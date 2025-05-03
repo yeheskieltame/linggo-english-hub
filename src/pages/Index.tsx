@@ -23,6 +23,9 @@ const Index = () => {
               <p className="text-lg md:text-xl mb-8 text-gray-700 max-w-xl">
                 Learn English naturally with personalized lessons, AI pronunciation feedback, and interactive practice. Perfect for Indonesian speakers.
               </p>
+              <p className="text-sm text-gray-600 mb-8">
+                Developed by <a href="https://tameverse.netlify.app" target="_blank" rel="noopener noreferrer" className="text-linggo-primary hover:underline">Tameverse Ecosystem</a> - Innovating in blockchain and AI technologies.
+              </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="text-base font-medium">
                   Get Started for Free

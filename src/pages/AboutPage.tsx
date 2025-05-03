@@ -95,32 +95,32 @@ const AboutPage = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {[
                   {
-                    name: 'Dr. Sarah Johnson',
-                    role: 'English Language Specialist',
-                    description: '15+ years experience in TEFL instruction, PhD in Applied Linguistics'
+                    name: 'Yeheskiel Yunus Tame',
+                    role: 'Founder & CEO, AI & Technology Lead',
+                    description: 'Expert in Machine Learning, Speech Recognition systems and API integration'
                   },
                   {
-                    name: 'Budi Santoso',
+                    name: 'Dewi Lestari',
                     role: 'Indonesian Language Expert',
                     description: 'Specializes in cross-cultural communication and language learning methodologies'
                   },
                   {
-                    name: 'Michael Chang',
-                    role: 'AI & Technology Lead',
-                    description: 'Expert in speech recognition systems and machine learning for language acquisition'
-                  },
-                  {
-                    name: 'Rina Wijaya',
+                    name: 'Budi Santoso',
                     role: 'Curriculum Designer',
                     description: 'Creates engaging lessons that bridge Indonesian and English language patterns'
                   },
                   {
-                    name: 'James Wilson',
+                    name: 'Rini Wulandari',
+                    role: 'English Language Specialist',
+                    description: '15+ years experience in TEFL instruction, PhD in Applied Linguistics'
+                  },
+                  {
+                    name: 'Agus Purnomo',
                     role: 'Voice Talent Director',
                     description: 'Coordinates our team of native English speakers for authentic pronunciation examples'
                   },
                   {
-                    name: 'Dewi Putri',
+                    name: 'Siti Rahmawati',
                     role: 'User Experience Lead',
                     description: 'Ensures the platform is intuitive and effective for learners of all levels'
                   }

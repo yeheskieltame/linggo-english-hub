@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Link } from "react-router-dom";
+import { Globe } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -21,6 +22,17 @@ const Footer = () => {
             <p className="mt-4 text-gray-300">
               Unlock fluent English communication with personalized learning.
             </p>
+            <div className="mt-4 flex items-center gap-2 text-gray-300">
+              <Globe size={16} />
+              <a 
+                href="https://tameverse.netlify.app" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                Developed by Tameverse Ecosystem
+              </a>
+            </div>
           </div>
           
           <div>
@@ -55,7 +67,7 @@ const Footer = () => {
         
         <div className="border-t border-gray-700 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm">
-            &copy; {currentYear} LinggoID. All rights reserved.
+            &copy; {currentYear} LinggoID by Tameverse Ecosystem. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="https://twitter.com" className="text-gray-300 hover:text-white transition-colors">Twitter</a>
