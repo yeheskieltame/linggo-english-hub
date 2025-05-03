@@ -30,9 +30,10 @@ const CefrBadgeColor = {
 };
 
 const CategoryColors = {
-  'business': 'bg-amber-100 text-amber-800',
+  'introduction': 'bg-green-100 text-green-800',
   'daily': 'bg-emerald-100 text-emerald-800',
   'travel': 'bg-blue-100 text-blue-800',
+  'business': 'bg-amber-100 text-amber-800',
   'academic': 'bg-violet-100 text-violet-800',
   'interview': 'bg-pink-100 text-pink-800',
 };
@@ -65,14 +66,19 @@ const ConversationPage = () => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [feedback, setFeedback] = useState<ConversationFeedback | null>(null);
   
+  // Filters
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [difficultyFilter, setDifficultyFilter] = useState<string>('all');
+  
   // Refs
   const recognitionRef = useRef<any>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Filter scenarios based on lessonId if provided
-  const availableScenarios = lessonId
-    ? conversationScenarios.filter(scenario => scenario.lessonId === lessonId)
-    : conversationScenarios;
+  // Filter scenarios based on lessonId, category, and difficulty
+  const availableScenarios = conversationScenarios
+    .filter(scenario => lessonId ? scenario.lessonId === lessonId : true)
+    .filter(scenario => categoryFilter === 'all' ? true : scenario.category === categoryFilter)
+    .filter(scenario => difficultyFilter === 'all' ? true : scenario.difficulty === difficultyFilter);
   
   // Find the current lesson if lessonId is provided
   const currentLesson = lessonId ? mockLessons.find(lesson => lesson.id === lessonId) : null;
@@ -252,13 +258,33 @@ const ConversationPage = () => {
   
   // Render the scenario selection screen
   const renderScenarioSelection = () => {
+    // Get unique categories and difficulties for filters
+    const categories = ['all', ...new Set(conversationScenarios.map(s => s.category))];
+    const difficulties = ['all', ...new Set(conversationScenarios.map(s => s.difficulty))];
+    
     if (availableScenarios.length === 0) {
       return (
         <div className="text-center py-8">
           <h2 className="text-xl font-semibold mb-4">No Conversation Scenarios Available</h2>
           <p className="text-gray-600 mb-6">
-            There are no conversation scenarios available for this lesson yet.
+            {categoryFilter !== 'all' || difficultyFilter !== 'all' 
+              ? "No scenarios match your current filters. Try changing your filter selections."
+              : "There are no conversation scenarios available for this lesson yet."}
           </p>
+          
+          {(categoryFilter !== 'all' || difficultyFilter !== 'all') && (
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setCategoryFilter('all');
+                setDifficultyFilter('all');
+              }}
+              className="mb-4"
+            >
+              Clear Filters
+            </Button>
+          )}
+          
           {lessonId && (
             <Button asChild>
               <Link to={`/lessons/${lessonId}`}>
@@ -272,7 +298,73 @@ const ConversationPage = () => {
     
     return (
       <div className="py-6">
-        <h2 className="text-xl font-semibold mb-6">Select a Conversation Scenario</h2>
+        <h2 className="text-xl font-semibold mb-4">Select a Conversation Scenario</h2>
+        
+        {/* Filters */}
+        <div className="bg-gray-50 p-4 rounded-lg mb-6">
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Filter Scenarios:</h3>
+          <div className="flex flex-wrap gap-4">
+            <div>
+              <label htmlFor="category-filter" className="block text-sm text-gray-600 mb-1">
+                Category
+              </label>
+              <select
+                id="category-filter"
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="rounded-md border-gray-300 shadow-sm focus:border-linggo-primary focus:ring-linggo-primary text-sm"
+              >
+                {categories.map(category => (
+                  <option key={category} value={category}>
+                    {category === 'all' 
+                      ? 'All Categories' 
+                      : category.charAt(0).toUpperCase() + category.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label htmlFor="difficulty-filter" className="block text-sm text-gray-600 mb-1">
+                Difficulty
+              </label>
+              <select
+                id="difficulty-filter"
+                value={difficultyFilter}
+                onChange={(e) => setDifficultyFilter(e.target.value)}
+                className="rounded-md border-gray-300 shadow-sm focus:border-linggo-primary focus:ring-linggo-primary text-sm"
+              >
+                {difficulties.map(difficulty => (
+                  <option key={difficulty} value={difficulty}>
+                    {difficulty === 'all' 
+                      ? 'All Difficulties' 
+                      : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            {(categoryFilter !== 'all' || difficultyFilter !== 'all') && (
+              <div className="flex items-end">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => {
+                    setCategoryFilter('all');
+                    setDifficultyFilter('all');
+                  }}
+                >
+                  Clear Filters
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+        
+        <div className="text-sm text-gray-500 mb-4">
+          Showing {availableScenarios.length} {availableScenarios.length === 1 ? 'scenario' : 'scenarios'}
+        </div>
+        
         <div className="grid gap-4 md:grid-cols-2">
           {availableScenarios.map(scenario => (
             <Card 
@@ -631,24 +723,47 @@ const ConversationPage = () => {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              {currentLesson 
-                ? `Conversation Practice: ${currentLesson.title}` 
-                : 'Conversation Practice'}
+              {selectedScenario && conversationState !== ConversationState.SELECTING
+                ? selectedScenario.title
+                : currentLesson 
+                  ? `Conversation Practice: ${currentLesson.title}` 
+                  : 'Conversation Practice'}
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Improve your speaking skills through interactive conversations with AI role-play partners.
+              {selectedScenario && conversationState !== ConversationState.SELECTING
+                ? selectedScenario.description
+                : "Improve your speaking skills through interactive conversations with AI role-play partners."}
             </p>
             
-            {/* Display lesson info if available */}
-            {currentLesson && (
+            {/* Display scenario info if selected */}
+            {selectedScenario && conversationState !== ConversationState.SELECTING ? (
               <div className="flex flex-wrap justify-center gap-3 mt-4">
-                <Badge className={LevelsColor[currentLesson.level]}>
-                  {currentLesson.level.charAt(0).toUpperCase() + currentLesson.level.slice(1)}
+                <Badge className={
+                  selectedScenario.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
+                  selectedScenario.difficulty === 'medium' ? 'bg-blue-100 text-blue-800' :
+                  'bg-purple-100 text-purple-800'
+                }>
+                  {selectedScenario.difficulty.charAt(0).toUpperCase() + selectedScenario.difficulty.slice(1)}
                 </Badge>
-                <Badge className={CefrBadgeColor[currentLesson.cefrLevel]}>
-                  CEFR {currentLesson.cefrLevel}
+                <Badge className={CefrBadgeColor[selectedScenario.cefrLevel]}>
+                  CEFR {selectedScenario.cefrLevel}
+                </Badge>
+                <Badge className={CategoryColors[selectedScenario.category]}>
+                  {selectedScenario.category.charAt(0).toUpperCase() + selectedScenario.category.slice(1)}
                 </Badge>
               </div>
+            ) : (
+              /* Display lesson info if available */
+              currentLesson && (
+                <div className="flex flex-wrap justify-center gap-3 mt-4">
+                  <Badge className={LevelsColor[currentLesson.level]}>
+                    {currentLesson.level.charAt(0).toUpperCase() + currentLesson.level.slice(1)}
+                  </Badge>
+                  <Badge className={CefrBadgeColor[currentLesson.cefrLevel]}>
+                    CEFR {currentLesson.cefrLevel}
+                  </Badge>
+                </div>
+              )
             )}
           </div>
         </div>
