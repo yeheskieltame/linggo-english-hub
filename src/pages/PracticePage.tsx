@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, Mic, Loader2, Book, ArrowLeft } from 'lucide-react';
+import { Volume2, Mic, Loader2, Book, ArrowLeft, Info } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { practiceSentences, mockLessons } from '@/data/mockData';
+import { practicePrompts, PracticePrompt } from '@/data/practicePrompts';
 import { speakText } from '@/services/textToSpeech';
-import { startSpeechRecognition, getPronunciationFeedback } from '@/services/speechRecognition';
+import { startSpeechRecognition } from '@/services/speechRecognition';
+import { analyzeSpeechWithLLM } from '@/services/llmService';
 
 interface FeedbackResult {
   score: number;
@@ -55,6 +57,7 @@ const PracticePage = () => {
   const [transcript, setTranscript] = useState('');
   const [feedback, setFeedback] = useState<FeedbackResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [practiceMode, setPracticeMode] = useState<'sentence' | 'prompt'>('sentence');
   const recognitionRef = useRef<any>(null);
   
   // Filter practice sentences based on lessonId
@@ -62,19 +65,41 @@ const PracticePage = () => {
     ? practiceSentences.filter(sentence => sentence.lessonId === lessonId)
     : practiceSentences;
   
+  // Filter practice prompts based on lessonId
+  const lessonPrompts = lessonId
+    ? practicePrompts.filter(prompt => prompt.lessonId === lessonId)
+    : practicePrompts;
+  
   // Find the current lesson if lessonId is provided
   const currentLesson = lessonId ? mockLessons.find(lesson => lesson.id === lessonId) : null;
   
-  // Get the current sentence to practice
+  // Get the current item to practice based on mode
   const currentSentence = lessonSentences.length > currentIndex 
     ? lessonSentences[currentIndex] 
     : lessonSentences[0];
+    
+  const currentPrompt = lessonPrompts.length > currentIndex
+    ? lessonPrompts[currentIndex]
+    : lessonPrompts[0];
+  
+  // Determine if we have content to practice
+  const hasSentences = lessonSentences.length > 0;
+  const hasPrompts = lessonPrompts.length > 0;
+  
+  // Set default practice mode based on available content
+  useEffect(() => {
+    if (hasPrompts) {
+      setPracticeMode('prompt');
+    } else if (hasSentences) {
+      setPracticeMode('sentence');
+    }
+  }, [lessonId, hasPrompts, hasSentences]);
   
   useEffect(() => {
-    // Reset state when moving to a new sentence
+    // Reset state when moving to a new item
     setTranscript('');
     setFeedback(null);
-  }, [currentIndex]);
+  }, [currentIndex, practiceMode]);
 
   useEffect(() => {
     // Reset current index when lessonId changes
@@ -88,7 +113,11 @@ const PracticePage = () => {
     
     try {
       setIsSpeaking(true);
-      await speakText(currentSentence.english);
+      if (practiceMode === 'sentence') {
+        await speakText(currentSentence.english);
+      } else if (practiceMode === 'prompt' && currentPrompt.example) {
+        await speakText(currentPrompt.example);
+      }
     } catch (error) {
       console.error('Error playing audio:', error);
     } finally {
@@ -133,28 +162,58 @@ const PracticePage = () => {
     
     setIsLoading(true);
     try {
-      const result = await getPronunciationFeedback(transcript, currentSentence.english);
+      let result: FeedbackResult;
+      
+      if (practiceMode === 'sentence') {
+        // For sentence repetition, use simple comparison
+        result = await analyzeSpeechWithLLM(
+          transcript, 
+          `Repeat this sentence: "${currentSentence.english}"`
+        );
+      } else {
+        // For prompts, use LLM analysis
+        result = await analyzeSpeechWithLLM(
+          transcript,
+          currentPrompt.instruction,
+          'english'
+        );
+      }
+      
       setFeedback(result);
     } catch (error) {
-      console.error('Error getting pronunciation feedback:', error);
+      console.error('Error getting speech feedback:', error);
     } finally {
       setIsLoading(false);
     }
   };
   
-  const handleNextSentence = () => {
-    if (currentIndex < lessonSentences.length - 1) {
+  const handleNextItem = () => {
+    const itemsArray = practiceMode === 'sentence' ? lessonSentences : lessonPrompts;
+    
+    if (currentIndex < itemsArray.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      // Navigate back to lesson detail if we're done with all sentences
+      // Navigate back to lesson detail if we're done with all items
       if (lessonId) {
         window.location.href = `/lessons/${lessonId}`;
       } else {
-        // If no specific lesson, reset to first sentence
+        // If no specific lesson, reset to first item
         setCurrentIndex(0);
         alert('Practice completed! Great job!');
       }
     }
+  };
+  
+  const togglePracticeMode = () => {
+    if (practiceMode === 'sentence' && hasPrompts) {
+      setPracticeMode('prompt');
+    } else if (practiceMode === 'prompt' && hasSentences) {
+      setPracticeMode('sentence');
+    }
+    // Reset state
+    setCurrentIndex(0);
+    setTranscript('');
+    setFeedback(null);
   };
   
   const getSkillFocusLabel = (skillFocus: string) => {
@@ -167,8 +226,8 @@ const PracticePage = () => {
     }
   };
 
-  // If there are no practice sentences for this lesson
-  if (lessonSentences.length === 0) {
+  // If there are no practice items for this lesson
+  if (lessonSentences.length === 0 && lessonPrompts.length === 0) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -204,7 +263,7 @@ const PracticePage = () => {
               {currentLesson ? `Practice: ${currentLesson.title}` : 'Speaking Practice'}
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Improve your pronunciation by practicing with our AI-powered speaking exercises.
+              Improve your English speaking skills with our AI-powered speaking exercises.
             </p>
             
             {/* Display lesson info if available */}
@@ -223,6 +282,19 @@ const PracticePage = () => {
                 </Badge>
               </div>
             )}
+            
+            {/* Practice mode toggle */}
+            {hasSentences && hasPrompts && (
+              <div className="mt-6">
+                <Button 
+                  variant="outline" 
+                  onClick={togglePracticeMode}
+                  className="text-sm"
+                >
+                  Switch to {practiceMode === 'sentence' ? 'Free Speaking' : 'Sentence Repetition'}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -233,7 +305,7 @@ const PracticePage = () => {
           <div className="mb-6 flex justify-between items-center">
             <div className="flex items-center gap-2">
               <Badge variant="outline">
-                {currentIndex + 1} of {lessonSentences.length}
+                {currentIndex + 1} of {practiceMode === 'sentence' ? lessonSentences.length : lessonPrompts.length}
               </Badge>
               {currentLesson && (
                 <Link to={`/lessons/${currentLesson.id}`} className="text-sm text-gray-500 flex items-center">
@@ -241,50 +313,118 @@ const PracticePage = () => {
                 </Link>
               )}
             </div>
-            <Progress value={(currentIndex / (lessonSentences.length - 1)) * 100} className="w-1/2" />
+            <Progress 
+              value={(currentIndex / (
+                (practiceMode === 'sentence' ? lessonSentences.length : lessonPrompts.length) - 1
+              )) * 100} 
+              className="w-1/2" 
+            />
           </div>
           
           <Card className="mb-8">
             <CardContent className="p-6">
-              <div className="flex flex-wrap gap-2 mb-4 justify-between items-start">
-                <div className="flex gap-2">
-                  <Badge className={
-                    currentSentence.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
-                    currentSentence.difficulty === 'medium' ? 'bg-blue-100 text-blue-800' :
-                    'bg-purple-100 text-purple-800'
-                  }>
-                    {currentSentence.difficulty.charAt(0).toUpperCase() + currentSentence.difficulty.slice(1)}
-                  </Badge>
+              {practiceMode === 'sentence' ? (
+                /* Sentence Repetition Mode */
+                <>
+                  <div className="flex flex-wrap gap-2 mb-4 justify-between items-start">
+                    <div className="flex gap-2">
+                      <Badge className={
+                        currentSentence.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
+                        currentSentence.difficulty === 'medium' ? 'bg-blue-100 text-blue-800' :
+                        'bg-purple-100 text-purple-800'
+                      }>
+                        {currentSentence.difficulty.charAt(0).toUpperCase() + currentSentence.difficulty.slice(1)}
+                      </Badge>
+                      
+                      <Badge className={CefrBadgeColor[currentSentence.cefrLevel]}>
+                        CEFR {currentSentence.cefrLevel}
+                      </Badge>
+                      
+                      <Badge className={SkillFocusColors[currentSentence.skillFocus]}>
+                        {getSkillFocusLabel(currentSentence.skillFocus)}
+                      </Badge>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handlePlayAudio}
+                      disabled={isSpeaking}
+                    >
+                      {isSpeaking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Volume2 className="h-4 w-4" />}
+                      <span className="ml-2">Listen</span>
+                    </Button>
+                  </div>
                   
-                  <Badge className={CefrBadgeColor[currentSentence.cefrLevel]}>
-                    CEFR {currentSentence.cefrLevel}
-                  </Badge>
+                  <div className="my-6">
+                    <h2 className="text-xl font-semibold mb-4">Repeat this sentence:</h2>
+                    <p className="text-2xl bg-linggo-light p-4 rounded-md">{currentSentence.english}</p>
+                    <p className="text-gray-600 mt-2 text-sm">{currentSentence.indonesian}</p>
+                  </div>
                   
-                  <Badge className={SkillFocusColors[currentSentence.skillFocus]}>
-                    {getSkillFocusLabel(currentSentence.skillFocus)}
-                  </Badge>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handlePlayAudio}
-                  disabled={isSpeaking}
-                >
-                  {isSpeaking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Volume2 className="h-4 w-4" />}
-                  <span className="ml-2">Listen</span>
-                </Button>
-              </div>
-              
-              <div className="my-6">
-                <h2 className="text-xl font-semibold mb-4">Repeat this sentence:</h2>
-                <p className="text-2xl bg-linggo-light p-4 rounded-md">{currentSentence.english}</p>
-                <p className="text-gray-600 mt-2 text-sm">{currentSentence.indonesian}</p>
-              </div>
-              
-              <div className="bg-gray-50 p-4 rounded-md mb-6">
-                <h3 className="font-medium mb-2">Pronunciation Tip:</h3>
-                <p>{currentSentence.tips}</p>
-              </div>
+                  <div className="bg-gray-50 p-4 rounded-md mb-6">
+                    <h3 className="font-medium mb-2">Pronunciation Tip:</h3>
+                    <p>{currentSentence.tips}</p>
+                  </div>
+                </>
+              ) : (
+                /* Free Speaking Mode */
+                <>
+                  <div className="flex flex-wrap gap-2 mb-4 justify-between items-start">
+                    <div className="flex gap-2">
+                      <Badge className={
+                        currentPrompt.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
+                        currentPrompt.difficulty === 'medium' ? 'bg-blue-100 text-blue-800' :
+                        'bg-purple-100 text-purple-800'
+                      }>
+                        {currentPrompt.difficulty.charAt(0).toUpperCase() + currentPrompt.difficulty.slice(1)}
+                      </Badge>
+                      
+                      <Badge className={CefrBadgeColor[currentPrompt.cefrLevel]}>
+                        CEFR {currentPrompt.cefrLevel}
+                      </Badge>
+                      
+                      <Badge className={
+                        currentPrompt.category === 'introduction' ? 'bg-emerald-100 text-emerald-800' :
+                        currentPrompt.category === 'daily' ? 'bg-blue-100 text-blue-800' :
+                        currentPrompt.category === 'business' ? 'bg-amber-100 text-amber-800' :
+                        currentPrompt.category === 'academic' ? 'bg-violet-100 text-violet-800' :
+                        'bg-pink-100 text-pink-800'
+                      }>
+                        {currentPrompt.category.charAt(0).toUpperCase() + currentPrompt.category.slice(1)}
+                      </Badge>
+                    </div>
+                    
+                    {currentPrompt.example && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handlePlayAudio}
+                        disabled={isSpeaking}
+                      >
+                        {isSpeaking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Volume2 className="h-4 w-4" />}
+                        <span className="ml-2">Listen to Example</span>
+                      </Button>
+                    )}
+                  </div>
+                  
+                  <div className="my-6">
+                    <h2 className="text-xl font-semibold mb-4">{currentPrompt.title}</h2>
+                    <p className="text-lg bg-linggo-light p-4 rounded-md">{currentPrompt.instruction}</p>
+                  </div>
+                  
+                  {currentPrompt.example && (
+                    <div className="bg-gray-50 p-4 rounded-md mb-6">
+                      <div className="flex justify-between items-center">
+                        <h3 className="font-medium mb-2">Example Response:</h3>
+                        <Badge variant="outline" className="text-xs">
+                          <Info className="h-3 w-3 mr-1" /> For reference only
+                        </Badge>
+                      </div>
+                      <p>{currentPrompt.example}</p>
+                    </div>
+                  )}
+                </>
+              )}
               
               <div className="flex justify-center">
                 <Button
@@ -318,14 +458,18 @@ const PracticePage = () => {
                     onClick={handleSubmitSpeech}
                     disabled={isLoading}
                   >
-                    Check Pronunciation
+                    {practiceMode === 'sentence' ? 'Check Pronunciation' : 'Analyze Response'}
                   </Button>
                 )}
                 
                 {isLoading && (
                   <div className="flex items-center justify-center py-8">
                     <Loader2 className="animate-spin mr-2" />
-                    <span>Analyzing your pronunciation...</span>
+                    <span>
+                      {practiceMode === 'sentence' 
+                        ? 'Analyzing your pronunciation...' 
+                        : 'Analyzing your response...'}
+                    </span>
                   </div>
                 )}
               </CardContent>
@@ -336,7 +480,9 @@ const PracticePage = () => {
             <Card className="mb-8">
               <CardContent className="p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="font-semibold text-lg">Pronunciation Feedback</h3>
+                  <h3 className="font-semibold text-lg">
+                    {practiceMode === 'sentence' ? 'Pronunciation Feedback' : 'Speaking Feedback'}
+                  </h3>
                   <Badge className={
                     feedback.score > 80 ? 'bg-green-100 text-green-800' :
                     feedback.score > 60 ? 'bg-yellow-100 text-yellow-800' :
@@ -363,10 +509,18 @@ const PracticePage = () => {
                 )}
                 
                 <div className="flex justify-between mt-6">
-                  <Button variant="outline" onClick={handlePlayAudio}>
-                    <Volume2 className="mr-2 h-4 w-4" /> Listen Again
-                  </Button>
-                  <Button onClick={handleNextSentence}>
+                  {practiceMode === 'prompt' && currentPrompt.example ? (
+                    <Button variant="outline" onClick={handlePlayAudio}>
+                      <Volume2 className="mr-2 h-4 w-4" /> Listen to Example
+                    </Button>
+                  ) : practiceMode === 'sentence' ? (
+                    <Button variant="outline" onClick={handlePlayAudio}>
+                      <Volume2 className="mr-2 h-4 w-4" /> Listen Again
+                    </Button>
+                  ) : (
+                    <div></div> // Empty div as placeholder when no audio button is needed
+                  )}
+                  <Button onClick={handleNextItem}>
                     Continue
                   </Button>
                 </div>

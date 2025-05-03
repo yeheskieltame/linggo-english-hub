@@ -16,7 +16,7 @@ const Footer = () => {
                 <span className="text-linggo-primary font-display font-bold text-xl">L</span>
               </div>
               <span className="font-display font-semibold text-xl text-white">
-                Linggo<span className="text-linggo-secondary">ID</span>
+                inggo<span className="text-linggo-secondary">ID</span>
               </span>
             </Link>
             <p className="mt-4 text-gray-300">

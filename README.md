@@ -59,6 +59,20 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Groq LLM API for AI-powered language feedback
+
+## Environment Setup
+
+This project uses environment variables for API keys. To set up:
+
+1. Copy `.env.example` to `.env`
+2. Add your Groq API key to the `.env` file:
+   ```
+   VITE_GROQ_API_KEY=your_groq_api_key_here
+   ```
+3. Restart the development server if it's running
+
+You can get a Groq API key by signing up at [groq.com](https://console.groq.com/)
 
 ## How can I deploy this project?
 

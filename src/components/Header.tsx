@@ -15,7 +15,7 @@ const Header = () => {
             <span className="text-white font-display font-bold text-xl">L</span>
           </div>
           <span className="font-display font-semibold text-xl text-linggo-dark">
-            Linggo<span className="text-linggo-primary">ID</span>
+            inggo<span className="text-linggo-primary">ID</span>
           </span>
         </Link>
 
