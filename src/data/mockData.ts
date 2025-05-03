@@ -1,3 +1,4 @@
+
 export interface Lesson {
   id: string;
   title: string;
@@ -503,7 +504,7 @@ export const practiceSentences: PracticeSentence[] = [
     indonesian: 'Saya ingin mencoba sepatu ini dalam ukuran 42, tolong.',
     difficulty: 'easy',
     cefrLevel: 'A2',
-    tips: 'Focus on the contraction "I'd" and the clear pronunciation of numbers.',
+    tips: 'Focus on the contraction "I\'d" and the clear pronunciation of numbers.',
     skillFocus: 'pronunciation',
     lessonId: 'l4'
   },
@@ -531,7 +532,7 @@ export const practiceSentences: PracticeSentence[] = [
   // Lesson 5: Business Negotiations (advanced, C1, business)
   {
     id: 'p5-l5-1',
-    english: 'We appreciate your offer, but we're looking for more favorable payment terms.',
+    english: 'We appreciate your offer, but we\'re looking for more favorable payment terms.',
     indonesian: 'Kami menghargai penawaran Anda, tetapi kami mencari persyaratan pembayaran yang lebih menguntungkan.',
     difficulty: 'hard',
     cefrLevel: 'C1',
@@ -541,7 +542,7 @@ export const practiceSentences: PracticeSentence[] = [
   },
   {
     id: 'p5-l5-2',
-    english: "If we can reach an agreement today, we're prepared to sign the contract immediately.",
+    english: "If we can reach an agreement today, we\'re prepared to sign the contract immediately.",
     indonesian: 'Jika kita dapat mencapai kesepakatan hari ini, kami siap untuk menandatangani kontrak segera.',
     difficulty: 'hard',
     cefrLevel: 'C1',
@@ -551,7 +552,7 @@ export const practiceSentences: PracticeSentence[] = [
   },
   {
     id: 'p5-l5-3',
-    english: "Let's find a solution that benefits both our companies in the long term.",
+    english: "Let\'s find a solution that benefits both our companies in the long term.",
     indonesian: 'Mari kita temukan solusi yang menguntungkan kedua perusahaan kita dalam jangka panjang.',
     difficulty: 'medium',
     cefrLevel: 'C1',
