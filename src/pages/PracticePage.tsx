@@ -1,13 +1,15 @@
+
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, Mic, Loader2 } from 'lucide-react';
+import { Volume2, Mic, Loader2, Book, ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { practiceSentences } from '@/data/mockData';
+import { practiceSentences, mockLessons } from '@/data/mockData';
 import { speakText } from '@/services/textToSpeech';
 import { startSpeechRecognition, getPronunciationFeedback } from '@/services/speechRecognition';
 
@@ -33,7 +35,20 @@ const SkillFocusColors = {
   'grammar': 'bg-amber-100 text-amber-800',
 };
 
+const LevelsColor = {
+  beginner: 'bg-green-100 text-green-800',
+  intermediate: 'bg-blue-100 text-blue-800',
+  advanced: 'bg-purple-100 text-purple-800',
+};
+
+const PathsColor = {
+  general: 'bg-green-50 text-green-700',
+  business: 'bg-blue-50 text-blue-700',
+  academic: 'bg-violet-50 text-violet-700',
+};
+
 const PracticePage = () => {
+  const { lessonId } = useParams<{ lessonId: string }>();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -42,13 +57,31 @@ const PracticePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const recognitionRef = useRef<any>(null);
   
-  const currentSentence = practiceSentences[currentIndex];
+  // Filter practice sentences based on lessonId
+  const lessonSentences = lessonId 
+    ? practiceSentences.filter(sentence => sentence.lessonId === lessonId)
+    : practiceSentences;
+  
+  // Find the current lesson if lessonId is provided
+  const currentLesson = lessonId ? mockLessons.find(lesson => lesson.id === lessonId) : null;
+  
+  // Get the current sentence to practice
+  const currentSentence = lessonSentences.length > currentIndex 
+    ? lessonSentences[currentIndex] 
+    : lessonSentences[0];
   
   useEffect(() => {
     // Reset state when moving to a new sentence
     setTranscript('');
     setFeedback(null);
   }, [currentIndex]);
+
+  useEffect(() => {
+    // Reset current index when lessonId changes
+    setCurrentIndex(0);
+    setTranscript('');
+    setFeedback(null);
+  }, [lessonId]);
   
   const handlePlayAudio = async () => {
     if (isSpeaking) return;
@@ -110,12 +143,17 @@ const PracticePage = () => {
   };
   
   const handleNextSentence = () => {
-    if (currentIndex < practiceSentences.length - 1) {
+    if (currentIndex < lessonSentences.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      // Could navigate to a completion page
-      alert('Practice completed! Great job!');
-      setCurrentIndex(0);
+      // Navigate back to lesson detail if we're done with all sentences
+      if (lessonId) {
+        window.location.href = `/lessons/${lessonId}`;
+      } else {
+        // If no specific lesson, reset to first sentence
+        setCurrentIndex(0);
+        alert('Practice completed! Great job!');
+      }
     }
   };
   
@@ -128,6 +166,31 @@ const PracticePage = () => {
       default: return 'Skill Focus';
     }
   };
+
+  // If there are no practice sentences for this lesson
+  if (lessonSentences.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <div className="pt-28 pb-12 bg-linggo-light">
+          <div className="container mx-auto px-4 text-center">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">No Practice Available</h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Sorry, there are no practice exercises available for this lesson yet.
+            </p>
+            {lessonId && (
+              <Button asChild className="mt-6">
+                <Link to={`/lessons/${lessonId}`}>
+                  <ArrowLeft className="mr-2 h-4 w-4" /> Return to Lesson
+                </Link>
+              </Button>
+            )}
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -137,10 +200,29 @@ const PracticePage = () => {
       <section className="pt-28 pb-12 bg-linggo-light">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">Speaking Practice</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">
+              {currentLesson ? `Practice: ${currentLesson.title}` : 'Speaking Practice'}
+            </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Improve your pronunciation by practicing with our AI-powered speaking exercises.
             </p>
+            
+            {/* Display lesson info if available */}
+            {currentLesson && (
+              <div className="flex flex-wrap justify-center gap-3 mt-4">
+                <Badge className={LevelsColor[currentLesson.level]}>
+                  {currentLesson.level.charAt(0).toUpperCase() + currentLesson.level.slice(1)}
+                </Badge>
+                <Badge className={CefrBadgeColor[currentLesson.cefrLevel]}>
+                  CEFR {currentLesson.cefrLevel}
+                </Badge>
+                <Badge className={PathsColor[currentLesson.path]}>
+                  {currentLesson.path === 'general' ? 'General English' : 
+                   currentLesson.path === 'business' ? 'Business English' : 
+                   'Academic English'}
+                </Badge>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -149,12 +231,17 @@ const PracticePage = () => {
       <section className="py-12 bg-white flex-grow">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="mb-6 flex justify-between items-center">
-            <div>
+            <div className="flex items-center gap-2">
               <Badge variant="outline">
-                {currentIndex + 1} of {practiceSentences.length}
+                {currentIndex + 1} of {lessonSentences.length}
               </Badge>
+              {currentLesson && (
+                <Link to={`/lessons/${currentLesson.id}`} className="text-sm text-gray-500 flex items-center">
+                  <Book className="h-4 w-4 mr-1" /> Back to lesson
+                </Link>
+              )}
             </div>
-            <Progress value={(currentIndex / (practiceSentences.length - 1)) * 100} className="w-1/2" />
+            <Progress value={(currentIndex / (lessonSentences.length - 1)) * 100} className="w-1/2" />
           </div>
           
           <Card className="mb-8">

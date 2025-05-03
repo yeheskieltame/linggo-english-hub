@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Volume2 } from 'lucide-react';
+import { Volume2, BookOpen, Mic } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { mockLessons } from '@/data/mockData';
+import { mockLessons, practiceSentences } from '@/data/mockData';
 import { speakText } from '@/services/textToSpeech';
 
 const LevelsColor = {
@@ -37,6 +37,9 @@ const LessonDetail = () => {
   const [lesson, setLesson] = useState(mockLessons.find(l => l.id === lessonId));
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [activeExampleIndex, setActiveExampleIndex] = useState<number | null>(null);
+  
+  // Check if this lesson has practice exercises
+  const hasPracticeExercises = practiceSentences.some(sentence => sentence.lessonId === lessonId);
   
   useEffect(() => {
     if (!lesson) {
@@ -111,13 +114,14 @@ const LessonDetail = () => {
                 {lesson.description}
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
               <Button variant="outline" onClick={() => handleSpeak(lesson.title)}>
                 <Volume2 className="mr-2 h-4 w-4" />
                 Listen
               </Button>
               <Button asChild>
                 <Link to={`/practice/${lesson.id}`}>
+                  <Mic className="mr-2 h-4 w-4" />
                   Start Practice
                 </Link>
               </Button>
@@ -182,11 +186,22 @@ const LessonDetail = () => {
           
           <div className="flex justify-between items-center">
             <Button variant="outline" asChild>
-              <Link to="/lessons">Back to Lessons</Link>
+              <Link to="/lessons">
+                <BookOpen className="mr-2 h-4 w-4" /> Back to Lessons
+              </Link>
             </Button>
-            <Button asChild>
-              <Link to={`/practice/${lesson.id}`}>Practice This Lesson</Link>
-            </Button>
+            
+            {hasPracticeExercises ? (
+              <Button asChild>
+                <Link to={`/practice/${lesson.id}`}>
+                  <Mic className="mr-2 h-4 w-4" /> Practice This Lesson
+                </Link>
+              </Button>
+            ) : (
+              <Button disabled>
+                <Mic className="mr-2 h-4 w-4" /> No Practice Available
+              </Button>
+            )}
           </div>
         </div>
       </section>
