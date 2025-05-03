@@ -17,6 +17,22 @@ interface FeedbackResult {
   detailedFeedback?: { word: string; issue: string }[];
 }
 
+const CefrBadgeColor = {
+  'A1': 'bg-slate-100 text-slate-800',
+  'A2': 'bg-slate-200 text-slate-800',
+  'B1': 'bg-yellow-100 text-yellow-800',
+  'B2': 'bg-orange-100 text-orange-800',
+  'C1': 'bg-red-100 text-red-800',
+  'C2': 'bg-pink-100 text-pink-800',
+};
+
+const SkillFocusColors = {
+  'pronunciation': 'bg-emerald-100 text-emerald-800',
+  'fluency': 'bg-blue-100 text-blue-800',
+  'vocabulary': 'bg-violet-100 text-violet-800',
+  'grammar': 'bg-amber-100 text-amber-800',
+};
+
 const PracticePage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isListening, setIsListening] = useState(false);
@@ -103,6 +119,16 @@ const PracticePage = () => {
     }
   };
   
+  const getSkillFocusLabel = (skillFocus: string) => {
+    switch (skillFocus) {
+      case 'pronunciation': return 'Pronunciation Focus';
+      case 'fluency': return 'Fluency Focus';
+      case 'vocabulary': return 'Vocabulary Focus';
+      case 'grammar': return 'Grammar Focus';
+      default: return 'Skill Focus';
+    }
+  };
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -133,14 +159,22 @@ const PracticePage = () => {
           
           <Card className="mb-8">
             <CardContent className="p-6">
-              <div className="flex justify-between items-start">
-                <div>
+              <div className="flex flex-wrap gap-2 mb-4 justify-between items-start">
+                <div className="flex gap-2">
                   <Badge className={
                     currentSentence.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
                     currentSentence.difficulty === 'medium' ? 'bg-blue-100 text-blue-800' :
                     'bg-purple-100 text-purple-800'
                   }>
                     {currentSentence.difficulty.charAt(0).toUpperCase() + currentSentence.difficulty.slice(1)}
+                  </Badge>
+                  
+                  <Badge className={CefrBadgeColor[currentSentence.cefrLevel]}>
+                    CEFR {currentSentence.cefrLevel}
+                  </Badge>
+                  
+                  <Badge className={SkillFocusColors[currentSentence.skillFocus]}>
+                    {getSkillFocusLabel(currentSentence.skillFocus)}
                   </Badge>
                 </div>
                 <Button

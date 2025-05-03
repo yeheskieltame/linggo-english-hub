@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,27 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { mockLessons } from '@/data/mockData';
 import { speakText } from '@/services/textToSpeech';
+
+const LevelsColor = {
+  beginner: 'bg-green-100 text-green-800',
+  intermediate: 'bg-blue-100 text-blue-800',
+  advanced: 'bg-purple-100 text-purple-800',
+};
+
+const CefrBadgeColor = {
+  'A1': 'bg-slate-100 text-slate-800',
+  'A2': 'bg-slate-200 text-slate-800',
+  'B1': 'bg-yellow-100 text-yellow-800',
+  'B2': 'bg-orange-100 text-orange-800',
+  'C1': 'bg-red-100 text-red-800',
+  'C2': 'bg-pink-100 text-pink-800',
+};
+
+const PathsColor = {
+  general: 'bg-green-50 text-green-700',
+  business: 'bg-blue-50 text-blue-700',
+  academic: 'bg-violet-50 text-violet-700',
+};
 
 const LessonDetail = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -70,9 +92,17 @@ const LessonDetail = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <Badge className="bg-linggo-primary text-white">
+              <div className="flex items-center gap-3 mb-2 flex-wrap">
+                <Badge className={LevelsColor[lesson.level]}>
                   {lesson.level.charAt(0).toUpperCase() + lesson.level.slice(1)}
+                </Badge>
+                <Badge className={CefrBadgeColor[lesson.cefrLevel]}>
+                  CEFR {lesson.cefrLevel}
+                </Badge>
+                <Badge className={PathsColor[lesson.path]}>
+                  {lesson.path === 'general' ? 'General English' : 
+                   lesson.path === 'business' ? 'Business English' : 
+                   'Academic English'}
                 </Badge>
                 <Badge variant="outline">{lesson.duration}</Badge>
               </div>
@@ -86,8 +116,10 @@ const LessonDetail = () => {
                 <Volume2 className="mr-2 h-4 w-4" />
                 Listen
               </Button>
-              <Button>
-                Start Practice
+              <Button asChild>
+                <Link to={`/practice/${lesson.id}`}>
+                  Start Practice
+                </Link>
               </Button>
             </div>
           </div>

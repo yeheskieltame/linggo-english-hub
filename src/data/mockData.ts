@@ -1,8 +1,9 @@
-
 export interface Lesson {
   id: string;
   title: string;
   level: 'beginner' | 'intermediate' | 'advanced';
+  cefrLevel: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+  path: 'general' | 'business' | 'academic';
   duration: string;
   description: string;
   imageUrl: string;
@@ -25,7 +26,9 @@ export interface PracticeSentence {
   indonesian: string;
   audioUrl?: string;
   difficulty: 'easy' | 'medium' | 'hard';
+  cefrLevel: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
   tips: string;
+  skillFocus: 'pronunciation' | 'fluency' | 'vocabulary' | 'grammar';
 }
 
 export const topicCategories = [
@@ -44,6 +47,8 @@ export const mockLessons: Lesson[] = [
     id: 'l1',
     title: 'Introducing Yourself',
     level: 'beginner',
+    cefrLevel: 'B1',
+    path: 'general',
     duration: '15 min',
     description: 'Learn how to confidently introduce yourself in English for social and professional situations.',
     imageUrl: '/placeholder.svg',
@@ -109,47 +114,49 @@ export const mockLessons: Lesson[] = [
   },
   {
     id: 'l2',
-    title: 'Ordering Food at a Restaurant',
-    level: 'beginner',
-    duration: '20 min',
-    description: 'Master the essential phrases and vocabulary for ordering food and drinks at restaurants.',
+    title: 'Business Meetings',
+    level: 'intermediate',
+    cefrLevel: 'B2',
+    path: 'business',
+    duration: '25 min',
+    description: 'Master the essential phrases and vocabulary for participating in and leading business meetings.',
     imageUrl: '/placeholder.svg',
-    tags: ['Daily Conversation', 'Travel', 'Vocabulary'],
+    tags: ['Business English', 'Meetings', 'Professional'],
     content: {
       sections: [
         {
-          title: 'Getting a Table',
-          text: 'Use these phrases when you first enter a restaurant:',
+          title: 'Opening a Meeting',
+          text: 'Use these phrases to formally begin a business meeting:',
           examples: [
             {
-              english: 'A table for two, please.',
-              indonesian: 'Meja untuk dua orang, tolong.'
+              english: "Good morning everyone. Thank you for coming today.",
+              indonesian: "Selamat pagi semua. Terima kasih telah hadir hari ini."
             },
             {
-              english: "Do you have any tables available?",
-              indonesian: 'Apakah Anda memiliki meja yang tersedia?'
+              english: "Let's get started with today's agenda.",
+              indonesian: "Mari kita mulai dengan agenda hari ini."
             },
             {
-              english: "I have a reservation under the name [your name].",
-              indonesian: 'Saya memiliki reservasi atas nama [nama Anda].'
+              english: "First, I'd like to welcome our new team member, [name].",
+              indonesian: "Pertama, saya ingin menyambut anggota tim baru kita, [nama]."
             }
           ]
         },
         {
-          title: 'Asking About the Menu',
-          text: "When you're ready to order, you can ask about the menu:",
+          title: 'Expressing Opinions in Meetings',
+          text: "Use these phrases to express your thoughts professionally:",
           examples: [
             {
-              english: "Could you recommend something from the menu?",
-              indonesian: 'Bisakah Anda merekomendasikan sesuatu dari menu ini?'
+              english: "In my opinion, we should focus on the marketing strategy first.",
+              indonesian: "Menurut pendapat saya, kita harus fokus pada strategi pemasaran terlebih dahulu."
             },
             {
-              english: "What's today's special?",
-              indonesian: 'Apa menu spesial hari ini?'
+              english: "I think we need to reconsider our approach to this problem.",
+              indonesian: "Saya pikir kita perlu mempertimbangkan kembali pendekatan kita terhadap masalah ini."
             },
             {
-              english: "Does this dish contain [ingredient]?",
-              indonesian: 'Apakah hidangan ini mengandung [bahan]?'
+              english: "From my perspective, this solution offers the best long-term benefits.",
+              indonesian: "Dari perspektif saya, solusi ini menawarkan manfaat jangka panjang yang terbaik."
             }
           ]
         }
@@ -158,29 +165,49 @@ export const mockLessons: Lesson[] = [
   },
   {
     id: 'l3',
-    title: 'Business Email Writing',
-    level: 'intermediate',
-    duration: '25 min',
-    description: 'Learn how to write effective and professional business emails in English.',
+    title: 'Academic Research Writing',
+    level: 'advanced',
+    cefrLevel: 'C1',
+    path: 'academic',
+    duration: '30 min',
+    description: 'Learn how to write effective and professional academic research papers in English.',
     imageUrl: '/placeholder.svg',
-    tags: ['Business English', 'Writing', 'Communication'],
+    tags: ['Academic English', 'Writing', 'Research'],
     content: {
       sections: [
         {
-          title: 'Email Structure',
-          text: 'A professional email typically includes these components:',
+          title: 'Structuring a Research Paper',
+          text: 'An academic research paper typically includes these components:',
           examples: [
             {
-              english: 'Subject Line: Clear and specific',
-              indonesian: 'Subjek: Jelas dan spesifik'
+              english: 'Abstract: A concise summary of your research and findings.',
+              indonesian: 'Abstrak: Ringkasan singkat tentang penelitian dan temuan Anda.'
             },
             {
-              english: "Greeting: Dear Mr./Ms./Dr. [Last Name],",
-              indonesian: 'Salam: Dear Mr./Ms./Dr. [Nama Belakang],'
+              english: "Introduction: Background information and your research question.",
+              indonesian: 'Pendahuluan: Informasi latar belakang dan pertanyaan penelitian Anda.'
             },
             {
-              english: "Body: Introduction, main message, and conclusion",
-              indonesian: 'Isi: Pendahuluan, pesan utama, dan kesimpulan'
+              english: "Literature Review: Analysis of existing research on the topic.",
+              indonesian: 'Tinjauan Pustaka: Analisis penelitian yang ada tentang topik tersebut.'
+            }
+          ]
+        },
+        {
+          title: 'Academic Vocabulary and Phrases',
+          text: "Use these formal expressions in your academic writing:",
+          examples: [
+            {
+              english: "This study aims to investigate the relationship between X and Y.",
+              indonesian: "Penelitian ini bertujuan untuk menyelidiki hubungan antara X dan Y."
+            },
+            {
+              english: "The findings suggest that there is a strong correlation between the variables.",
+              indonesian: "Temuan menunjukkan bahwa ada korelasi kuat antara variabel-variabel tersebut."
+            },
+            {
+              english: "It can be concluded that the hypothesis is partially supported by the evidence.",
+              indonesian: "Dapat disimpulkan bahwa hipotesis tersebut sebagian didukung oleh bukti."
             }
           ]
         }
@@ -195,35 +222,45 @@ export const practiceSentences: PracticeSentence[] = [
     english: 'Hello, my name is Sarah. Nice to meet you.',
     indonesian: 'Halo, nama saya Sarah. Senang bertemu dengan Anda.',
     difficulty: 'easy',
-    tips: 'Focus on the "th" sound in "Sarah" and in "the".'
+    cefrLevel: 'B1',
+    tips: 'Focus on the "th" sound in "Sarah" and in "the".',
+    skillFocus: 'pronunciation'
   },
   {
     id: 'p2',
     english: 'I would like to order a coffee with milk and sugar, please.',
     indonesian: 'Saya ingin memesan kopi dengan susu dan gula, tolong.',
     difficulty: 'medium',
-    tips: 'Pay attention to the "w" sound in "would" and the "th" sound in "with".'
+    cefrLevel: 'B1',
+    tips: 'Pay attention to the "w" sound in "would" and the "th" sound in "with".',
+    skillFocus: 'pronunciation'
   },
   {
     id: 'p3',
     english: 'Could you tell me how to get to the nearest subway station?',
     indonesian: 'Bisakah Anda memberi tahu saya bagaimana cara ke stasiun kereta bawah tanah terdekat?',
     difficulty: 'medium',
-    tips: 'Practice the "could you" contraction and the "st" sound in "nearest".'
+    cefrLevel: 'B1',
+    tips: 'Practice the "could you" contraction and the "st" sound in "nearest".',
+    skillFocus: 'pronunciation'
   },
   {
     id: 'p4',
-    english: 'The weather is beautiful today. I think I will go for a walk in the park.',
-    indonesian: 'Cuaca hari ini indah. Saya pikir saya akan berjalan-jalan di taman.',
+    english: 'In our quarterly meeting, we need to discuss the financial projections for next year.',
+    indonesian: 'Dalam rapat triwulanan kita, kita perlu membahas proyeksi keuangan untuk tahun depan.',
     difficulty: 'medium',
-    tips: 'Focus on the "th" sound in "weather" and "think".'
+    cefrLevel: 'B2',
+    tips: 'Focus on the clarity of "quarterly" and the intonation when presenting business topics.',
+    skillFocus: 'fluency'
   },
   {
     id: 'p5',
-    english: 'I need to schedule an appointment with the doctor for next Thursday afternoon.',
-    indonesian: 'Saya perlu menjadwalkan janji dengan dokter untuk Kamis sore minggu depan.',
+    english: 'The research paper demonstrates a significant correlation between the variables examined in the study.',
+    indonesian: 'Makalah penelitian menunjukkan korelasi yang signifikan antara variabel-variabel yang diteliti dalam studi tersebut.',
     difficulty: 'hard',
-    tips: 'Practice the "sch" sound in "schedule" and the rhythm of this longer sentence.'
+    cefrLevel: 'C1',
+    tips: 'Pay attention to the academic vocabulary and formal structure of this complex sentence.',
+    skillFocus: 'vocabulary'
   }
 ];
 
