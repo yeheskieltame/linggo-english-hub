@@ -1,3 +1,8 @@
+// Type declarations for the Web Speech API
+interface Window {
+  SpeechRecognition: any;
+  webkitSpeechRecognition: any;
+}
 
 // This is a simplified Speech Recognition service for the first version
 // In a production version, this would connect to actual STT APIs
@@ -15,7 +20,7 @@ export const startSpeechRecognition = (): Promise<{
 }> => {
   return new Promise((resolve, reject) => {
     // Check if browser supports speech recognition
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     
     if (!SpeechRecognition) {
       reject('Speech recognition not supported in this browser');

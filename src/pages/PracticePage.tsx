@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { VolumeHigh, Mic, Loader2 } from 'lucide-react';
+import { Volume2, Mic, Loader2 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { practiceSentences } from '@/data/mockData';
@@ -150,7 +149,7 @@ const PracticePage = () => {
                   onClick={handlePlayAudio}
                   disabled={isSpeaking}
                 >
-                  {isSpeaking ? <Loader2 className="h-4 w-4 animate-spin" /> : <VolumeHigh className="h-4 w-4" />}
+                  {isSpeaking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Volume2 className="h-4 w-4" />}
                   <span className="ml-2">Listen</span>
                 </Button>
               </div>
@@ -244,7 +243,7 @@ const PracticePage = () => {
                 
                 <div className="flex justify-between mt-6">
                   <Button variant="outline" onClick={handlePlayAudio}>
-                    <VolumeHigh className="mr-2 h-4 w-4" /> Listen Again
+                    <Volume2 className="mr-2 h-4 w-4" /> Listen Again
                   </Button>
                   <Button onClick={handleNextSentence}>
                     Continue

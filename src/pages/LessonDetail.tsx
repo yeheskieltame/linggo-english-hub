@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { VolumeHigh } from 'lucide-react';
+import { Volume2 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { mockLessons } from '@/data/mockData';
@@ -84,7 +83,7 @@ const LessonDetail = () => {
             </div>
             <div className="flex gap-3">
               <Button variant="outline" onClick={() => handleSpeak(lesson.title)}>
-                <VolumeHigh className="mr-2 h-4 w-4" />
+                <Volume2 className="mr-2 h-4 w-4" />
                 Listen
               </Button>
               <Button>
@@ -108,7 +107,7 @@ const LessonDetail = () => {
                   onClick={() => handleSpeak(section.text)}
                   disabled={isSpeaking}
                 >
-                  <VolumeHigh className="h-4 w-4" />
+                  <Volume2 className="h-4 w-4" />
                 </Button>
               </div>
               <p className="text-gray-700 mb-6">{section.text}</p>
@@ -134,7 +133,7 @@ const LessonDetail = () => {
                               onClick={() => handleSpeak(example.english, index)}
                               disabled={isSpeaking}
                             >
-                              <VolumeHigh className="h-4 w-4" />
+                              <Volume2 className="h-4 w-4" />
                             </Button>
                           </div>
                           <p className="text-gray-600 text-sm">{example.indonesian}</p>
