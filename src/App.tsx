@@ -9,6 +9,7 @@ import LessonsPage from "./pages/LessonsPage";
 import LessonDetail from "./pages/LessonDetail";
 import PracticePage from "./pages/PracticePage";
 import ConversationPage from "./pages/ConversationPage";
+import Dashboard from "./pages/Dashboard";
 import AboutPage from "./pages/AboutPage";
 import NotFound from "./pages/NotFound";
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/conversation" element={<ConversationPage />} />
           <Route path="/conversation/:lessonId" element={<ConversationPage />} />
           <Route path="/conversation/scenario/:scenarioId" element={<ConversationPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

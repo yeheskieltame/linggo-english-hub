@@ -13,6 +13,7 @@ export interface Lesson {
     sections: {
       title: string;
       text: string;
+      imageUrl?: string; // Optional image URL for each section
       examples?: {
         english: string;
         indonesian: string;
@@ -60,6 +61,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'Common Greetings',
           text: 'When meeting someone for the first time, you can use these common greetings:',
+          imageUrl: 'https://images.unsplash.com/photo-1557425955-df376b5903c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
           examples: [
             {
               english: 'Hello, my name is [your name].',
@@ -78,6 +80,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'Sharing Basic Information',
           text: "After introducing your name, you can share some basic information about yourself:",
+          imageUrl: 'https://images.unsplash.com/photo-1573497161161-c3e73707e25c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
           examples: [
             {
               english: "I'm from Indonesia.",
@@ -96,6 +99,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'Asking Questions',
           text: "To keep the conversation going, you can ask questions about the other person:",
+          imageUrl: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1046&q=80',
           examples: [
             {
               english: "Where are you from?",
@@ -129,6 +133,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'Opening a Meeting',
           text: 'Use these phrases to formally begin a business meeting:',
+          imageUrl: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
           examples: [
             {
               english: "Good morning everyone. Thank you for coming today.",
@@ -147,6 +152,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'Expressing Opinions in Meetings',
           text: "Use these phrases to express your thoughts professionally:",
+          imageUrl: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
           examples: [
             {
               english: "In my opinion, we should focus on the marketing strategy first.",
@@ -180,6 +186,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'Structuring a Research Paper',
           text: 'An academic research paper typically includes these components:',
+          imageUrl: 'https://images.unsplash.com/photo-1532153975070-2e9ab71f1b14?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
           examples: [
             {
               english: 'Abstract: A concise summary of your research and findings.',
@@ -198,6 +205,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'Academic Vocabulary and Phrases',
           text: "Use these formal expressions in your academic writing:",
+          imageUrl: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1073&q=80',
           examples: [
             {
               english: "This study aims to investigate the relationship between X and Y.",
@@ -231,6 +239,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'At the Restaurant',
           text: 'Use these phrases when dining at a restaurant:',
+          imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
           examples: [
             {
               english: "I'd like to make a reservation for tonight at 7 PM.",
@@ -249,6 +258,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'Shopping Conversations',
           text: "Common phrases to use while shopping:",
+          imageUrl: 'https://images.unsplash.com/photo-1481437156560-3205f6a55735?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1095&q=80',
           examples: [
             {
               english: "How much does this cost?",
@@ -282,6 +292,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'Opening Negotiations',
           text: 'Professional ways to begin a negotiation:',
+          imageUrl: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80',
           examples: [
             {
               english: "Thank you for meeting with us today to discuss this opportunity.",
@@ -300,6 +311,7 @@ export const mockLessons: Lesson[] = [
         {
           title: 'Negotiation Techniques',
           text: "Strategic phrases to use during negotiations:",
+          imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
           examples: [
             {
               english: "We appreciate your offer, but we were looking for something more along the lines of...",

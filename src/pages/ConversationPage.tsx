@@ -264,55 +264,123 @@ const ConversationPage = () => {
     
     if (availableScenarios.length === 0) {
       return (
-        <div className="text-center py-8">
-          <h2 className="text-xl font-semibold mb-4">No Conversation Scenarios Available</h2>
-          <p className="text-gray-600 mb-6">
-            {categoryFilter !== 'all' || difficultyFilter !== 'all' 
-              ? "No scenarios match your current filters. Try changing your filter selections."
-              : "There are no conversation scenarios available for this lesson yet."}
-          </p>
+        <div className="py-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+            <h2 className="text-2xl font-bold text-purple-700">Select a Conversation Scenario</h2>
+            
+            {/* Filter Pills */}
+            <div className="flex flex-wrap gap-2">
+              <div className="relative">
+                <select
+                  id="category-filter"
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  className="appearance-none pl-4 pr-10 py-2 bg-white border border-purple-200 rounded-full text-sm font-medium text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                >
+                  {categories.map(category => (
+                    <option key={category} value={category}>
+                      {category === 'all' 
+                        ? 'All Categories' 
+                        : category.charAt(0).toUpperCase() + category.slice(1)}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg className="h-4 w-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              
+              <div className="relative">
+                <select
+                  id="difficulty-filter"
+                  value={difficultyFilter}
+                  onChange={(e) => setDifficultyFilter(e.target.value)}
+                  className="appearance-none pl-4 pr-10 py-2 bg-white border border-purple-200 rounded-full text-sm font-medium text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                >
+                  {difficulties.map(difficulty => (
+                    <option key={difficulty} value={difficulty}>
+                      {difficulty === 'all' 
+                        ? 'All Difficulties' 
+                        : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg className="h-4 w-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              
+              {(categoryFilter !== 'all' || difficultyFilter !== 'all') && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => {
+                    setCategoryFilter('all');
+                    setDifficultyFilter('all');
+                  }}
+                  className="border-purple-200 text-purple-700 hover:bg-purple-50 rounded-full px-4"
+                >
+                  Clear Filters
+                </Button>
+              )}
+            </div>
+          </div>
           
-          {(categoryFilter !== 'all' || difficultyFilter !== 'all') && (
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setCategoryFilter('all');
-                setDifficultyFilter('all');
-              }}
-              className="mb-4"
-            >
-              Clear Filters
-            </Button>
-          )}
-          
-          {lessonId && (
-            <Button asChild>
-              <Link to={`/lessons/${lessonId}`}>
-                <ArrowLeft className="mr-2 h-4 w-4" /> Return to Lesson
-              </Link>
-            </Button>
-          )}
+          <div className="bg-purple-50 rounded-xl p-8 text-center my-12">
+            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <MessageCircle className="h-8 w-8 text-purple-500" />
+            </div>
+            <h3 className="text-xl font-semibold mb-3 text-purple-800">No Conversation Scenarios Available</h3>
+            <p className="text-gray-600 mb-6 max-w-md mx-auto">
+              {categoryFilter !== 'all' || difficultyFilter !== 'all' 
+                ? "No scenarios match your current filters. Try changing your filter selections."
+                : "There are no conversation scenarios available for this lesson yet."}
+            </p>
+            
+            <div className="flex flex-wrap justify-center gap-3">
+              {(categoryFilter !== 'all' || difficultyFilter !== 'all') && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setCategoryFilter('all');
+                    setDifficultyFilter('all');
+                  }}
+                  className="border-purple-300 text-purple-700 hover:bg-purple-50"
+                >
+                  Clear Filters
+                </Button>
+              )}
+              
+              {lessonId && (
+                <Button asChild className="bg-purple-600 hover:bg-purple-700">
+                  <Link to={`/lessons/${lessonId}`}>
+                    <ArrowLeft className="mr-2 h-4 w-4" /> Return to Lesson
+                  </Link>
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
       );
     }
     
     return (
-      <div className="py-6">
-        <h2 className="text-xl font-semibold mb-4">Select a Conversation Scenario</h2>
-        
-        {/* Filters */}
-        <div className="bg-gray-50 p-4 rounded-lg mb-6">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Filter Scenarios:</h3>
-          <div className="flex flex-wrap gap-4">
-            <div>
-              <label htmlFor="category-filter" className="block text-sm text-gray-600 mb-1">
-                Category
-              </label>
+      <div className="py-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+          <h2 className="text-2xl font-bold text-purple-700">Select a Conversation Scenario</h2>
+          
+          {/* Filter Pills */}
+          <div className="flex flex-wrap gap-2">
+            <div className="relative">
               <select
                 id="category-filter"
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="rounded-md border-gray-300 shadow-sm focus:border-linggo-primary focus:ring-linggo-primary text-sm"
+                className="appearance-none pl-4 pr-10 py-2 bg-white border border-purple-200 rounded-full text-sm font-medium text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               >
                 {categories.map(category => (
                   <option key={category} value={category}>
@@ -322,17 +390,19 @@ const ConversationPage = () => {
                   </option>
                 ))}
               </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg className="h-4 w-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </div>
             
-            <div>
-              <label htmlFor="difficulty-filter" className="block text-sm text-gray-600 mb-1">
-                Difficulty
-              </label>
+            <div className="relative">
               <select
                 id="difficulty-filter"
                 value={difficultyFilter}
                 onChange={(e) => setDifficultyFilter(e.target.value)}
-                className="rounded-md border-gray-300 shadow-sm focus:border-linggo-primary focus:ring-linggo-primary text-sm"
+                className="appearance-none pl-4 pr-10 py-2 bg-white border border-purple-200 rounded-full text-sm font-medium text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               >
                 {difficulties.map(difficulty => (
                   <option key={difficulty} value={difficulty}>
@@ -342,38 +412,43 @@ const ConversationPage = () => {
                   </option>
                 ))}
               </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg className="h-4 w-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </div>
             
             {(categoryFilter !== 'all' || difficultyFilter !== 'all') && (
-              <div className="flex items-end">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => {
-                    setCategoryFilter('all');
-                    setDifficultyFilter('all');
-                  }}
-                >
-                  Clear Filters
-                </Button>
-              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setCategoryFilter('all');
+                  setDifficultyFilter('all');
+                }}
+                className="border-purple-200 text-purple-700 hover:bg-purple-50 rounded-full px-4"
+              >
+                Clear Filters
+              </Button>
             )}
           </div>
         </div>
         
-        <div className="text-sm text-gray-500 mb-4">
+        <div className="text-sm text-gray-500 mb-6 bg-purple-50 px-4 py-2 rounded-lg inline-block">
           Showing {availableScenarios.length} {availableScenarios.length === 1 ? 'scenario' : 'scenarios'}
         </div>
         
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {availableScenarios.map(scenario => (
             <Card 
               key={scenario.id} 
-              className="cursor-pointer hover:shadow-md transition-shadow"
+              className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100"
               onClick={() => handleSelectScenario(scenario)}
             >
+              <div className="h-2 bg-gradient-to-r from-purple-500 to-blue-500"></div>
               <CardContent className="p-6">
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="flex flex-wrap gap-2 mb-4">
                   <Badge className={
                     scenario.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
                     scenario.difficulty === 'medium' ? 'bg-blue-100 text-blue-800' :
@@ -391,18 +466,26 @@ const ConversationPage = () => {
                   </Badge>
                 </div>
                 
-                <h3 className="text-lg font-medium mb-2">{scenario.title}</h3>
-                <p className="text-gray-600 mb-4">{scenario.description}</p>
+                <h3 className="text-lg font-semibold mb-3 text-purple-800">{scenario.title}</h3>
+                <p className="text-gray-600 mb-5 text-sm line-clamp-2">{scenario.description}</p>
                 
-                <div className="flex justify-between text-sm text-gray-500">
-                  <div>
-                    <span className="font-medium">Your role:</span> {scenario.userRole}
+                <div className="flex flex-col sm:flex-row justify-between gap-3 text-sm text-gray-500 pt-3 border-t border-gray-100">
+                  <div className="flex items-center">
+                    <span className="font-medium text-purple-700 mr-1">Role:</span> 
+                    <span className="truncate">{scenario.userRole}</span>
                   </div>
-                  <div>
-                    <Clock className="inline h-4 w-4 mr-1" />
+                  <div className="flex items-center text-blue-600 font-medium">
+                    <Clock className="h-4 w-4 mr-1" />
                     {Math.floor(scenario.durationInSeconds / 60)} min
                   </div>
                 </div>
+                
+                <Button 
+                  className="w-full mt-4 bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white"
+                  size="sm"
+                >
+                  Start Conversation
+                </Button>
               </CardContent>
             </Card>
           ))}
@@ -488,7 +571,7 @@ const ConversationPage = () => {
             </Badge>
           </div>
           <Button 
-            variant="outline" 
+            className="bg-purple-600 hover:bg-purple-700"
             size="sm" 
             onClick={handleEndConversation}
           >
@@ -516,18 +599,21 @@ const ConversationPage = () => {
               className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div 
-                className={`max-w-[80%] p-3 rounded-lg ${
+                className={`max-w-[80%] p-4 rounded-lg ${
                   message.role === 'user' 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-100 text-gray-800'
+                    ? 'bg-blue-50 rounded-lg border-r-4 border-blue-400 text-gray-700' 
+                    : 'bg-purple-50 rounded-lg border-l-4 border-purple-400 text-gray-700'
                 }`}
               >
+                <p className={`font-medium mb-1 ${message.role === 'user' ? 'text-blue-800' : 'text-purple-800'}`}>
+                  {message.role === 'user' ? 'You' : selectedScenario.aiRole}
+                </p>
                 <p>{message.content}</p>
                 {message.role === 'assistant' && (
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="mt-1 h-6 text-xs opacity-70 hover:opacity-100"
+                    className="mt-2 h-7 text-xs text-purple-600 hover:text-purple-800 hover:bg-purple-100"
                     onClick={() => handleSpeakMessage(message.content)}
                     disabled={isSpeaking}
                   >
@@ -719,17 +805,31 @@ const ConversationPage = () => {
       <Header />
       
       {/* Page Header */}
-      <section className="pt-28 pb-12 bg-linggo-light">
-        <div className="container mx-auto px-4">
+      <section className="pt-32 pb-16 relative overflow-hidden bg-gradient-to-r from-purple-50 to-blue-50">
+        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        <div className="absolute top-20 left-10 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+        <div className="absolute bottom-10 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            <div className="inline-block px-4 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium mb-6">
+              Interactive Learning
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
               {selectedScenario && conversationState !== ConversationState.SELECTING
                 ? selectedScenario.title
                 : currentLesson 
-                  ? `Conversation Practice: ${currentLesson.title}` 
-                  : 'Conversation Practice'}
+                  ? 'Conversation Practice: '
+                  : ''}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500">
+                {selectedScenario && conversationState !== ConversationState.SELECTING
+                  ? ''
+                  : currentLesson 
+                    ? currentLesson.title
+                    : 'Conversation Practice'}
+              </span>
             </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
               {selectedScenario && conversationState !== ConversationState.SELECTING
                 ? selectedScenario.description
                 : "Improve your speaking skills through interactive conversations with AI role-play partners."}

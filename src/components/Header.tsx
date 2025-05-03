@@ -21,19 +21,19 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors">
+          <Link to="/" className="font-medium text-gray-800 hover:text-purple-600 transition-colors">
             Home
           </Link>
-          <Link to="/lessons" className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors">
+          <Link to="/lessons" className="font-medium text-gray-800 hover:text-purple-600 transition-colors">
             Lessons
           </Link>
-          <Link to="/practice" className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors">
-            Speaking
-          </Link>
-          <Link to="/conversation" className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors">
+          <Link to="/conversation" className="font-medium text-gray-800 hover:text-purple-600 transition-colors">
             Conversation
           </Link>
-          <Link to="/about" className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors">
+          <Link to="/dashboard" className="font-medium text-gray-800 hover:text-purple-600 transition-colors">
+            Dashboard
+          </Link>
+          <Link to="/about" className="font-medium text-gray-800 hover:text-purple-600 transition-colors">
             About
           </Link>
         </nav>
@@ -61,35 +61,35 @@ const Header = () => {
           <nav className="flex flex-col space-y-4">
             <Link 
               to="/" 
-              className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors"
+              className="font-medium text-gray-800 hover:text-purple-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Home
             </Link>
             <Link 
               to="/lessons" 
-              className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors"
+              className="font-medium text-gray-800 hover:text-purple-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Lessons
             </Link>
             <Link 
-              to="/practice" 
-              className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              Speaking
-            </Link>
-            <Link 
               to="/conversation" 
-              className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors"
+              className="font-medium text-gray-800 hover:text-purple-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Conversation
             </Link>
             <Link 
+              to="/dashboard" 
+              className="font-medium text-gray-800 hover:text-purple-600 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Dashboard
+            </Link>
+            <Link 
               to="/about" 
-              className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors"
+              className="font-medium text-gray-800 hover:text-purple-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               About

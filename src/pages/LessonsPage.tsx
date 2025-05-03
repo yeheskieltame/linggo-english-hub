@@ -113,7 +113,12 @@ const LessonsPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredLessons.map((lesson) => (
               <Card key={lesson.id} className="overflow-hidden card-hover">
-                <div className="h-48 bg-gray-200 relative">
+                <div className="h-48 bg-gray-200 relative overflow-hidden">
+                  <img 
+                    src={lesson.content.sections[0].imageUrl || 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80'} 
+                    alt={lesson.title}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
                   <div className="absolute top-2 right-2 flex flex-col gap-2">
                     <Badge className={LevelsColor[lesson.level]}>
                       {lesson.level.charAt(0).toUpperCase() + lesson.level.slice(1)}
