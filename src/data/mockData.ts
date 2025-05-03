@@ -1,4 +1,3 @@
-
 export interface Lesson {
   id: string;
   title: string;
@@ -400,7 +399,7 @@ export const practiceSentences: PracticeSentence[] = [
     indonesian: 'Mari kita mulai dengan meninjau item tindakan dari rapat sebelumnya.',
     difficulty: 'medium',
     cefrLevel: 'B2',
-    tips: 'Focus on the "let's" contraction and the rhythm of the business phrase "action items".',
+    tips: 'Focus on the "let\'s" contraction and the rhythm of the business phrase "action items".',
     skillFocus: 'fluency',
     lessonId: 'l2'
   },
