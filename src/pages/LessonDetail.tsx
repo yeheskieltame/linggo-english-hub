@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, BookOpen, Mic } from 'lucide-react';
+import { Volume2, BookOpen, Mic, MessageCircle } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { mockLessons, practiceSentences } from '@/data/mockData';
+import { conversationScenarios } from '@/data/conversationScenarios';
 import { speakText } from '@/services/textToSpeech';
 
 const LevelsColor = {
@@ -38,8 +39,9 @@ const LessonDetail = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [activeExampleIndex, setActiveExampleIndex] = useState<number | null>(null);
   
-  // Check if this lesson has practice exercises
+  // Check if this lesson has practice exercises and conversation scenarios
   const hasPracticeExercises = practiceSentences.some(sentence => sentence.lessonId === lessonId);
+  const hasConversationScenarios = conversationScenarios.some(scenario => scenario.lessonId === lessonId);
   
   useEffect(() => {
     if (!lesson) {
@@ -122,9 +124,17 @@ const LessonDetail = () => {
               <Button asChild>
                 <Link to={`/practice/${lesson.id}`}>
                   <Mic className="mr-2 h-4 w-4" />
-                  Start Practice
+                  Speaking Practice
                 </Link>
               </Button>
+              {hasConversationScenarios && (
+                <Button asChild variant="secondary">
+                  <Link to={`/conversation/${lesson.id}`}>
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Conversation Practice
+                  </Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -191,17 +201,27 @@ const LessonDetail = () => {
               </Link>
             </Button>
             
-            {hasPracticeExercises ? (
-              <Button asChild>
-                <Link to={`/practice/${lesson.id}`}>
-                  <Mic className="mr-2 h-4 w-4" /> Practice This Lesson
-                </Link>
-              </Button>
-            ) : (
-              <Button disabled>
-                <Mic className="mr-2 h-4 w-4" /> No Practice Available
-              </Button>
-            )}
+            <div className="flex gap-3">
+              {hasPracticeExercises ? (
+                <Button asChild>
+                  <Link to={`/practice/${lesson.id}`}>
+                    <Mic className="mr-2 h-4 w-4" /> Speaking Practice
+                  </Link>
+                </Button>
+              ) : (
+                <Button disabled>
+                  <Mic className="mr-2 h-4 w-4" /> No Speaking Practice
+                </Button>
+              )}
+              
+              {hasConversationScenarios ? (
+                <Button asChild variant="secondary">
+                  <Link to={`/conversation/${lesson.id}`}>
+                    <MessageCircle className="mr-2 h-4 w-4" /> Conversation Practice
+                  </Link>
+                </Button>
+              ) : null}
+            </div>
           </div>
         </div>
       </section>

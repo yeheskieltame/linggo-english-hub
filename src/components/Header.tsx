@@ -28,7 +28,10 @@ const Header = () => {
             Lessons
           </Link>
           <Link to="/practice" className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors">
-            Practice
+            Speaking
+          </Link>
+          <Link to="/conversation" className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors">
+            Conversation
           </Link>
           <Link to="/about" className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors">
             About
@@ -75,7 +78,14 @@ const Header = () => {
               className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              Practice
+              Speaking
+            </Link>
+            <Link 
+              to="/conversation" 
+              className="font-medium text-linggo-dark hover:text-linggo-primary transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Conversation
             </Link>
             <Link 
               to="/about" 
