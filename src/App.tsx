@@ -9,8 +9,11 @@ import LessonsPage from "./pages/LessonsPage";
 import LessonDetail from "./pages/LessonDetail";
 import PracticePage from "./pages/PracticePage";
 import ConversationPage from "./pages/ConversationPage";
+import ListeningActivityPage from "./pages/ListeningActivityPage";
+import ReadingActivityPage from "./pages/ReadingActivityPage";
 import Dashboard from "./pages/Dashboard";
 import AboutPage from "./pages/AboutPage";
+import LevelAssessmentPage from "./pages/LevelAssessmentPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,8 +33,11 @@ const App = () => (
           <Route path="/conversation" element={<ConversationPage />} />
           <Route path="/conversation/:lessonId" element={<ConversationPage />} />
           <Route path="/conversation/scenario/:scenarioId" element={<ConversationPage />} />
+          <Route path="/listening/:activityId" element={<ListeningActivityPage />} />
+          <Route path="/reading/:activityId" element={<ReadingActivityPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/assessment" element={<LevelAssessmentPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

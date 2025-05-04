@@ -319,6 +319,44 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
               
+              {/* Level Assessment */}
+              <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-green-100">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BarChart className="h-5 w-5 mr-2 text-green-500" />
+                    English Level Assessment
+                  </CardTitle>
+                  <CardDescription>Test your current English proficiency level</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <p className="text-sm text-gray-600">
+                      Take our comprehensive assessment test to determine your current CEFR level and get personalized learning recommendations.
+                    </p>
+                    <div className="bg-white p-4 rounded-lg border border-green-100">
+                      <h4 className="font-medium text-green-800 mb-2">Why take the assessment?</h4>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex items-start">
+                          <span className="text-green-500 mr-2">•</span>
+                          <span>Discover your current CEFR level (A1-C2)</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 mr-2">•</span>
+                          <span>Get personalized feedback on your strengths and weaknesses</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 mr-2">•</span>
+                          <span>Receive tailored lesson recommendations</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <Button className="w-full bg-green-600 hover:bg-green-700">
+                      <Link to="/assessment" className="text-white w-full">Take Level Assessment</Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
               {/* Goals */}
               <Card>
                 <CardHeader>

@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, BookOpen, Mic, MessageCircle } from 'lucide-react';
+import { Volume2, BookOpen, Mic, MessageCircle, Headphones, BookOpenText } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { mockLessons, practiceSentences } from '@/data/mockData';
 import { conversationScenarios } from '@/data/conversationScenarios';
+import { listeningActivities } from '@/data/listeningActivities';
+import { readingActivities } from '@/data/readingActivities';
 import { speakText } from '@/services/textToSpeech';
 
 const LevelsColor = {
@@ -39,9 +41,19 @@ const LessonDetail = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [activeExampleIndex, setActiveExampleIndex] = useState<number | null>(null);
   
-  // Check if this lesson has practice exercises and conversation scenarios
+  // Check if this lesson has different types of activities
   const hasPracticeExercises = practiceSentences.some(sentence => sentence.lessonId === lessonId);
   const hasConversationScenarios = conversationScenarios.some(scenario => scenario.lessonId === lessonId);
+  const hasListeningActivities = listeningActivities.some(activity => activity.lessonId === lessonId);
+  const hasReadingActivities = readingActivities.some(activity => activity.lessonId === lessonId);
+  
+  // Get the first activity ID of each type for this lesson
+  const firstListeningActivityId = hasListeningActivities 
+    ? listeningActivities.find(activity => activity.lessonId === lessonId)?.id 
+    : null;
+  const firstReadingActivityId = hasReadingActivities 
+    ? readingActivities.find(activity => activity.lessonId === lessonId)?.id 
+    : null;
   
   useEffect(() => {
     if (!lesson) {
@@ -138,6 +150,33 @@ const LessonDetail = () => {
                 <Volume2 className="mr-2 h-4 w-4" />
                 <span className="sm:inline">Listen</span>
               </Button>
+              
+              {hasListeningActivities && (
+                <Button 
+                  asChild 
+                  className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
+                  size="sm"
+                >
+                  <Link to={`/listening/${firstListeningActivityId}`}>
+                    <Headphones className="mr-2 h-4 w-4" />
+                    <span className="sm:inline">Listening Practice</span>
+                  </Link>
+                </Button>
+              )}
+              
+              {hasReadingActivities && (
+                <Button 
+                  asChild 
+                  className="bg-emerald-600 hover:bg-emerald-700 w-full sm:w-auto"
+                  size="sm"
+                >
+                  <Link to={`/reading/${firstReadingActivityId}`}>
+                    <BookOpenText className="mr-2 h-4 w-4" />
+                    <span className="sm:inline">Reading Practice</span>
+                  </Link>
+                </Button>
+              )}
+              
               <Button 
                 asChild 
                 className="bg-purple-600 hover:bg-purple-700 w-full sm:w-auto"
@@ -148,10 +187,11 @@ const LessonDetail = () => {
                   <span className="sm:inline">Speaking Practice</span>
                 </Link>
               </Button>
+              
               {hasConversationScenarios && (
                 <Button 
                   asChild 
-                  className="bg-blue-500 hover:bg-blue-600 w-full sm:w-auto"
+                  className="bg-indigo-500 hover:bg-indigo-600 w-full sm:w-auto"
                   size="sm"
                 >
                   <Link to={`/conversation/${lesson.id}`}>
@@ -258,6 +298,32 @@ const LessonDetail = () => {
             </Button>
             
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+              {hasListeningActivities ? (
+                <Button 
+                  asChild 
+                  className="bg-blue-600 hover:bg-blue-700 shadow-sm w-full sm:w-auto"
+                  size="sm"
+                >
+                  <Link to={`/listening/${firstListeningActivityId}`}>
+                    <Headphones className="mr-2 h-4 w-4" /> 
+                    <span className="sm:inline">Listening Practice</span>
+                  </Link>
+                </Button>
+              ) : null}
+              
+              {hasReadingActivities ? (
+                <Button 
+                  asChild 
+                  className="bg-emerald-600 hover:bg-emerald-700 shadow-sm w-full sm:w-auto"
+                  size="sm"
+                >
+                  <Link to={`/reading/${firstReadingActivityId}`}>
+                    <BookOpenText className="mr-2 h-4 w-4" /> 
+                    <span className="sm:inline">Reading Practice</span>
+                  </Link>
+                </Button>
+              ) : null}
+              
               {hasPracticeExercises ? (
                 <Button 
                   asChild 
@@ -283,7 +349,7 @@ const LessonDetail = () => {
               {hasConversationScenarios ? (
                 <Button 
                   asChild 
-                  className="bg-blue-500 hover:bg-blue-600 shadow-sm w-full sm:w-auto"
+                  className="bg-indigo-500 hover:bg-indigo-600 shadow-sm w-full sm:w-auto"
                   size="sm"
                 >
                   <Link to={`/conversation/${lesson.id}`}>

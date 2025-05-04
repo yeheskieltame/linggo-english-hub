@@ -38,6 +38,9 @@ const Index = () => {
                 <Button size="lg" variant="outline" className="text-base font-medium border-purple-300 text-purple-700 hover:bg-purple-50">
                   <Link to="/lessons">Continue Learning</Link>
                 </Button>
+                <Button size="lg" variant="outline" className="text-base font-medium border-green-300 text-green-700 hover:bg-green-50">
+                  <Link to="/assessment">Test Your Level</Link>
+                </Button>
               </div>
               <div className="flex items-center">
                 <div className="flex -space-x-3">

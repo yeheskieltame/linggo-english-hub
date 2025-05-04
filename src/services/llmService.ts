@@ -6,6 +6,93 @@ interface LLMFeedbackResponse {
 }
 
 /**
+ * Makes a general request to the LLM API with a prompt
+ * @param prompt The prompt to send to the LLM
+ * @param requestJson Whether to request a JSON response format
+ * @returns A promise that resolves to the LLM's response as a string
+ */
+export const llmRequest = async (prompt: string, requestJson: boolean = true): Promise<string> => {
+  try {
+    // Get API key from environment variables
+    const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+    
+    if (!apiKey) {
+      console.error('GROQ API key not found');
+      if (requestJson) {
+        return JSON.stringify({
+          feedback: "Error: API key not found. Please check your environment variables.",
+          strengths: ["Unable to assess due to system error"],
+          areasToImprove: ["Unable to assess due to system error"],
+          recommendedLessons: ["Basic English", "Grammar Fundamentals", "Vocabulary Building"]
+        });
+      }
+      return "Error: API key not found. Please check your environment variables.";
+    }
+
+    // Add a system message to help ensure proper JSON formatting if requested
+    const messages = requestJson 
+      ? [
+          {
+            role: 'system',
+            content: 'You are a helpful assistant that always responds in valid JSON format. Make sure your response can be parsed with JSON.parse().'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ]
+      : [
+          {
+            role: 'user',
+            content: prompt
+          }
+        ];
+
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages: messages,
+        temperature: 0.7,
+        response_format: requestJson ? { type: 'json_object' } : undefined
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error from Groq API:', errorText);
+      if (requestJson) {
+        return JSON.stringify({
+          feedback: "Error: Failed to get a response from the language model.",
+          strengths: ["Unable to assess due to system error"],
+          areasToImprove: ["Unable to assess due to system error"],
+          recommendedLessons: ["Basic English", "Grammar Fundamentals", "Vocabulary Building"]
+        });
+      }
+      return "Error: Failed to get a response from the language model.";
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error('Error calling Groq API:', error);
+    if (requestJson) {
+      return JSON.stringify({
+        feedback: "Error: An unexpected error occurred while processing your request.",
+        strengths: ["Unable to assess due to system error"],
+        areasToImprove: ["Unable to assess due to system error"],
+        recommendedLessons: ["Basic English", "Grammar Fundamentals", "Vocabulary Building"]
+      });
+    }
+    return "Error: An unexpected error occurred while processing your request.";
+  }
+};
+
+/**
  * Analyzes user speech using Groq LLM API
  * @param userSpeech The transcribed speech from the user
  * @param prompt The speaking prompt/instruction given to the user
@@ -18,14 +105,6 @@ export const analyzeSpeechWithLLM = async (
   targetLanguage: string = 'english'
 ): Promise<LLMFeedbackResponse> => {
   try {
-    // Get API key from environment variables
-    const apiKey = import.meta.env.VITE_GROQ_API_KEY;
-    
-    if (!apiKey) {
-      console.error('GROQ API key not found');
-      return getFallbackFeedback(userSpeech);
-    }
-
     const systemPrompt = `You are an expert language teacher specializing in ${targetLanguage}. 
     Analyze the following speech from a language learner who was responding to this prompt: "${prompt}".
     
@@ -40,37 +119,9 @@ export const analyzeSpeechWithLLM = async (
     - feedback: A helpful, encouraging paragraph with your main feedback
     - detailedFeedback: An array of objects with {word: string, issue: string} highlighting specific words or phrases that need improvement`;
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
-        messages: [
-          {
-            role: 'system',
-            content: systemPrompt
-          },
-          {
-            role: 'user',
-            content: userSpeech
-          }
-        ],
-        temperature: 0.7,
-        response_format: { type: 'json_object' }
-      })
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Error from Groq API:', errorText);
-      return getFallbackFeedback(userSpeech);
-    }
-
-    const data = await response.json();
-    const content = data.choices[0].message.content;
+    // Use the llmRequest function with JSON response format
+    const fullPrompt = `${systemPrompt}\n\nUser speech: "${userSpeech}"`;
+    const content = await llmRequest(fullPrompt, true);
     
     try {
       // Parse the JSON response
