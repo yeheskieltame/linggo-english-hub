@@ -15,8 +15,35 @@ import Dashboard from "./pages/Dashboard";
 import AboutPage from "./pages/AboutPage";
 import LevelAssessmentPage from "./pages/LevelAssessmentPage";
 import NotFound from "./pages/NotFound";
+import AuthPage from "./pages/AuthPage";
+import ProfilePage from "./pages/ProfilePage";
+import { AuthProvider } from "./providers/AuthProvider";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
+
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/auth" element={<AuthPage />} />
+    <Route path="/lessons" element={<LessonsPage />} />
+    <Route path="/lessons/:lessonId" element={<LessonDetail />} />
+    <Route path="/about" element={<AboutPage />} />
+
+    {/* Protected Routes */}
+    <Route path="/practice" element={<ProtectedRoute><PracticePage /></ProtectedRoute>} />
+    <Route path="/practice/:lessonId" element={<ProtectedRoute><PracticePage /></ProtectedRoute>} />
+    <Route path="/conversation" element={<ProtectedRoute><ConversationPage /></ProtectedRoute>} />
+    <Route path="/conversation/:lessonId" element={<ProtectedRoute><ConversationPage /></ProtectedRoute>} />
+    <Route path="/conversation/scenario/:scenarioId" element={<ProtectedRoute><ConversationPage /></ProtectedRoute>} />
+    <Route path="/listening/:activityId" element={<ProtectedRoute><ListeningActivityPage /></ProtectedRoute>} />
+    <Route path="/reading/:activityId" element={<ProtectedRoute><ReadingActivityPage /></ProtectedRoute>} />
+    <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+    <Route path="/assessment" element={<ProtectedRoute><LevelAssessmentPage /></ProtectedRoute>} />
+    <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -24,22 +51,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/lessons" element={<LessonsPage />} />
-          <Route path="/lessons/:lessonId" element={<LessonDetail />} />
-          <Route path="/practice" element={<PracticePage />} />
-          <Route path="/practice/:lessonId" element={<PracticePage />} />
-          <Route path="/conversation" element={<ConversationPage />} />
-          <Route path="/conversation/:lessonId" element={<ConversationPage />} />
-          <Route path="/conversation/scenario/:scenarioId" element={<ConversationPage />} />
-          <Route path="/listening/:activityId" element={<ListeningActivityPage />} />
-          <Route path="/reading/:activityId" element={<ReadingActivityPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/assessment" element={<LevelAssessmentPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
