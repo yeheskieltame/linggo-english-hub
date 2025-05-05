@@ -2,10 +2,11 @@
 import React, { useState } from 'react';
 import { LessonStage } from '@/types/lesson';
 import { Button } from '@/components/ui/button';
-import { Volume2 } from 'lucide-react';
+import { Volume2, BookOpen, ExternalLink } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { speakText } from '@/services/textToSpeech';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface LessonStageContentProps {
   stage: LessonStage;
@@ -15,6 +16,7 @@ interface LessonStageContentProps {
 const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComplete }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [activeExampleIndex, setActiveExampleIndex] = useState<number | null>(null);
+  const isMobile = useIsMobile();
 
   const handleSpeak = async (text: string, index?: number) => {
     if (isSpeaking) return;
@@ -40,24 +42,36 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
         <h2 className="text-xl sm:text-2xl font-bold text-purple-700">{stage.title}</h2>
         <Button 
           variant="ghost" 
-          size="sm"
+          size={isMobile ? "icon" : "sm"}
           onClick={() => handleSpeak(stage.content)}
           disabled={isSpeaking}
           className="text-purple-600 hover:bg-purple-50"
           title="Listen to this section"
         >
           <Volume2 className="h-4 w-4" />
-          <span className="ml-2">Listen</span>
+          {!isMobile && <span className="ml-2">Listen</span>}
         </Button>
       </div>
 
       {stage.videoId && (
         <div className="mb-6">
-          <YouTubeEmbed 
-            videoId={stage.videoId} 
-            title={stage.title}
-            className="w-full shadow-lg"
-          />
+          <div className="relative rounded-lg overflow-hidden shadow-lg">
+            <YouTubeEmbed 
+              videoId={stage.videoId} 
+              title={stage.title}
+              className="w-full"
+            />
+          </div>
+          <div className="mt-2 flex justify-end">
+            <a 
+              href={`https://www.youtube.com/watch?v=${stage.videoId}`} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sm flex items-center text-purple-600 hover:text-purple-800"
+            >
+              <BookOpen className="h-3 w-3 mr-1" /> Watch on YouTube <ExternalLink className="h-3 w-3 ml-1" />
+            </a>
+          </div>
         </div>
       )}
 
@@ -76,7 +90,7 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
       </div>
       
       {stage.examples && stage.examples.length > 0 && (
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 sm:p-6 md:p-8 shadow-sm">
+        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 sm:p-6 shadow-sm">
           <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-purple-700">Examples</h3>
           <div className="space-y-4">
             {stage.examples.map((example, index) => (
@@ -109,8 +123,8 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
         </div>
       )}
 
-      <div className="flex justify-end mt-8">
-        <Button onClick={() => onComplete(stage.id)}>
+      <div className="flex justify-end mt-8 pb-4">
+        <Button onClick={() => onComplete(stage.id)} className="bg-purple-600 hover:bg-purple-700">
           Mark as Complete & Continue
         </Button>
       </div>

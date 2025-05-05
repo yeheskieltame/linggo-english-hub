@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { 
   Menu, X, BookOpen, MessageCircle, BarChart, 
-  Headphones, BookText, Mic, Info, User, LogOut 
+  BookText, Info, User, LogOut 
 } from "lucide-react";
 import { useAuth } from '@/providers/AuthProvider';
 import {
@@ -80,54 +80,15 @@ const Header = () => {
             <BookText className="h-4 w-4" />
             <span>Pelajaran</span>
           </Link>
-          <div className="relative group">
-            <div className={`font-medium cursor-pointer flex items-center gap-1 ${
-              isActive('/listening') || isActive('/reading') ? 'text-purple-600' : 'text-gray-800 hover:text-purple-600'
-            }`}>
-              <Headphones className="h-4 w-4" />
-              <span>Latihan Pemahaman</span>
-            </div>
-            <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden transform scale-0 group-hover:scale-100 transition-transform origin-top z-50">
-              <Link 
-                to="/listening/listen-1" 
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600"
-                onClick={() => setIsOpen(false)}
-              >
-                Listening (Mendengarkan)
-              </Link>
-              <Link 
-                to="/reading/read-1" 
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600"
-                onClick={() => setIsOpen(false)}
-              >
-                Reading (Membaca)
-              </Link>
-            </div>
-          </div>
-          <div className="relative group">
-            <div className={`font-medium cursor-pointer flex items-center gap-1 ${
-              isActive('/practice') || isActive('/conversation') ? 'text-purple-600' : 'text-gray-800 hover:text-purple-600'
-            }`}>
-              <Mic className="h-4 w-4" />
-              <span>Latihan Berbicara</span>
-            </div>
-            <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden transform scale-0 group-hover:scale-100 transition-transform origin-top z-50">
-              <Link 
-                to="/practice" 
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600"
-                onClick={() => setIsOpen(false)}
-              >
-                Speaking (Berbicara)
-              </Link>
-              <Link 
-                to="/conversation" 
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600"
-                onClick={() => setIsOpen(false)}
-              >
-                Conversation (Percakapan)
-              </Link>
-            </div>
-          </div>
+          <Link 
+            to="/conversation" 
+            className={`font-medium transition-colors flex items-center gap-1 ${
+              isActive('/conversation') ? 'text-purple-600' : 'text-gray-800 hover:text-purple-600'
+            }`}
+          >
+            <MessageCircle className="h-4 w-4" />
+            <span>Percakapan</span>
+          </Link>
           <Link 
             to="/assessment" 
             className={`font-medium transition-colors flex items-center gap-1 ${
@@ -232,55 +193,16 @@ const Header = () => {
               <BookText className="h-4 w-4" />
               <span>Pelajaran</span>
             </Link>
-            
-            <div className="pl-2 border-l-2 border-gray-200 ml-1">
-              <p className="font-medium text-gray-500 text-sm mb-2">Latihan Pemahaman:</p>
-              <Link 
-                to="/listening/listen-1" 
-                className={`font-medium flex items-center gap-2 mb-2 ${
-                  isActive('/listening') ? 'text-purple-600' : 'text-gray-800 hover:text-purple-600'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                <Headphones className="h-4 w-4" />
-                <span>Listening (Mendengarkan)</span>
-              </Link>
-              <Link 
-                to="/reading/read-1" 
-                className={`font-medium flex items-center gap-2 ${
-                  isActive('/reading') ? 'text-purple-600' : 'text-gray-800 hover:text-purple-600'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                <BookText className="h-4 w-4" />
-                <span>Reading (Membaca)</span>
-              </Link>
-            </div>
-            
-            <div className="pl-2 border-l-2 border-gray-200 ml-1">
-              <p className="font-medium text-gray-500 text-sm mb-2">Latihan Berbicara:</p>
-              <Link 
-                to="/practice" 
-                className={`font-medium flex items-center gap-2 mb-2 ${
-                  isActive('/practice') ? 'text-purple-600' : 'text-gray-800 hover:text-purple-600'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                <Mic className="h-4 w-4" />
-                <span>Speaking (Berbicara)</span>
-              </Link>
-              <Link 
-                to="/conversation" 
-                className={`font-medium flex items-center gap-2 ${
-                  isActive('/conversation') ? 'text-purple-600' : 'text-gray-800 hover:text-purple-600'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                <MessageCircle className="h-4 w-4" />
-                <span>Conversation (Percakapan)</span>
-              </Link>
-            </div>
-            
+            <Link 
+              to="/conversation" 
+              className={`font-medium flex items-center gap-2 ${
+                isActive('/conversation') ? 'text-purple-600' : 'text-gray-800 hover:text-purple-600'
+              }`}
+              onClick={() => setIsOpen(false)}
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span>Percakapan</span>
+            </Link>
             <Link 
               to="/assessment" 
               className={`font-medium flex items-center gap-2 ${
