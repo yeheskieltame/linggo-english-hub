@@ -14,6 +14,9 @@ import {
   LevelAssessmentQuestion,
   LevelAssessmentResult
 } from '@/services/levelAssessmentService';
+import { useAuth } from '@/providers/AuthProvider';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/components/ui/use-toast';
 
 const LevelBadgeColor = {
   'A1': 'bg-slate-100 text-slate-800',
@@ -32,6 +35,8 @@ enum AssessmentState {
 
 const LevelAssessmentPage = () => {
   const navigate = useNavigate();
+  const { user, profile } = useAuth();
+  const { toast } = useToast();
   
   // State
   const [assessmentState, setAssessmentState] = useState<AssessmentState>(AssessmentState.INTRO);
@@ -40,6 +45,7 @@ const LevelAssessmentPage = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [assessmentResult, setAssessmentResult] = useState<LevelAssessmentResult | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSavingResults, setIsSavingResults] = useState(false);
   
   // Calculate progress
   const progress = (currentQuestionIndex / levelAssessmentQuestions.length) * 100;
@@ -100,11 +106,106 @@ const LevelAssessmentPage = () => {
         
       const result = await evaluateAssessment(finalAnswers);
       setAssessmentResult(result);
+      
+      // Save assessment results to database if user is logged in
+      if (user) {
+        setIsSavingResults(true);
+        try {
+          // 1. Save assessment result to user_assessments table
+          const { error: assessmentError } = await supabase
+            .from('user_assessments')
+            .insert({
+              user_id: user.id,
+              score: result.score,
+              level: result.level,
+              cefr_level: result.cefrLevel,
+              correct_answers: result.correctAnswers,
+              total_questions: result.totalQuestions,
+              strengths: result.strengths,
+              areas_to_improve: result.areasToImprove,
+              created_at: new Date().toISOString()
+            });
+            
+          if (assessmentError) {
+            console.error('Error saving assessment results:', assessmentError);
+            toast({
+              title: "Error saving assessment results",
+              description: "Your results couldn't be saved to your profile.",
+              variant: "destructive",
+            });
+          }
+          
+          // 2. Update user profile with the new level
+          const preferredLevel = mapCefrToPreferredLevel(result.cefrLevel);
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .update({
+              preferred_level: preferredLevel,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', user.id);
+            
+          if (profileError) {
+            console.error('Error updating user profile:', profileError);
+            toast({
+              title: "Error updating profile",
+              description: "Your profile couldn't be updated with your new level.",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Assessment completed",
+              description: `Your level has been updated to ${preferredLevel}.`,
+            });
+          }
+          
+          // 3. Log this activity in user_schedule
+          const { error: scheduleError } = await supabase
+            .from('user_schedule')
+            .insert({
+              user_id: user.id,
+              title: `Completed level assessment: ${preferredLevel}`,
+              date: new Date().toISOString().split('T')[0],
+              start_time: new Date().toTimeString().split(' ')[0],
+              duration: 10, // Assume 10 minutes for assessment
+              is_completed: true
+            });
+            
+          if (scheduleError) {
+            console.error('Error logging assessment activity:', scheduleError);
+          }
+        } catch (dbError) {
+          console.error('Error saving assessment data:', dbError);
+        } finally {
+          setIsSavingResults(false);
+        }
+      }
+      
       setAssessmentState(AssessmentState.RESULTS);
     } catch (error) {
       console.error('Error evaluating assessment:', error);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+  
+  // Helper function to map CEFR level to preferred_level format
+  const mapCefrToPreferredLevel = (cefrLevel: string): string => {
+    switch(cefrLevel) {
+      case 'A1':
+        return 'Beginner';
+      case 'A2':
+        return 'Elementary';
+      case 'B1':
+        return 'Intermediate';
+      case 'B2':
+        return 'Upper Intermediate';
+      case 'C1':
+        return 'Advanced';
+      case 'C2':
+        return 'Proficiency';
+      default:
+        return 'Beginner';
     }
   };
   
@@ -370,11 +471,13 @@ const LevelAssessmentPage = () => {
         {assessmentState === AssessmentState.IN_PROGRESS && renderAssessment()}
         {assessmentState === AssessmentState.RESULTS && renderResults()}
         
-        {isSubmitting && (
+        {(isSubmitting || isSavingResults) && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white p-8 rounded-lg flex flex-col items-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700 mb-4"></div>
-              <p className="text-gray-700">Evaluating your answers...</p>
+              <p className="text-gray-700">
+                {isSubmitting ? "Evaluating your answers..." : "Saving your results..."}
+              </p>
             </div>
           </div>
         )}
