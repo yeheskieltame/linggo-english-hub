@@ -9,40 +9,85 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { mockLessons } from '@/data/mockData';
+import { CEFR_LEVELS, PATHWAYS, SKILL_COLORS } from '@/types/lesson';
+import LessonSkillFocus from '@/components/LessonSkillFocus';
+import { useAuth } from '@/providers/AuthProvider';
 
-const LevelsColor = {
-  beginner: 'bg-green-100 text-green-800',
-  intermediate: 'bg-blue-100 text-blue-800',
-  advanced: 'bg-purple-100 text-purple-800',
-};
+// Mock skills data for demonstration
+const mockSkills = {
+  'l1': [
+    { type: 'grammar', focus: 8 },
+    { type: 'vocabulary', focus: 7 },
+    { type: 'speaking', focus: 5 },
+  ],
+  'l2': [
+    { type: 'speaking', focus: 9 },
+    { type: 'listening', focus: 8 },
+  ],
+  'l3': [
+    { type: 'reading', focus: 9 },
+    { type: 'writing', focus: 8 },
+  ],
+  'l4': [
+    { type: 'listening', focus: 8 },
+    { type: 'speaking', focus: 7 },
+  ],
+  'l5': [
+    { type: 'writing', focus: 9 },
+    { type: 'grammar', focus: 8 },
+  ]
+} as {[key: string]: any[]};
 
-const CefrBadgeColor = {
-  'A1': 'bg-slate-100 text-slate-800',
-  'A2': 'bg-slate-200 text-slate-800',
-  'B1': 'bg-yellow-100 text-yellow-800',
-  'B2': 'bg-orange-100 text-orange-800',
-  'C1': 'bg-red-100 text-red-800',
-  'C2': 'bg-pink-100 text-pink-800',
-};
-
-const PathsColor = {
-  general: 'bg-green-50 text-green-700',
-  business: 'bg-blue-50 text-blue-700',
-  academic: 'bg-violet-50 text-violet-700',
-};
+// Default skills if none are mapped
+const defaultSkills = [
+  { type: 'grammar', focus: 6 },
+  { type: 'vocabulary', focus: 6 },
+];
 
 const LessonsPage = () => {
   const [difficultyFilter, setDifficultyFilter] = useState('all');
   const [cefrFilter, setCefrFilter] = useState('all');
   const [pathFilter, setPathFilter] = useState('all');
+  const [skillFilter, setSkillFilter] = useState('all');
+  const { user } = useAuth();
   
   const filteredLessons = mockLessons.filter(lesson => {
     const matchesDifficulty = difficultyFilter === 'all' || lesson.level === difficultyFilter;
     const matchesCefr = cefrFilter === 'all' || lesson.cefrLevel === cefrFilter;
     const matchesPath = pathFilter === 'all' || lesson.path === pathFilter;
     
-    return matchesDifficulty && matchesCefr && matchesPath;
+    // For skill filter, we'd need to look at the mock skills data
+    // This is simplified but would be based on real data in production
+    let matchesSkill = true;
+    if (skillFilter !== 'all') {
+      const lessonSkills = mockSkills[lesson.id] || defaultSkills;
+      matchesSkill = lessonSkills.some(skill => skill.type === skillFilter);
+    }
+    
+    return matchesDifficulty && matchesCefr && matchesPath && matchesSkill;
   });
+  
+  // Group lessons by CEFR level for better organization
+  const lessonsByLevel: {[key: string]: typeof mockLessons} = {};
+  
+  if (cefrFilter === 'all') {
+    // If not filtering by CEFR, group them
+    filteredLessons.forEach(lesson => {
+      if (!lessonsByLevel[lesson.cefrLevel]) {
+        lessonsByLevel[lesson.cefrLevel] = [];
+      }
+      lessonsByLevel[lesson.cefrLevel].push(lesson);
+    });
+  } else {
+    // If filtering by CEFR level, just use the filtered lessons
+    lessonsByLevel[cefrFilter] = filteredLessons;
+  }
+  
+  // Order CEFR levels for display
+  const cefrLevelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+  const orderedCefrLevels = Object.keys(lessonsByLevel).sort(
+    (a, b) => cefrLevelOrder.indexOf(a) - cefrLevelOrder.indexOf(b)
+  );
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -108,55 +153,76 @@ const LessonsPage = () => {
                 </SelectContent>
               </Select>
             </div>
+            
+            <div>
+              <h3 className="text-sm font-medium mb-2">Skill Focus</h3>
+              <Select value={skillFilter} onValueChange={setSkillFilter}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select skill focus" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Skills</SelectItem>
+                  <SelectItem value="reading">Reading</SelectItem>
+                  <SelectItem value="writing">Writing</SelectItem>
+                  <SelectItem value="speaking">Speaking</SelectItem>
+                  <SelectItem value="listening">Listening</SelectItem>
+                  <SelectItem value="grammar">Grammar</SelectItem>
+                  <SelectItem value="vocabulary">Vocabulary</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredLessons.map((lesson) => (
-              <Card key={lesson.id} className="overflow-hidden card-hover">
-                <div className="h-48 bg-gray-200 relative overflow-hidden">
-                  <img 
-                    src={lesson.content.sections[0].imageUrl || 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80'} 
-                    alt={lesson.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-2 right-2 flex flex-col gap-2">
-                    <Badge className={LevelsColor[lesson.level]}>
-                      {lesson.level.charAt(0).toUpperCase() + lesson.level.slice(1)}
-                    </Badge>
-                    <Badge className={CefrBadgeColor[lesson.cefrLevel]}>
-                      CEFR {lesson.cefrLevel}
-                    </Badge>
-                  </div>
+          {orderedCefrLevels.length > 0 ? (
+            orderedCefrLevels.map(level => (
+              <div key={level} className="mb-12">
+                <div className="flex items-center gap-3 mb-5">
+                  <Badge className={CEFR_LEVELS[level].color}>CEFR {level}</Badge>
+                  <h2 className="text-2xl font-bold">{CEFR_LEVELS[level].label}</h2>
                 </div>
-                <CardContent className="pt-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-semibold">{lesson.title}</h3>
-                    <Badge variant="outline">{lesson.duration}</Badge>
-                  </div>
-                  <p className="text-gray-600 mb-4">{lesson.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    <Badge className={PathsColor[lesson.path]}>
-                      {lesson.path === 'general' ? 'General English' : 
-                       lesson.path === 'business' ? 'Business English' : 
-                       'Academic English'}
-                    </Badge>
-                    {lesson.tags.slice(0, 2).map((tag, i) => (
-                      <Badge key={i} variant="secondary" className="bg-gray-100">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Link to={`/lessons/${lesson.id}`} className="w-full">
-                    <Button variant="outline" className="w-full">Start Lesson</Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-          
-          {filteredLessons.length === 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {lessonsByLevel[level].map((lesson) => (
+                    <Card key={lesson.id} className="overflow-hidden card-hover">
+                      <div className="h-48 bg-gray-200 relative overflow-hidden">
+                        <img 
+                          src={lesson.content.sections[0].imageUrl || 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80'} 
+                          alt={lesson.title}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 right-2 flex flex-col gap-2">
+                          <Badge className={CEFR_LEVELS[lesson.cefrLevel].color}>
+                            CEFR {lesson.cefrLevel}
+                          </Badge>
+                        </div>
+                      </div>
+                      <CardContent className="pt-6">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="text-xl font-semibold">{lesson.title}</h3>
+                          <Badge variant="outline">{lesson.duration}</Badge>
+                        </div>
+                        <p className="text-gray-600 mb-4">{lesson.description.substring(0, 120)}...</p>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          <Badge className={PATHWAYS[lesson.path].color}>
+                            {PATHWAYS[lesson.path].label}
+                          </Badge>
+                          {(mockSkills[lesson.id] || defaultSkills).slice(0, 2).map((skill, i) => (
+                            <Badge key={i} className={SKILL_COLORS[skill.type]}>
+                              {skill.type.charAt(0).toUpperCase() + skill.type.slice(1)}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                      <CardFooter className="flex justify-between">
+                        <Link to={`/lessons/${lesson.id}`} className="w-full">
+                          <Button variant="outline" className="w-full">Start Lesson</Button>
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : (
             <div className="text-center py-12">
               <p className="text-lg text-gray-600">No lessons found matching your filters. Try adjusting your selection.</p>
             </div>

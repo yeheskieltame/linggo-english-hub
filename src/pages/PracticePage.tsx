@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, Mic, Loader2, Book, ArrowLeft, Info } from 'lucide-react';
+import { Volume2, Mic, Loader2, Book, ArrowLeft, Info, User } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { practiceSentences, mockLessons } from '@/data/mockData';
@@ -14,39 +14,21 @@ import { practicePrompts, PracticePrompt } from '@/data/practicePrompts';
 import { speakText } from '@/services/textToSpeech';
 import { startSpeechRecognition } from '@/services/speechRecognition';
 import { analyzeSpeechWithLLM } from '@/services/llmService';
+import { CEFR_LEVELS, PATHWAYS, SKILL_COLORS } from '@/types/lesson';
 
 interface FeedbackResult {
   score: number;
   feedback: string;
   detailedFeedback?: { word: string; issue: string }[];
+  strengths?: string[];
+  areasToImprove?: string[];
 }
-
-const CefrBadgeColor = {
-  'A1': 'bg-slate-100 text-slate-800',
-  'A2': 'bg-slate-200 text-slate-800',
-  'B1': 'bg-yellow-100 text-yellow-800',
-  'B2': 'bg-orange-100 text-orange-800',
-  'C1': 'bg-red-100 text-red-800',
-  'C2': 'bg-pink-100 text-pink-800',
-};
 
 const SkillFocusColors = {
   'pronunciation': 'bg-emerald-100 text-emerald-800',
   'fluency': 'bg-blue-100 text-blue-800',
   'vocabulary': 'bg-violet-100 text-violet-800',
   'grammar': 'bg-amber-100 text-amber-800',
-};
-
-const LevelsColor = {
-  beginner: 'bg-green-100 text-green-800',
-  intermediate: 'bg-blue-100 text-blue-800',
-  advanced: 'bg-purple-100 text-purple-800',
-};
-
-const PathsColor = {
-  general: 'bg-green-50 text-green-700',
-  business: 'bg-blue-50 text-blue-700',
-  academic: 'bg-violet-50 text-violet-700',
 };
 
 const PracticePage = () => {
@@ -58,6 +40,7 @@ const PracticePage = () => {
   const [feedback, setFeedback] = useState<FeedbackResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [practiceMode, setPracticeMode] = useState<'sentence' | 'prompt'>('sentence');
+  const [showGuidance, setShowGuidance] = useState(true);
   const recognitionRef = useRef<any>(null);
   
   // Filter practice sentences based on lessonId
@@ -168,7 +151,8 @@ const PracticePage = () => {
         // For sentence repetition, use simple comparison
         result = await analyzeSpeechWithLLM(
           transcript, 
-          `Repeat this sentence: "${currentSentence.english}"`
+          `Repeat this sentence: "${currentSentence.english}"`,
+          'english'
         );
       } else {
         // For prompts, use LLM analysis
@@ -177,6 +161,21 @@ const PracticePage = () => {
           currentPrompt.instruction,
           'english'
         );
+      }
+      
+      // Add mock strengths and areas to improve for UI demo
+      if (!result.strengths) {
+        result.strengths = [
+          'Good attempt at sentence structure',
+          'Appropriate vocabulary usage'
+        ];
+      }
+      
+      if (!result.areasToImprove) {
+        result.areasToImprove = [
+          'Work on pronunciation of difficult sounds',
+          'Practice more complex grammatical structures'
+        ];
       }
       
       setFeedback(result);
@@ -269,16 +268,11 @@ const PracticePage = () => {
             {/* Display lesson info if available */}
             {currentLesson && (
               <div className="flex flex-wrap justify-center gap-3 mt-4">
-                <Badge className={LevelsColor[currentLesson.level]}>
-                  {currentLesson.level.charAt(0).toUpperCase() + currentLesson.level.slice(1)}
+                <Badge className={CEFR_LEVELS[currentLesson.cefrLevel].color}>
+                  CEFR {currentLesson.cefrLevel} - {CEFR_LEVELS[currentLesson.cefrLevel].label}
                 </Badge>
-                <Badge className={CefrBadgeColor[currentLesson.cefrLevel]}>
-                  CEFR {currentLesson.cefrLevel}
-                </Badge>
-                <Badge className={PathsColor[currentLesson.path]}>
-                  {currentLesson.path === 'general' ? 'General English' : 
-                   currentLesson.path === 'business' ? 'Business English' : 
-                   'Academic English'}
+                <Badge className={PATHWAYS[currentLesson.path].color}>
+                  {PATHWAYS[currentLesson.path].label}
                 </Badge>
               </div>
             )}
@@ -302,6 +296,36 @@ const PracticePage = () => {
       {/* Practice Content */}
       <section className="py-12 bg-white flex-grow">
         <div className="container mx-auto px-4 max-w-3xl">
+          {/* Quick guidance for first-time users */}
+          {showGuidance && (
+            <Card className="mb-6 bg-blue-50 border-blue-200">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex justify-between items-start">
+                  <div className="flex gap-3">
+                    <Info className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h3 className="font-medium text-blue-800 mb-2">How to practice</h3>
+                      <ul className="text-sm text-blue-700 space-y-1 list-disc list-inside">
+                        <li>Listen to the {practiceMode === 'sentence' ? 'example sentence' : 'task instructions'}</li>
+                        <li>Click "Start Speaking" and speak clearly into your microphone</li>
+                        <li>Receive AI feedback on your pronunciation and speech</li>
+                        <li>Review your strengths and areas to improve</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-blue-700 hover:bg-blue-100"
+                    onClick={() => setShowGuidance(false)}
+                  >
+                    Dismiss
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        
           <div className="mb-6 flex justify-between items-center">
             <div className="flex items-center gap-2">
               <Badge variant="outline">
@@ -336,7 +360,7 @@ const PracticePage = () => {
                         {currentSentence.difficulty.charAt(0).toUpperCase() + currentSentence.difficulty.slice(1)}
                       </Badge>
                       
-                      <Badge className={CefrBadgeColor[currentSentence.cefrLevel]}>
+                      <Badge className={CEFR_LEVELS[currentSentence.cefrLevel].color}>
                         CEFR {currentSentence.cefrLevel}
                       </Badge>
                       
@@ -379,7 +403,7 @@ const PracticePage = () => {
                         {currentPrompt.difficulty.charAt(0).toUpperCase() + currentPrompt.difficulty.slice(1)}
                       </Badge>
                       
-                      <Badge className={CefrBadgeColor[currentPrompt.cefrLevel]}>
+                      <Badge className={CEFR_LEVELS[currentPrompt.cefrLevel].color}>
                         CEFR {currentPrompt.cefrLevel}
                       </Badge>
                       
@@ -428,9 +452,10 @@ const PracticePage = () => {
               
               <div className="flex justify-center">
                 <Button
-                  className="flex items-center gap-2 px-8"
+                  className={`flex items-center gap-2 px-8 ${isListening ? 'bg-red-600 hover:bg-red-700' : ''}`}
                   onClick={isListening ? handleStopListening : handleStartListening}
                   variant={isListening ? "destructive" : "default"}
+                  size="lg"
                 >
                   {isListening ? (
                     <>
@@ -447,14 +472,17 @@ const PracticePage = () => {
           </Card>
           
           {transcript && (
-            <Card className="mb-8">
+            <Card className="mb-8 border-t-4 border-blue-400">
               <CardContent className="p-6">
-                <h3 className="font-medium mb-2">Your speech:</h3>
-                <p className="bg-gray-50 p-3 rounded-md">{transcript}</p>
+                <div className="flex items-center gap-2 mb-3">
+                  <User className="h-5 w-5 text-blue-600" />
+                  <h3 className="font-medium text-lg">Your speech:</h3>
+                </div>
+                <p className="bg-gray-50 p-4 rounded-md text-lg">{transcript}</p>
                 
                 {!feedback && !isLoading && (
                   <Button 
-                    className="mt-4" 
+                    className="mt-6" 
                     onClick={handleSubmitSpeech}
                     disabled={isLoading}
                   >
@@ -477,7 +505,7 @@ const PracticePage = () => {
           )}
           
           {feedback && (
-            <Card className="mb-8">
+            <Card className="mb-8 border-t-4 border-green-400">
               <CardContent className="p-6">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="font-semibold text-lg">
@@ -492,11 +520,33 @@ const PracticePage = () => {
                   </Badge>
                 </div>
                 
-                <p className="mb-4">{feedback.feedback}</p>
+                <p className="mb-4 text-lg">{feedback.feedback}</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                  {/* Strengths */}
+                  <div className="bg-green-50 p-4 rounded-md">
+                    <h4 className="font-medium mb-3 text-green-800">Strengths:</h4>
+                    <ul className="space-y-2 list-disc list-inside text-green-700">
+                      {feedback.strengths && feedback.strengths.map((strength, i) => (
+                        <li key={i}>{strength}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  
+                  {/* Areas to improve */}
+                  <div className="bg-amber-50 p-4 rounded-md">
+                    <h4 className="font-medium mb-3 text-amber-800">Areas to Improve:</h4>
+                    <ul className="space-y-2 list-disc list-inside text-amber-700">
+                      {feedback.areasToImprove && feedback.areasToImprove.map((area, i) => (
+                        <li key={i}>{area}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
                 
                 {feedback.detailedFeedback && feedback.detailedFeedback.length > 0 && (
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    <h4 className="font-medium mb-2">Detailed Feedback:</h4>
+                  <div className="bg-gray-50 p-4 rounded-md mb-6">
+                    <h4 className="font-medium mb-3">Detailed Feedback:</h4>
                     <ul className="space-y-2">
                       {feedback.detailedFeedback.map((item, index) => (
                         <li key={index} className="flex gap-2">
@@ -529,7 +579,8 @@ const PracticePage = () => {
           )}
           
           {!transcript && !feedback && (
-            <div className="text-center text-gray-500 my-8">
+            <div className="text-center text-gray-500 my-12">
+              <Mic className="mx-auto h-12 w-12 mb-4 text-gray-400" />
               <p>Click "Start Speaking" to begin practicing</p>
             </div>
           )}

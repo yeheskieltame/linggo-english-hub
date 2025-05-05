@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Volume2, BookOpen, Mic, MessageCircle, Headphones, BookOpenText } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Volume2, BookOpen, Mic, MessageCircle, Headphones, BookOpenText, ArrowLeft, Star, Info } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { mockLessons, practiceSentences } from '@/data/mockData';
@@ -13,33 +14,58 @@ import { conversationScenarios } from '@/data/conversationScenarios';
 import { listeningActivities } from '@/data/listeningActivities';
 import { readingActivities } from '@/data/readingActivities';
 import { speakText } from '@/services/textToSpeech';
+import { CEFR_LEVELS, PATHWAYS } from '@/types/lesson';
+import LessonNavigation from '@/components/LessonNavigation';
+import LessonSkillFocus from '@/components/LessonSkillFocus';
+import CefrLevelExplainer from '@/components/CefrLevelExplainer';
+import { useAuth } from '@/providers/AuthProvider';
+import { useToast } from '@/hooks/use-toast';
 
-const LevelsColor = {
-  beginner: 'bg-green-100 text-green-800',
-  intermediate: 'bg-blue-100 text-blue-800',
-  advanced: 'bg-purple-100 text-purple-800',
-};
+// Define mock skills for demonstration
+const mockSkills = {
+  'l1': [
+    { type: 'grammar', focus: 8 },
+    { type: 'vocabulary', focus: 7 },
+    { type: 'speaking', focus: 5 },
+    { type: 'listening', focus: 4 }
+  ],
+  'l2': [
+    { type: 'speaking', focus: 9 },
+    { type: 'listening', focus: 8 },
+    { type: 'vocabulary', focus: 6 }
+  ],
+  'l3': [
+    { type: 'reading', focus: 9 },
+    { type: 'writing', focus: 8 },
+    { type: 'grammar', focus: 7 }
+  ],
+  'l4': [
+    { type: 'listening', focus: 8 },
+    { type: 'speaking', focus: 7 },
+    { type: 'vocabulary', focus: 6 }
+  ],
+  'l5': [
+    { type: 'writing', focus: 9 },
+    { type: 'grammar', focus: 8 },
+    { type: 'vocabulary', focus: 7 }
+  ]
+} as {[key: string]: any[]};
 
-const CefrBadgeColor = {
-  'A1': 'bg-slate-100 text-slate-800',
-  'A2': 'bg-slate-200 text-slate-800',
-  'B1': 'bg-yellow-100 text-yellow-800',
-  'B2': 'bg-orange-100 text-orange-800',
-  'C1': 'bg-red-100 text-red-800',
-  'C2': 'bg-pink-100 text-pink-800',
-};
-
-const PathsColor = {
-  general: 'bg-green-50 text-green-700',
-  business: 'bg-blue-50 text-blue-700',
-  academic: 'bg-violet-50 text-violet-700',
-};
+// Default skills if none are mapped
+const defaultSkills = [
+  { type: 'grammar', focus: 6 },
+  { type: 'vocabulary', focus: 6 },
+  { type: 'speaking', focus: 5 }
+];
 
 const LessonDetail = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const [lesson, setLesson] = useState(mockLessons.find(l => l.id === lessonId));
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [activeExampleIndex, setActiveExampleIndex] = useState<number | null>(null);
+  const [showCefrExplainer, setShowCefrExplainer] = useState(false);
+  const { user } = useAuth();
+  const { toast } = useToast();
   
   // Check if this lesson has different types of activities
   const hasPracticeExercises = practiceSentences.some(sentence => sentence.lessonId === lessonId);
@@ -83,6 +109,18 @@ const LessonDetail = () => {
     }
   };
   
+  const handleActivityClick = (activityType: string) => {
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please login to access this learning activity",
+        variant: "destructive"
+      });
+      return false;
+    }
+    return true;
+  };
+  
   if (!lesson) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -100,6 +138,10 @@ const LessonDetail = () => {
     );
   }
   
+  const lessonSkills = mockSkills[lesson.id] || defaultSkills;
+  const cefrLevel = CEFR_LEVELS[lesson.cefrLevel];
+  const pathwayInfo = PATHWAYS[lesson.path];
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -111,25 +153,51 @@ const LessonDetail = () => {
         <div className="absolute bottom-10 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
         
         <div className="container mx-auto px-4 relative z-10">
+          {/* Breadcrumb Navigation */}
+          <div className="flex items-center mb-6 text-sm">
+            <Link to="/lessons" className="text-gray-600 hover:text-purple-700 flex items-center">
+              <ArrowLeft className="mr-1 h-3 w-3" /> Back to Lessons
+            </Link>
+          </div>
+          
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
             <div className="w-full md:max-w-2xl">
               <div className="inline-block px-4 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium mb-4">
                 English Lesson
               </div>
               <div className="flex items-center gap-2 sm:gap-3 mb-3 flex-wrap">
-                <Badge className={LevelsColor[lesson.level]}>
-                  {lesson.level.charAt(0).toUpperCase() + lesson.level.slice(1)}
+                <Badge className={cefrLevel.color}>
+                  CEFR {lesson.cefrLevel} - {CEFR_LEVELS[lesson.cefrLevel].label}
                 </Badge>
-                <Badge className={CefrBadgeColor[lesson.cefrLevel]}>
-                  CEFR {lesson.cefrLevel}
-                </Badge>
-                <Badge className={PathsColor[lesson.path]}>
-                  {lesson.path === 'general' ? 'General English' : 
-                   lesson.path === 'business' ? 'Business English' : 
-                   'Academic English'}
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        className="p-0 h-auto text-gray-500 hover:text-purple-700" 
+                        onClick={() => setShowCefrExplainer(!showCefrExplainer)}
+                      >
+                        <Info className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Click to learn more about this CEFR level</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
+                <Badge className={pathwayInfo.color}>
+                  {pathwayInfo.label}
                 </Badge>
                 <Badge variant="outline">{lesson.duration}</Badge>
               </div>
+              
+              {showCefrExplainer && (
+                <div className="mb-6">
+                  <CefrLevelExplainer level={lesson.cefrLevel as any} expanded={true} />
+                </div>
+              )}
+              
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500">
                   {lesson.title}
@@ -138,6 +206,12 @@ const LessonDetail = () => {
               <p className="text-base sm:text-lg md:text-xl text-gray-700 max-w-2xl">
                 {lesson.description}
               </p>
+              
+              {/* Skill Focus Section */}
+              <div className="mt-6">
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Skill Focus:</h3>
+                <LessonSkillFocus skills={lessonSkills as any} />
+              </div>
             </div>
             <div className="flex flex-wrap gap-2 sm:gap-3 mt-2 md:mt-0 md:flex-col md:items-start lg:flex-row">
               <Button 
@@ -156,8 +230,9 @@ const LessonDetail = () => {
                   asChild 
                   className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
                   size="sm"
+                  onClick={() => handleActivityClick('listening')}
                 >
-                  <Link to={`/listening/${firstListeningActivityId}`}>
+                  <Link to={user ? `/listening/${firstListeningActivityId}` : "/auth"}>
                     <Headphones className="mr-2 h-4 w-4" />
                     <span className="sm:inline">Listening Practice</span>
                   </Link>
@@ -169,8 +244,9 @@ const LessonDetail = () => {
                   asChild 
                   className="bg-emerald-600 hover:bg-emerald-700 w-full sm:w-auto"
                   size="sm"
+                  onClick={() => handleActivityClick('reading')}
                 >
-                  <Link to={`/reading/${firstReadingActivityId}`}>
+                  <Link to={user ? `/reading/${firstReadingActivityId}` : "/auth"}>
                     <BookOpenText className="mr-2 h-4 w-4" />
                     <span className="sm:inline">Reading Practice</span>
                   </Link>
@@ -181,8 +257,9 @@ const LessonDetail = () => {
                 asChild 
                 className="bg-purple-600 hover:bg-purple-700 w-full sm:w-auto"
                 size="sm"
+                onClick={() => handleActivityClick('speaking')}
               >
-                <Link to={`/practice/${lesson.id}`}>
+                <Link to={user ? `/practice/${lesson.id}` : "/auth"}>
                   <Mic className="mr-2 h-4 w-4" />
                   <span className="sm:inline">Speaking Practice</span>
                 </Link>
@@ -193,8 +270,9 @@ const LessonDetail = () => {
                   asChild 
                   className="bg-indigo-500 hover:bg-indigo-600 w-full sm:w-auto"
                   size="sm"
+                  onClick={() => handleActivityClick('conversation')}
                 >
-                  <Link to={`/conversation/${lesson.id}`}>
+                  <Link to={user ? `/conversation/${lesson.id}` : "/auth"}>
                     <MessageCircle className="mr-2 h-4 w-4" />
                     <span className="sm:inline">Conversation</span>
                   </Link>
@@ -284,7 +362,10 @@ const LessonDetail = () => {
           
           <Separator className="my-8 sm:my-12" />
           
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          {/* Lesson Navigation */}
+          <LessonNavigation currentLessonId={lesson.id} />
+          
+          <div className="mt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
             <Button 
               variant="outline" 
               asChild 
@@ -303,8 +384,9 @@ const LessonDetail = () => {
                   asChild 
                   className="bg-blue-600 hover:bg-blue-700 shadow-sm w-full sm:w-auto"
                   size="sm"
+                  onClick={() => handleActivityClick('listening')}
                 >
-                  <Link to={`/listening/${firstListeningActivityId}`}>
+                  <Link to={user ? `/listening/${firstListeningActivityId}` : "/auth"}>
                     <Headphones className="mr-2 h-4 w-4" /> 
                     <span className="sm:inline">Listening Practice</span>
                   </Link>
@@ -316,8 +398,9 @@ const LessonDetail = () => {
                   asChild 
                   className="bg-emerald-600 hover:bg-emerald-700 shadow-sm w-full sm:w-auto"
                   size="sm"
+                  onClick={() => handleActivityClick('reading')}
                 >
-                  <Link to={`/reading/${firstReadingActivityId}`}>
+                  <Link to={user ? `/reading/${firstReadingActivityId}` : "/auth"}>
                     <BookOpenText className="mr-2 h-4 w-4" /> 
                     <span className="sm:inline">Reading Practice</span>
                   </Link>
@@ -329,8 +412,9 @@ const LessonDetail = () => {
                   asChild 
                   className="bg-purple-600 hover:bg-purple-700 shadow-sm w-full sm:w-auto"
                   size="sm"
+                  onClick={() => handleActivityClick('speaking')}
                 >
-                  <Link to={`/practice/${lesson.id}`}>
+                  <Link to={user ? `/practice/${lesson.id}` : "/auth"}>
                     <Mic className="mr-2 h-4 w-4" /> 
                     <span className="sm:inline">Speaking Practice</span>
                   </Link>
@@ -351,8 +435,9 @@ const LessonDetail = () => {
                   asChild 
                   className="bg-indigo-500 hover:bg-indigo-600 shadow-sm w-full sm:w-auto"
                   size="sm"
+                  onClick={() => handleActivityClick('conversation')}
                 >
-                  <Link to={`/conversation/${lesson.id}`}>
+                  <Link to={user ? `/conversation/${lesson.id}` : "/auth"}>
                     <MessageCircle className="mr-2 h-4 w-4" /> 
                     <span className="sm:inline">Conversation</span>
                   </Link>
