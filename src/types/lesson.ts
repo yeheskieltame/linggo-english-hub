@@ -35,6 +35,24 @@ export interface CefrLevel {
   color: string;
 }
 
+export interface LessonVideoContent {
+  youtubeId: string;
+  title: string;
+  description?: string;
+  timestamps?: {
+    time: string;
+    label: string;
+  }[];
+}
+
+export interface WritingPrompt {
+  topic: string;
+  instructions?: string;
+  minWords?: number;
+  maxWords?: number;
+  level: string;
+}
+
 export const CEFR_LEVELS: {[key: string]: CefrLevel} = {
   'A1': {
     id: 'A1',
