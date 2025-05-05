@@ -1,0 +1,121 @@
+
+import React, { useState } from 'react';
+import { LessonStage } from '@/types/lesson';
+import { Button } from '@/components/ui/button';
+import { Volume2 } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { speakText } from '@/services/textToSpeech';
+import YouTubeEmbed from '@/components/YouTubeEmbed';
+
+interface LessonStageContentProps {
+  stage: LessonStage;
+  onComplete: (stageId: string) => void;
+}
+
+const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComplete }) => {
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [activeExampleIndex, setActiveExampleIndex] = useState<number | null>(null);
+
+  const handleSpeak = async (text: string, index?: number) => {
+    if (isSpeaking) return;
+    
+    try {
+      setIsSpeaking(true);
+      if (index !== undefined) {
+        setActiveExampleIndex(index);
+      }
+      
+      await speakText(text);
+    } catch (error) {
+      console.error('Error speaking text:', error);
+    } finally {
+      setIsSpeaking(false);
+      setActiveExampleIndex(null);
+    }
+  };
+
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-purple-700">{stage.title}</h2>
+        <Button 
+          variant="ghost" 
+          size="sm"
+          onClick={() => handleSpeak(stage.content)}
+          disabled={isSpeaking}
+          className="text-purple-600 hover:bg-purple-50"
+          title="Listen to this section"
+        >
+          <Volume2 className="h-4 w-4" />
+          <span className="ml-2">Listen</span>
+        </Button>
+      </div>
+
+      {stage.videoId && (
+        <div className="mb-6">
+          <YouTubeEmbed 
+            videoId={stage.videoId} 
+            title={stage.title}
+            className="w-full shadow-lg"
+          />
+        </div>
+      )}
+
+      {stage.imageUrl && (
+        <div className="mb-6 overflow-hidden rounded-lg shadow-md">
+          <img 
+            src={stage.imageUrl} 
+            alt={stage.title} 
+            className="w-full h-auto object-cover rounded-lg hover:scale-105 transition-transform duration-500"
+          />
+        </div>
+      )}
+
+      <div className="prose max-w-none">
+        <p className="text-gray-700 text-base sm:text-lg leading-relaxed whitespace-pre-wrap">{stage.content}</p>
+      </div>
+      
+      {stage.examples && stage.examples.length > 0 && (
+        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 sm:p-6 md:p-8 shadow-sm">
+          <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-purple-700">Examples</h3>
+          <div className="space-y-4">
+            {stage.examples.map((example, index) => (
+              <Card 
+                key={index} 
+                className={`border-none shadow-sm transition-all hover:shadow-md ${
+                  activeExampleIndex === index ? 'bg-purple-50 border-l-4 border-purple-400' : 'bg-white'
+                }`}
+              >
+                <CardContent className="p-3 sm:p-5">
+                  <div className="flex justify-between items-start mb-2 gap-2">
+                    <p className="font-medium text-gray-800 text-sm sm:text-base flex-1">{example.english}</p>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="ml-1 text-purple-600 hover:bg-purple-50 flex-shrink-0"
+                      onClick={() => handleSpeak(example.english, index)}
+                      disabled={isSpeaking}
+                      title="Listen to example"
+                    >
+                      <Volume2 className="h-4 w-4" />
+                      <span className="sr-only">Listen</span>
+                    </Button>
+                  </div>
+                  <p className="text-gray-600 text-sm sm:text-base">{example.indonesian}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="flex justify-end mt-8">
+        <Button onClick={() => onComplete(stage.id)}>
+          Mark as Complete & Continue
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default LessonStageContent;

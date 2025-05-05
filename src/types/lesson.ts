@@ -53,6 +53,53 @@ export interface WritingPrompt {
   level: string;
 }
 
+// New interfaces for staged learning
+export interface LessonStage {
+  id: string;
+  title: string;
+  description?: string;
+  content: string;
+  videoId?: string;
+  imageUrl?: string;
+  examples?: {
+    english: string;
+    indonesian: string;
+  }[];
+}
+
+export interface LessonQuiz {
+  id: string;
+  title: string;
+  description?: string;
+  questions: QuizQuestion[];
+  requiredScore: number; // Minimum score to pass (0-100)
+  skillType: LessonSkill['type']; // Which skill this quiz tests
+}
+
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: string;
+  explanation?: string;
+}
+
+export interface PracticalTest {
+  id: string;
+  title: string;
+  description: string;
+  type: LessonSkill['type'];
+  prompt: string;
+  criteria?: string[];
+  minScore: number; // Minimum score to pass (0-100)
+}
+
+export interface LessonStructure {
+  stages: LessonStage[];
+  stageQuizzes: LessonQuiz[];
+  finalTest: PracticalTest;
+}
+
 export const CEFR_LEVELS: {[key: string]: CefrLevel} = {
   'A1': {
     id: 'A1',
