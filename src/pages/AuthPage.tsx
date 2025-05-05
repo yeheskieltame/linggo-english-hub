@@ -30,7 +30,7 @@ const AuthPage: React.FC = () => {
   useEffect(() => {
     // Redirect if already logged in
     if (user) {
-      navigate('/assessment');
+      navigate('/dashboard');
     }
   }, [user, navigate]);
 

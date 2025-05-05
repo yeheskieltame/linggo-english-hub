@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         if (event === 'SIGNED_IN' && location.pathname === '/auth') {
-          navigate('/assessment');
+          navigate('/dashboard');
         } else if (event === 'SIGNED_OUT') {
           navigate('/');
         }
@@ -134,7 +134,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, fullName: string) => {
     try {
-      const { error } = await supabase.auth.signUp({
+      // Register user with Supabase Auth
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -151,6 +152,68 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           variant: "destructive",
         });
         return { error };
+      }
+
+      // Create user profile in the profiles table
+      if (data.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: data.user.id,
+            email: email,
+            full_name: fullName,
+            preferred_level: 'Beginner',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          });
+
+        if (profileError) {
+          console.error("Error creating user profile:", profileError);
+          // We don't return this error to avoid blocking the signup process
+          // The profile can be created later
+        }
+        
+        // Create initial user progress entries
+        const initialModules = [
+          { level: 'A1', module: 'Introduction', progress: 0, completed: false },
+          { level: 'A1', module: 'Greetings', progress: 0, completed: false },
+          { level: 'A1', module: 'Basic Phrases', progress: 0, completed: false }
+        ];
+        
+        for (const module of initialModules) {
+          const { error: progressError } = await supabase
+            .from('user_progress')
+            .insert({
+              user_id: data.user.id,
+              level: module.level,
+              module: module.module,
+              progress: module.progress,
+              completed: module.completed,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            });
+            
+          if (progressError) {
+            console.error("Error creating initial user progress:", progressError);
+          }
+        }
+        
+        // Log first activity
+        const today = new Date();
+        const { error: scheduleError } = await supabase
+          .from('user_schedule')
+          .insert({
+            user_id: data.user.id,
+            title: 'Account Registration',
+            date: today.toISOString().split('T')[0],
+            start_time: today.toTimeString().split(' ')[0],
+            duration: 5,
+            is_completed: true
+          });
+          
+        if (scheduleError) {
+          console.error("Error logging initial user activity:", scheduleError);
+        }
       }
 
       toast({

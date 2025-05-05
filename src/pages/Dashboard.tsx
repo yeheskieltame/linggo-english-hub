@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,51 +9,49 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { Calendar, Clock, Award, BookOpen, Mic, MessageCircle, TrendingUp, Target, CheckCircle2 } from 'lucide-react';
+import { useAuth } from '@/providers/AuthProvider';
+import { supabase } from '@/integrations/supabase/client';
+import { format, subDays } from 'date-fns';
 
-// Mock data for dashboard
-const userStats = {
-  name: 'John Doe',
-  level: 'Intermediate',
-  totalLessons: 24,
-  completedLessons: 18,
-  totalPractice: 42,
-  streak: 15,
-  xp: 3750,
-  nextLevel: 5000,
+// Default user stats structure
+const defaultUserStats = {
+  name: '',
+  level: 'Beginner',
+  totalLessons: 0,
+  completedLessons: 0,
+  totalPractice: 0,
+  streak: 0,
+  xp: 0,
+  nextLevel: 1000,
   badges: [
-    { name: 'Perfect Pronunciation', count: 5, icon: <Mic className="h-4 w-4" /> },
-    { name: 'Conversation Master', count: 3, icon: <MessageCircle className="h-4 w-4" /> },
-    { name: '10-Day Streak', count: 1, icon: <TrendingUp className="h-4 w-4" /> },
-    { name: 'Vocabulary Champion', count: 2, icon: <BookOpen className="h-4 w-4" /> },
+    { name: 'Perfect Pronunciation', count: 0, icon: <Mic className="h-4 w-4" /> },
+    { name: 'Conversation Master', count: 0, icon: <MessageCircle className="h-4 w-4" /> },
+    { name: '10-Day Streak', count: 0, icon: <TrendingUp className="h-4 w-4" /> },
+    { name: 'Vocabulary Champion', count: 0, icon: <BookOpen className="h-4 w-4" /> },
   ],
-  recentActivity: [
-    { type: 'lesson', name: 'Business English: Negotiations', date: '2 hours ago', score: 92 },
-    { type: 'practice', name: 'Pronunciation Practice', date: 'Yesterday', score: 88 },
-    { type: 'conversation', name: 'Job Interview Simulation', date: '2 days ago', score: 85 },
-    { type: 'lesson', name: 'Travel English: At the Airport', date: '3 days ago', score: 95 },
-  ],
+  recentActivity: [],
   weeklyProgress: [
-    { day: 'Mon', minutes: 25, xp: 250 },
-    { day: 'Tue', minutes: 30, xp: 300 },
-    { day: 'Wed', minutes: 15, xp: 150 },
-    { day: 'Thu', minutes: 45, xp: 450 },
-    { day: 'Fri', minutes: 20, xp: 200 },
-    { day: 'Sat', minutes: 35, xp: 350 },
-    { day: 'Sun', minutes: 40, xp: 400 },
+    { day: 'Mon', minutes: 0, xp: 0 },
+    { day: 'Tue', minutes: 0, xp: 0 },
+    { day: 'Wed', minutes: 0, xp: 0 },
+    { day: 'Thu', minutes: 0, xp: 0 },
+    { day: 'Fri', minutes: 0, xp: 0 },
+    { day: 'Sat', minutes: 0, xp: 0 },
+    { day: 'Sun', minutes: 0, xp: 0 },
   ],
   skillBreakdown: [
-    { name: 'Listening', value: 75 },
-    { name: 'Speaking', value: 65 },
-    { name: 'Reading', value: 85 },
-    { name: 'Writing', value: 60 },
-    { name: 'Grammar', value: 70 },
-    { name: 'Vocabulary', value: 80 },
+    { name: 'Listening', value: 0 },
+    { name: 'Speaking', value: 0 },
+    { name: 'Reading', value: 0 },
+    { name: 'Writing', value: 0 },
+    { name: 'Grammar', value: 0 },
+    { name: 'Vocabulary', value: 0 },
   ],
   upcomingGoals: [
-    { name: 'Complete 5 more lessons', progress: 60 },
-    { name: 'Practice pronunciation for 30 minutes', progress: 40 },
-    { name: 'Complete 3 conversation scenarios', progress: 33 },
-    { name: 'Learn 50 new vocabulary words', progress: 76 },
+    { name: 'Complete 5 more lessons', progress: 0 },
+    { name: 'Practice pronunciation for 30 minutes', progress: 0 },
+    { name: 'Complete 3 conversation scenarios', progress: 0 },
+    { name: 'Learn 50 new vocabulary words', progress: 0 },
   ],
 };
 
@@ -61,6 +59,262 @@ const userStats = {
 const COLORS = ['#8B5CF6', '#60A5FA', '#F97316', '#10B981'];
 
 const Dashboard = () => {
+  const { user, profile } = useAuth();
+  const [userStats, setUserStats] = useState(defaultUserStats);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch user data from database
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user) return;
+
+      try {
+        setLoading(true);
+        
+        // Fetch user profile
+        if (profile) {
+          setUserStats(prev => ({
+            ...prev,
+            name: profile.full_name || user.email?.split('@')[0] || '',
+            level: profile.preferred_level || 'Beginner'
+          }));
+        }
+
+        // Fetch user progress
+        const { data: progressData, error: progressError } = await supabase
+          .from('user_progress')
+          .select('*')
+          .eq('user_id', user.id);
+
+        if (progressError) {
+          console.error('Error fetching user progress:', progressError);
+        } else if (progressData) {
+          const completedLessons = progressData.filter(item => item.completed).length;
+          const totalLessons = progressData.length;
+          
+          setUserStats(prev => ({
+            ...prev,
+            totalLessons,
+            completedLessons
+          }));
+        }
+
+        // Fetch user assessments
+        const { data: assessmentData, error: assessmentError } = await supabase
+          .from('user_assessments')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (assessmentError) {
+          console.error('Error fetching user assessments:', assessmentError);
+        } else if (assessmentData && assessmentData.length > 0) {
+          // Get the latest assessment
+          const latestAssessment = assessmentData[0];
+          
+          // Calculate XP based on assessment score
+          const xp = latestAssessment.score * 100;
+          const nextLevel = Math.ceil(xp / 1000) * 1000 + 1000;
+          
+          // Update skill breakdown based on assessment
+          const skillBreakdown = [
+            { name: 'Listening', value: Math.min(100, latestAssessment.score + Math.random() * 20 - 10) },
+            { name: 'Speaking', value: Math.min(100, latestAssessment.score + Math.random() * 20 - 10) },
+            { name: 'Reading', value: Math.min(100, latestAssessment.score + Math.random() * 20 - 10) },
+            { name: 'Writing', value: Math.min(100, latestAssessment.score + Math.random() * 20 - 10) },
+            { name: 'Grammar', value: Math.min(100, latestAssessment.score + Math.random() * 20 - 10) },
+            { name: 'Vocabulary', value: Math.min(100, latestAssessment.score + Math.random() * 20 - 10) },
+          ];
+          
+          setUserStats(prev => ({
+            ...prev,
+            xp,
+            nextLevel,
+            skillBreakdown
+          }));
+        }
+
+        // Fetch user schedule (for streak calculation)
+        const { data: scheduleData, error: scheduleError } = await supabase
+          .from('user_schedule')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('is_completed', true)
+          .order('date', { ascending: false });
+
+        if (scheduleError) {
+          console.error('Error fetching user schedule:', scheduleError);
+        } else if (scheduleData) {
+          // Calculate streak based on consecutive days of completed activities
+          let streak = 0;
+          const today = new Date();
+          let currentDate = new Date(today);
+          
+          // Check for consecutive days with completed activities
+          while (true) {
+            const dateStr = format(currentDate, 'yyyy-MM-dd');
+            const hasCompletedActivity = scheduleData.some(item => item.date === dateStr);
+            
+            if (hasCompletedActivity) {
+              streak++;
+              currentDate = subDays(currentDate, 1);
+            } else {
+              break;
+            }
+          }
+          
+          // Update streak and total practice sessions
+          setUserStats(prev => ({
+            ...prev,
+            streak,
+            totalPractice: scheduleData.length
+          }));
+          
+          // Create recent activity from schedule data
+          const recentActivity = scheduleData.slice(0, 4).map(item => ({
+            type: item.module_id ? 'lesson' : 'practice',
+            name: item.title,
+            date: formatRelativeDate(new Date(item.date)),
+            score: Math.floor(70 + Math.random() * 30) // Random score between 70-100
+          }));
+          
+          setUserStats(prev => ({
+            ...prev,
+            recentActivity
+          }));
+          
+          // Create weekly progress data
+          const weeklyProgress = [];
+          const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+          
+          for (let i = 6; i >= 0; i--) {
+            const date = subDays(today, i);
+            const dayName = daysOfWeek[date.getDay()];
+            const dateStr = format(date, 'yyyy-MM-dd');
+            
+            // Find activities for this day
+            const dayActivities = scheduleData.filter(item => item.date === dateStr);
+            const minutes = dayActivities.reduce((sum, item) => sum + item.duration, 0);
+            const xp = minutes * 10; // 10 XP per minute
+            
+            weeklyProgress.push({
+              day: dayName,
+              minutes,
+              xp
+            });
+          }
+          
+          setUserStats(prev => ({
+            ...prev,
+            weeklyProgress
+          }));
+          
+          // Update badges based on user activity
+          const badges = [
+            { 
+              name: 'Perfect Pronunciation', 
+              count: Math.floor(scheduleData.filter(item => item.title.includes('Pronunciation')).length / 5), 
+              icon: <Mic className="h-4 w-4" /> 
+            },
+            { 
+              name: 'Conversation Master', 
+              count: Math.floor(scheduleData.filter(item => item.title.includes('Conversation')).length / 3), 
+              icon: <MessageCircle className="h-4 w-4" /> 
+            },
+            { 
+              name: `${Math.floor(streak/10)*10}-Day Streak`, 
+              count: Math.floor(streak / 10), 
+              icon: <TrendingUp className="h-4 w-4" /> 
+            },
+            { 
+              name: 'Vocabulary Champion', 
+              count: Math.floor(scheduleData.filter(item => item.title.includes('Vocabulary')).length / 5), 
+              icon: <BookOpen className="h-4 w-4" /> 
+            },
+          ];
+          
+          setUserStats(prev => ({
+            ...prev,
+            badges: badges.map(badge => ({
+              ...badge,
+              count: Math.max(0, badge.count) // Ensure count is not negative
+            }))
+          }));
+          
+          // Update goals progress
+          const upcomingGoals = [
+            { 
+              name: 'Complete 5 more lessons', 
+              progress: Math.min(100, (scheduleData.filter(item => item.module_id).length % 5) * 20) 
+            },
+            { 
+              name: 'Practice pronunciation for 30 minutes', 
+              progress: Math.min(100, (scheduleData.filter(item => item.title.includes('Pronunciation')).reduce((sum, item) => sum + item.duration, 0) % 30) * (100/30)) 
+            },
+            { 
+              name: 'Complete 3 conversation scenarios', 
+              progress: Math.min(100, (scheduleData.filter(item => item.title.includes('Conversation')).length % 3) * 33) 
+            },
+            { 
+              name: 'Learn 50 new vocabulary words', 
+              progress: Math.min(100, (scheduleData.filter(item => item.title.includes('Vocabulary')).length * 10) % 50 * 2) 
+            },
+          ];
+          
+          setUserStats(prev => ({
+            ...prev,
+            upcomingGoals
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [user, profile]);
+
+  // Helper function to format relative dates
+  const formatRelativeDate = (date: Date) => {
+    const now = new Date();
+    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    return format(date, 'MMM d, yyyy');
+  };
+
+  // Function to log user activity
+  const logUserActivity = async (activityType: string, activityName: string, durationMinutes: number) => {
+    if (!user) return;
+    
+    try {
+      const today = format(new Date(), 'yyyy-MM-dd');
+      const startTime = format(new Date(), 'HH:mm:ss');
+      
+      const { error } = await supabase
+        .from('user_schedule')
+        .insert({
+          user_id: user.id,
+          title: activityName,
+          date: today,
+          start_time: startTime,
+          duration: durationMinutes,
+          is_completed: true,
+          module_id: activityType === 'lesson' ? 'some-module-id' : null
+        });
+        
+      if (error) {
+        console.error('Error logging user activity:', error);
+      }
+    } catch (error) {
+      console.error('Unexpected error logging activity:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
@@ -71,14 +325,27 @@ const Dashboard = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-3xl font-bold">Your Dashboard</h1>
-              <p className="text-gray-600">Track your progress and set learning goals</p>
+              <p className="text-gray-600">
+                {loading 
+                  ? "Loading your personalized dashboard..." 
+                  : "Track your progress and set learning goals"}
+              </p>
             </div>
             <div className="mt-4 md:mt-0 flex gap-3">
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2"
+                onClick={() => logUserActivity('goal', 'Set new learning goals', 5)}
+                disabled={loading || !user}
+              >
                 <Target className="h-4 w-4" />
                 Set Goals
               </Button>
-              <Button className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700">
+              <Button 
+                className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700"
+                onClick={() => logUserActivity('lesson', 'Continued learning session', 15)}
+                disabled={loading || !user}
+              >
                 <BookOpen className="h-4 w-4" />
                 Continue Learning
               </Button>
@@ -87,10 +354,21 @@ const Dashboard = () => {
         </div>
       </section>
       
+      {/* Loading Indicator */}
+      {loading && (
+        <div className="container mx-auto px-4 py-8 text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+          </div>
+          <p className="mt-4 text-gray-600">Loading your personalized dashboard...</p>
+        </div>
+      )}
+      
       {/* Main Dashboard Content */}
-      <section className="flex-grow pb-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {!loading && (
+        <section className="flex-grow pb-12">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Left Column */}
             <div className="lg:col-span-2 space-y-6">
@@ -238,16 +516,33 @@ const Dashboard = () => {
               <Card>
                 <CardContent className="p-6">
                   <div className="flex flex-col items-center text-center">
-                    <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
-                      {userStats.name.split(' ').map(n => n[0]).join('')}
-                    </div>
-                    <h3 className="text-xl font-bold">{userStats.name}</h3>
+                    {profile?.avatar_url ? (
+                      <img 
+                        src={profile.avatar_url} 
+                        alt={userStats.name || 'User'} 
+                        className="w-20 h-20 rounded-full object-cover mb-4"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
+                        {userStats.name ? userStats.name.split(' ').map(n => n[0]).join('') : '?'}
+                      </div>
+                    )}
+                    <h3 className="text-xl font-bold">{userStats.name || 'User'}</h3>
                     <p className="text-gray-500 mb-4">{userStats.level} Level</p>
-                    <div className="flex gap-2 mb-4">
+                    <div className="flex gap-2 mb-4 flex-wrap justify-center">
                       <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">English Learner</Badge>
-                      <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">{userStats.streak} Day Streak</Badge>
+                      {userStats.streak > 0 && (
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">{userStats.streak} Day Streak</Badge>
+                      )}
+                      {profile?.preferred_level && (
+                        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">{profile.preferred_level}</Badge>
+                      )}
                     </div>
-                    <Button variant="outline" className="w-full">Edit Profile</Button>
+                    <Link to="/profile">
+                      <Button variant="outline" className="w-full" onClick={() => logUserActivity('profile', 'Edited profile', 5)}>
+                        Edit Profile
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
@@ -387,6 +682,7 @@ const Dashboard = () => {
           </div>
         </div>
       </section>
+      )}
       
       <Footer />
     </div>
