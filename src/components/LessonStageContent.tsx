@@ -37,15 +37,17 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 max-w-full">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <h2 className="text-xl sm:text-2xl font-bold text-purple-700">{stage.title}</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-purple-700 break-words hyphens-auto">
+          {stage.title}
+        </h2>
         <Button 
           variant="ghost" 
           size={isMobile ? "icon" : "sm"}
           onClick={() => handleSpeak(stage.content)}
           disabled={isSpeaking}
-          className="text-purple-600 hover:bg-purple-50"
+          className="text-purple-600 hover:bg-purple-50 flex-shrink-0"
           title="Listen to this section"
         >
           <Volume2 className="h-4 w-4" />
@@ -54,7 +56,7 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
       </div>
 
       {stage.videoId && (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="relative rounded-lg overflow-hidden shadow-lg">
             <YouTubeEmbed 
               videoId={stage.videoId} 
@@ -76,7 +78,7 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
       )}
 
       {stage.imageUrl && (
-        <div className="mb-6 overflow-hidden rounded-lg shadow-md">
+        <div className="mb-4 sm:mb-6 overflow-hidden rounded-lg shadow-md">
           <img 
             src={stage.imageUrl} 
             alt={stage.title} 
@@ -85,14 +87,16 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
         </div>
       )}
 
-      <div className="prose max-w-none">
-        <p className="text-gray-700 text-base sm:text-lg leading-relaxed whitespace-pre-wrap">{stage.content}</p>
+      <div className="prose prose-sm sm:prose max-w-none">
+        <p className="text-gray-700 text-sm sm:text-base leading-relaxed whitespace-pre-wrap break-words hyphens-auto overflow-wrap-anywhere">
+          {stage.content}
+        </p>
       </div>
       
       {stage.examples && stage.examples.length > 0 && (
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 sm:p-6 shadow-sm">
-          <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-purple-700">Examples</h3>
-          <div className="space-y-4">
+        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-3 sm:p-6 shadow-sm">
+          <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-6 text-purple-700">Examples</h3>
+          <div className="space-y-3">
             {stage.examples.map((example, index) => (
               <Card 
                 key={index} 
@@ -102,7 +106,9 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
               >
                 <CardContent className="p-3 sm:p-5">
                   <div className="flex justify-between items-start mb-2 gap-2">
-                    <p className="font-medium text-gray-800 text-sm sm:text-base flex-1">{example.english}</p>
+                    <p className="font-medium text-gray-800 text-sm sm:text-base break-words hyphens-auto flex-1">
+                      {example.english}
+                    </p>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -115,7 +121,9 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
                       <span className="sr-only">Listen</span>
                     </Button>
                   </div>
-                  <p className="text-gray-600 text-sm sm:text-base">{example.indonesian}</p>
+                  <p className="text-gray-600 text-sm sm:text-base break-words hyphens-auto">
+                    {example.indonesian}
+                  </p>
                 </CardContent>
               </Card>
             ))}
@@ -123,7 +131,7 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
         </div>
       )}
 
-      <div className="flex justify-end mt-8 pb-4">
+      <div className="flex justify-end mt-6 sm:mt-8 pb-4">
         <Button onClick={() => onComplete(stage.id)} className="bg-purple-600 hover:bg-purple-700">
           Mark as Complete & Continue
         </Button>

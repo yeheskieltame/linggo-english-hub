@@ -118,6 +118,15 @@ export default {
 			boxShadow: {
 				'linggo': '0 10px 25px -5px rgba(53, 99, 233, 0.1), 0 8px 10px -6px rgba(53, 99, 233, 0.1)',
 			},
+			typography: {
+				DEFAULT: {
+					css: {
+						maxWidth: '100%',
+						wordBreak: 'break-word',
+						overflowWrap: 'break-word',
+					},
+				},
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

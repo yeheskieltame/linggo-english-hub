@@ -149,4 +149,14 @@
   .multi-gradient {
     @apply bg-gradient-to-r from-purple-500 via-blue-400 to-orange-400;
   }
+  
+  /* Responsive text handling utilities */
+  .overflow-wrap-anywhere {
+    overflow-wrap: anywhere;
+  }
+  
+  .break-words {
+    word-break: break-word;
+  }
 }
+
