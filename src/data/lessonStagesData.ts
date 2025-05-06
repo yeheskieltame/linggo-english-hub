@@ -1,5 +1,11 @@
 
 import { LessonStage, LessonQuiz, PracticalTest } from '@/types/lesson';
+import { lessonC1Stages, lessonC1Quizzes, lessonC1FinalTest } from './c1LessonData';
+import { lessonC2BusinessStages, lessonC2AcademicStages, lessonC2BusinessQuizzes, lessonC2AcademicQuizzes, lessonC2BusinessFinalTest, lessonC2AcademicFinalTest } from './c2LessonData';
+import { lessonA1BusinessStages, lessonA1AcademicStages, lessonA1BusinessQuizzes, lessonA1AcademicQuizzes, lessonA1BusinessFinalTest, lessonA1AcademicFinalTest } from './a1LessonData';
+import { lessonA2BusinessStages, lessonA2AcademicStages, lessonA2BusinessQuizzes, lessonA2AcademicQuizzes, lessonA2BusinessFinalTest, lessonA2AcademicFinalTest } from './a2LessonData';
+import { lessonB1BusinessStages, lessonB1AcademicStages, lessonB1BusinessQuizzes, lessonB1AcademicQuizzes, lessonB1BusinessFinalTest, lessonB1AcademicFinalTest } from './b1LessonData';
+import { lessonB2BusinessStages, lessonB2AcademicStages, lessonB2BusinessQuizzes, lessonB2AcademicQuizzes, lessonB2BusinessFinalTest, lessonB2AcademicFinalTest } from './b2LessonData';
 
 // Mock lesson stages for lesson 1
 export const lessonL1Stages: LessonStage[] = [
@@ -311,6 +317,61 @@ export const lessonStagesMockData: Record<string, {
     stages: lessonL1Stages,
     quizzes: lessonL1Quizzes,
     finalTest: lessonL1FinalTest
+  },
+  'c1': {
+    stages: lessonC1Stages,
+    quizzes: lessonC1Quizzes,
+    finalTest: lessonC1FinalTest
+  },
+  'c2-business': {
+    stages: lessonC2BusinessStages,
+    quizzes: lessonC2BusinessQuizzes,
+    finalTest: lessonC2BusinessFinalTest
+  },
+  'c2-academic': {
+    stages: lessonC2AcademicStages,
+    quizzes: lessonC2AcademicQuizzes,
+    finalTest: lessonC2AcademicFinalTest
+  },
+  'a1-business': {
+    stages: lessonA1BusinessStages,
+    quizzes: lessonA1BusinessQuizzes,
+    finalTest: lessonA1BusinessFinalTest
+  },
+  'a1-academic': {
+    stages: lessonA1AcademicStages,
+    quizzes: lessonA1AcademicQuizzes,
+    finalTest: lessonA1AcademicFinalTest
+  },
+  'a2-business': {
+    stages: lessonA2BusinessStages,
+    quizzes: lessonA2BusinessQuizzes,
+    finalTest: lessonA2BusinessFinalTest
+  },
+  'a2-academic': {
+    stages: lessonA2AcademicStages,
+    quizzes: lessonA2AcademicQuizzes,
+    finalTest: lessonA2AcademicFinalTest
+  },
+  'b1-business': {
+    stages: lessonB1BusinessStages,
+    quizzes: lessonB1BusinessQuizzes,
+    finalTest: lessonB1BusinessFinalTest
+  },
+  'b1-academic': {
+    stages: lessonB1AcademicStages,
+    quizzes: lessonB1AcademicQuizzes,
+    finalTest: lessonB1AcademicFinalTest
+  },
+  'b2-business': {
+    stages: lessonB2BusinessStages,
+    quizzes: lessonB2BusinessQuizzes,
+    finalTest: lessonB2BusinessFinalTest
+  },
+  'b2-academic': {
+    stages: lessonB2AcademicStages,
+    quizzes: lessonB2AcademicQuizzes,
+    finalTest: lessonB2AcademicFinalTest
   },
   'l2': {
     stages: [

@@ -47,71 +47,24 @@ export const topicCategories = [
 
 export const mockLessons: Lesson[] = [
   {
-    id: 'l1',
-    title: 'Introducing Yourself',
+    id: 'a1-business',
+    title: 'Office Basics and Business Introductions',
     level: 'beginner',
-    cefrLevel: 'B1',
-    path: 'general',
-    duration: '15 min',
-    description: 'Learn how to confidently introduce yourself in English for social and professional situations.',
-    imageUrl: '/placeholder.svg',
-    tags: ['Daily Conversation', 'Beginner', 'Speaking'],
+    cefrLevel: 'A1',
+    path: 'business',
+    duration: '30 min',
+    description: 'Learn essential vocabulary and phrases for the workplace environment and business introductions.',
+    imageUrl: 'https://images.unsplash.com/photo-1497215842964-222b430dc094?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    tags: ['Business English', 'Beginner', 'Vocabulary', 'Introductions'],
     content: {
       sections: [
         {
-          title: 'Common Greetings',
-          text: 'When meeting someone for the first time, you can use these common greetings:',
-          imageUrl: 'https://images.unsplash.com/photo-1557425955-df376b5903c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+          title: 'Office Basics',
+          text: 'Learn essential vocabulary and phrases for the workplace environment.',
           examples: [
             {
-              english: 'Hello, my name is [your name].',
-              indonesian: 'Halo, nama saya [nama Anda].'
-            },
-            {
-              english: "Hi there! I'm [your name]. Nice to meet you.",
-              indonesian: 'Hai! Saya [nama Anda]. Senang bertemu dengan Anda.'
-            },
-            {
-              english: "Good morning/afternoon/evening! I'm [your name].",
-              indonesian: 'Selamat pagi/siang/malam! Saya [nama Anda].'
-            }
-          ]
-        },
-        {
-          title: 'Sharing Basic Information',
-          text: "After introducing your name, you can share some basic information about yourself:",
-          imageUrl: 'https://images.unsplash.com/photo-1573497161161-c3e73707e25c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-          examples: [
-            {
-              english: "I'm from Indonesia.",
-              indonesian: 'Saya dari Indonesia.'
-            },
-            {
-              english: "I work as a [job title] at [company name].",
-              indonesian: 'Saya bekerja sebagai [jabatan] di [nama perusahaan].'
-            },
-            {
-              english: "I'm studying [subject] at [school/university name].",
-              indonesian: 'Saya sedang belajar [subjek] di [nama sekolah/universitas].'
-            }
-          ]
-        },
-        {
-          title: 'Asking Questions',
-          text: "To keep the conversation going, you can ask questions about the other person:",
-          imageUrl: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1046&q=80',
-          examples: [
-            {
-              english: "Where are you from?",
-              indonesian: 'Anda berasal dari mana?'
-            },
-            {
-              english: "What do you do for work?",
-              indonesian: 'Apa pekerjaan Anda?'
-            },
-            {
-              english: "How long have you been in [place]?",
-              indonesian: 'Sudah berapa lama Anda berada di [tempat]?'
+              english: "Good morning! My name is John. I'm the new employee in the marketing department.",
+              indonesian: "Selamat pagi! Nama saya John. Saya karyawan baru di departemen pemasaran."
             }
           ]
         }
@@ -119,52 +72,149 @@ export const mockLessons: Lesson[] = [
     }
   },
   {
-    id: 'l2',
-    title: 'Business Meetings',
+    id: 'a1-academic',
+    title: 'Classroom Language and Academic Introductions',
+    level: 'beginner',
+    cefrLevel: 'A1',
+    path: 'academic',
+    duration: '30 min',
+    description: 'Learn essential vocabulary and phrases for the classroom environment and academic introductions.',
+    imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1122&q=80',
+    tags: ['Academic English', 'Beginner', 'Vocabulary', 'Classroom Language'],
+    content: {
+      sections: [
+        {
+          title: 'Classroom Language',
+          text: 'Learn essential vocabulary and phrases for the classroom environment.',
+          examples: [
+            {
+              english: "Excuse me, professor. Could you repeat that, please? I didn't understand.",
+              indonesian: "Permisi, profesor. Bisakah Anda mengulanginya? Saya tidak mengerti."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    id: 'a2-business',
+    title: 'Business Phone Calls and Emails',
+    level: 'elementary',
+    cefrLevel: 'A2',
+    path: 'business',
+    duration: '35 min',
+    description: 'Learn essential vocabulary and phrases for making business phone calls and writing professional emails.',
+    imageUrl: 'https://images.unsplash.com/photo-1534536281715-e28d76689b4d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    tags: ['Business English', 'Elementary', 'Phone Calls', 'Emails'],
+    content: {
+      sections: [
+        {
+          title: 'Business Phone Calls',
+          text: 'Learn essential vocabulary and phrases for making and receiving business phone calls.',
+          examples: [
+            {
+              english: "Hello, this is John Smith from ABC Company. Could I speak to Ms. Johnson, please?",
+              indonesian: "Halo, ini John Smith dari Perusahaan ABC. Bisakah saya berbicara dengan Ibu Johnson?"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    id: 'a2-academic',
+    title: 'Academic Discussions and Presentations',
+    level: 'elementary',
+    cefrLevel: 'A2',
+    path: 'academic',
+    duration: '35 min',
+    description: 'Learn essential vocabulary and phrases for participating in academic discussions and giving simple presentations.',
+    imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    tags: ['Academic English', 'Elementary', 'Discussions', 'Presentations'],
+    content: {
+      sections: [
+        {
+          title: 'Academic Discussions',
+          text: 'Learn essential vocabulary and phrases for participating in academic discussions.',
+          examples: [
+            {
+              english: "I think that's an interesting point. Could you explain more about it?",
+              indonesian: "Saya pikir itu adalah poin yang menarik. Bisakah Anda menjelaskan lebih lanjut tentang hal itu?"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    id: 'b1-business',
+    title: 'Business Meetings and Negotiations',
     level: 'intermediate',
+    cefrLevel: 'B1',
+    path: 'business',
+    duration: '40 min',
+    description: 'Learn vocabulary and phrases for participating effectively in business meetings and basic negotiations.',
+    imageUrl: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    tags: ['Business English', 'Intermediate', 'Meetings', 'Negotiations'],
+    content: {
+      sections: [
+        {
+          title: 'Business Meetings',
+          text: 'Learn vocabulary and phrases for participating effectively in business meetings.',
+          examples: [
+            {
+              english: "I'd like to add something to that point if I may.",
+              indonesian: "Saya ingin menambahkan sesuatu pada poin itu jika boleh."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    id: 'b1-academic',
+    title: 'Academic Research and Essays',
+    level: 'intermediate',
+    cefrLevel: 'B1',
+    path: 'academic',
+    duration: '40 min',
+    description: 'Learn vocabulary and structures for conducting academic research and writing essays.',
+    imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+    tags: ['Academic English', 'Intermediate', 'Research', 'Essays'],
+    content: {
+      sections: [
+        {
+          title: 'Academic Research',
+          text: 'Learn vocabulary and structures for conducting academic research.',
+          examples: [
+            {
+              english: "According to Smith (2020), there is a strong correlation between these variables.",
+              indonesian: "Menurut Smith (2020), ada korelasi yang kuat antara variabel-variabel ini."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    id: 'b2-business',
+    title: 'Negotiation Skills and Business Strategy',
+    level: 'upper intermediate',
     cefrLevel: 'B2',
     path: 'business',
-    duration: '25 min',
-    description: 'Master the essential phrases and vocabulary for participating in and leading business meetings.',
-    imageUrl: '/placeholder.svg',
-    tags: ['Business English', 'Meetings', 'Professional'],
+    duration: '45 min',
+    description: 'Learn effective strategies and language for business negotiations and discussing business strategy.',
+    imageUrl: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    tags: ['Business English', 'Upper Intermediate', 'Negotiations', 'Strategy'],
     content: {
       sections: [
         {
-          title: 'Opening a Meeting',
-          text: 'Use these phrases to formally begin a business meeting:',
-          imageUrl: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+          title: 'Negotiation Skills',
+          text: 'Learn effective strategies and language for business negotiations.',
           examples: [
             {
-              english: "Good morning everyone. Thank you for coming today.",
-              indonesian: "Selamat pagi semua. Terima kasih telah hadir hari ini."
-            },
-            {
-              english: "Let's get started with today's agenda.",
-              indonesian: "Mari kita mulai dengan agenda hari ini."
-            },
-            {
-              english: "First, I'd like to welcome our new team member, [name].",
-              indonesian: "Pertama, saya ingin menyambut anggota tim baru kita, [nama]."
-            }
-          ]
-        },
-        {
-          title: 'Expressing Opinions in Meetings',
-          text: "Use these phrases to express your thoughts professionally:",
-          imageUrl: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-          examples: [
-            {
-              english: "In my opinion, we should focus on the marketing strategy first.",
-              indonesian: "Menurut pendapat saya, kita harus fokus pada strategi pemasaran terlebih dahulu."
-            },
-            {
-              english: "I think we need to reconsider our approach to this problem.",
-              indonesian: "Saya pikir kita perlu mempertimbangkan kembali pendekatan kita terhadap masalah ini."
-            },
-            {
-              english: "From my perspective, this solution offers the best long-term benefits.",
-              indonesian: "Dari perspektif saya, solusi ini menawarkan manfaat jangka panjang yang terbaik."
+              english: "I understand your position, but I think we can find a solution that works for both parties.",
+              indonesian: "Saya memahami posisi Anda, tetapi saya pikir kita dapat menemukan solusi yang berfungsi untuk kedua belah pihak."
             }
           ]
         }
@@ -172,158 +222,109 @@ export const mockLessons: Lesson[] = [
     }
   },
   {
-    id: 'l3',
-    title: 'Academic Research Writing',
+    id: 'b2-academic',
+    title: 'Academic Debates and Critical Thinking',
+    level: 'upper intermediate',
+    cefrLevel: 'B2',
+    path: 'academic',
+    duration: '45 min',
+    description: 'Learn vocabulary and structures for participating in academic debates and developing critical thinking skills.',
+    imageUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    tags: ['Academic English', 'Upper Intermediate', 'Debates', 'Critical Thinking'],
+    content: {
+      sections: [
+        {
+          title: 'Academic Debates',
+          text: 'Learn vocabulary and structures for participating in academic debates.',
+          examples: [
+            {
+              english: "While I see the merit in your argument, I would like to offer an alternative perspective.",
+              indonesian: "Meskipun saya melihat manfaat dalam argumen Anda, saya ingin menawarkan perspektif alternatif."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    id: 'c1-business',
+    title: 'Advanced Business Communication',
+    level: 'advanced',
+    cefrLevel: 'C1',
+    path: 'business',
+    duration: '45 min',
+    description: 'Master sophisticated business language, negotiation strategies, and persuasive communication for high-level business contexts.',
+    imageUrl: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80',
+    tags: ['Business English', 'Advanced', 'Negotiation', 'Persuasive Communication'],
+    content: {
+      sections: [
+        {
+          title: 'Advanced Business Communication',
+          text: 'Master sophisticated business language and communication strategies.',
+          examples: [
+            {
+              english: "I appreciate your perspective on this matter, and I'd like to propose an alternative approach that might address your concerns while still meeting our objectives.",
+              indonesian: "Saya menghargai perspektif Anda tentang masalah ini, dan saya ingin mengusulkan pendekatan alternatif yang mungkin mengatasi kekhawatiran Anda sambil tetap memenuhi tujuan kami."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    id: 'c1-academic',
+    title: 'Academic Discourse and Critical Analysis',
     level: 'advanced',
     cefrLevel: 'C1',
     path: 'academic',
-    duration: '30 min',
-    description: 'Learn how to write effective and professional academic research papers in English.',
-    imageUrl: '/placeholder.svg',
-    tags: ['Academic English', 'Writing', 'Research'],
+    duration: '45 min',
+    description: 'Master sophisticated academic language, critical analysis, and persuasive argumentation for advanced academic contexts.',
+    imageUrl: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1373&q=80',
+    tags: ['Academic English', 'Critical Thinking', 'Advanced Grammar', 'Formal Writing'],
     content: {
       sections: [
         {
-          title: 'Structuring a Research Paper',
-          text: 'An academic research paper typically includes these components:',
-          imageUrl: 'https://images.unsplash.com/photo-1532153975070-2e9ab71f1b14?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+          title: 'Advanced Passive Structures',
+          text: 'Master complex passive constructions for academic and professional contexts, including passive infinitives, passive gerunds, and passive reporting structures.',
+          imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
           examples: [
             {
-              english: 'Abstract: A concise summary of your research and findings.',
-              indonesian: 'Abstrak: Ringkasan singkat tentang penelitian dan temuan Anda.'
+              english: "The findings are believed to have been manipulated to support the hypothesis.",
+              indonesian: "Temuan tersebut diyakini telah dimanipulasi untuk mendukung hipotesis."
             },
             {
-              english: "Introduction: Background information and your research question.",
-              indonesian: 'Pendahuluan: Informasi latar belakang dan pertanyaan penelitian Anda.'
-            },
-            {
-              english: "Literature Review: Analysis of existing research on the topic.",
-              indonesian: 'Tinjauan Pustaka: Analisis penelitian yang ada tentang topik tersebut.'
+              english: "It has been suggested that the policy should be reconsidered in light of recent developments.",
+              indonesian: "Telah disarankan bahwa kebijakan tersebut harus dipertimbangkan kembali mengingat perkembangan terbaru."
             }
           ]
         },
         {
-          title: 'Academic Vocabulary and Phrases',
-          text: "Use these formal expressions in your academic writing:",
-          imageUrl: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1073&q=80',
+          title: 'Academic Vocabulary and Nominalisation',
+          text: "Enhance your formal writing with sophisticated vocabulary and nominalisation techniques to create concise, objective academic discourse.",
+          imageUrl: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1373&q=80',
           examples: [
             {
-              english: "This study aims to investigate the relationship between X and Y.",
-              indonesian: "Penelitian ini bertujuan untuk menyelidiki hubungan antara X dan Y."
+              english: "The implementation of the new policy resulted in a significant reduction in carbon emissions.",
+              indonesian: "Implementasi kebijakan baru menghasilkan pengurangan signifikan dalam emisi karbon."
             },
             {
-              english: "The findings suggest that there is a strong correlation between the variables.",
-              indonesian: "Temuan menunjukkan bahwa ada korelasi kuat antara variabel-variabel tersebut."
-            },
-            {
-              english: "It can be concluded that the hypothesis is partially supported by the evidence.",
-              indonesian: "Dapat disimpulkan bahwa hipotesis tersebut sebagian didukung oleh bukti."
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'l4',
-    title: 'Daily Conversations',
-    level: 'beginner',
-    cefrLevel: 'A2',
-    path: 'general',
-    duration: '20 min',
-    description: 'Master everyday conversations in various common situations.',
-    imageUrl: '/placeholder.svg',
-    tags: ['Daily Conversation', 'Beginner', 'Speaking'],
-    content: {
-      sections: [
-        {
-          title: 'At the Restaurant',
-          text: 'Use these phrases when dining at a restaurant:',
-          imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-          examples: [
-            {
-              english: "I'd like to make a reservation for tonight at 7 PM.",
-              indonesian: "Saya ingin membuat reservasi untuk malam ini pukul 7."
-            },
-            {
-              english: "Could I have the menu, please?",
-              indonesian: "Boleh saya minta menunya?"
-            },
-            {
-              english: "I'll have the chicken with rice, please.",
-              indonesian: "Saya akan memesan ayam dengan nasi."
+              english: "Their failure to address the underlying issues led to the deterioration of diplomatic relations.",
+              indonesian: "Kegagalan mereka untuk mengatasi masalah mendasar menyebabkan memburuknya hubungan diplomatik."
             }
           ]
         },
         {
-          title: 'Shopping Conversations',
-          text: "Common phrases to use while shopping:",
-          imageUrl: 'https://images.unsplash.com/photo-1481437156560-3205f6a55735?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1095&q=80',
+          title: 'Critical Analysis and Argumentation',
+          text: "Develop sophisticated critical thinking and persuasive argumentation skills for academic discourse and professional contexts.",
+          imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
           examples: [
             {
-              english: "How much does this cost?",
-              indonesian: "Berapa harga ini?"
+              english: "While the author presents compelling statistical evidence to support their main claim, they fail to address several significant counterarguments that undermine their conclusion.",
+              indonesian: "Meskipun penulis menyajikan bukti statistik yang meyakinkan untuk mendukung klaim utama mereka, mereka gagal mengatasi beberapa argumen tandingan signifikan yang melemahkan kesimpulan mereka."
             },
             {
-              english: "Do you have this in a different size?",
-              indonesian: "Apakah Anda memiliki ini dalam ukuran yang berbeda?"
-            },
-            {
-              english: "I'm just looking, thank you.",
-              indonesian: "Saya hanya melihat-lihat, terima kasih."
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'l5',
-    title: 'Business Negotiations',
-    level: 'advanced',
-    cefrLevel: 'C1',
-    path: 'business',
-    duration: '35 min',
-    description: 'Advanced techniques for successful business negotiations in English.',
-    imageUrl: '/placeholder.svg',
-    tags: ['Business English', 'Negotiation', 'Professional'],
-    content: {
-      sections: [
-        {
-          title: 'Opening Negotiations',
-          text: 'Professional ways to begin a negotiation:',
-          imageUrl: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80',
-          examples: [
-            {
-              english: "Thank you for meeting with us today to discuss this opportunity.",
-              indonesian: "Terima kasih telah bertemu dengan kami hari ini untuk membahas kesempatan ini."
-            },
-            {
-              english: "Let me start by outlining what we hope to achieve today.",
-              indonesian: "Izinkan saya mulai dengan menguraikan apa yang kami harapkan untuk dicapai hari ini."
-            },
-            {
-              english: "Before we begin, I'd like to establish some common ground.",
-              indonesian: "Sebelum kita mulai, saya ingin menetapkan beberapa kesamaan pandangan."
-            }
-          ]
-        },
-        {
-          title: 'Negotiation Techniques',
-          text: "Strategic phrases to use during negotiations:",
-          imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-          examples: [
-            {
-              english: "We appreciate your offer, but we were looking for something more along the lines of...",
-              indonesian: "Kami menghargai penawaran Anda, tetapi kami mencari sesuatu yang lebih seperti..."
-            },
-            {
-              english: "Perhaps we can find a middle ground that addresses both our concerns.",
-              indonesian: "Mungkin kita dapat menemukan jalan tengah yang mengatasi kekhawatiran kedua belah pihak."
-            },
-            {
-              english: "Let's explore an alternative that might work better for both parties.",
-              indonesian: "Mari kita jelajahi alternatif yang mungkin bekerja lebih baik bagi kedua belah pihak."
+              english: "The research methodology appears robust; however, the small sample size and lack of demographic diversity raise questions about the generalizability of the findings.",
+              indonesian: "Metodologi penelitian tampak kuat; namun, ukuran sampel yang kecil dan kurangnya keragaman demografis menimbulkan pertanyaan tentang kemampuan generalisasi temuan."
             }
           ]
         }
@@ -591,6 +592,57 @@ export const practiceSentences: PracticeSentence[] = [
     tips: 'Practice the business terms "substantial" and "partnership" with clear pronunciation.',
     skillFocus: 'vocabulary',
     lessonId: 'l5'
+  },
+  // C1 Lesson: Academic Discourse and Critical Analysis
+  {
+    id: 'p6-c1-1',
+    english: "The findings are believed to have been manipulated to support the hypothesis.",
+    indonesian: "Temuan tersebut diyakini telah dimanipulasi untuk mendukung hipotesis.",
+    difficulty: 'hard',
+    cefrLevel: 'C1',
+    tips: 'Focus on the complex passive structure "are believed to have been manipulated" and maintain a formal academic tone.',
+    skillFocus: 'grammar',
+    lessonId: 'c1'
+  },
+  {
+    id: 'p6-c1-2',
+    english: "Had the government implemented stricter regulations, we wouldn't be facing this environmental crisis now.",
+    indonesian: "Seandainya pemerintah menerapkan peraturan yang lebih ketat, kita tidak akan menghadapi krisis lingkungan ini sekarang.",
+    difficulty: 'hard',
+    cefrLevel: 'C1',
+    tips: 'Pay attention to the inverted conditional structure and the stress patterns in the longer sentence.',
+    skillFocus: 'grammar',
+    lessonId: 'c1'
+  },
+  {
+    id: 'p6-c1-3',
+    english: "The implementation of the new policy resulted in a significant reduction in carbon emissions.",
+    indonesian: "Implementasi kebijakan baru menghasilkan pengurangan signifikan dalam emisi karbon.",
+    difficulty: 'medium',
+    cefrLevel: 'C1',
+    tips: 'Focus on the nominalised forms "implementation" and "reduction" and the academic vocabulary.',
+    skillFocus: 'vocabulary',
+    lessonId: 'c1'
+  },
+  {
+    id: 'p6-c1-4',
+    english: "Notwithstanding the challenges faced, the research team managed to complete the project ahead of schedule.",
+    indonesian: "Terlepas dari tantangan yang dihadapi, tim penelitian berhasil menyelesaikan proyek lebih cepat dari jadwal.",
+    difficulty: 'hard',
+    cefrLevel: 'C1',
+    tips: 'Practice the advanced discourse marker "notwithstanding" and maintain a smooth rhythm throughout the sentence.',
+    skillFocus: 'fluency',
+    lessonId: 'c1'
+  },
+  {
+    id: 'p6-c1-5',
+    english: "While the author presents compelling evidence, they fail to address several significant counterarguments.",
+    indonesian: "Meskipun penulis menyajikan bukti yang meyakinkan, mereka gagal mengatasi beberapa argumen tandingan yang signifikan.",
+    difficulty: 'hard',
+    cefrLevel: 'C1',
+    tips: 'Focus on the critical analysis vocabulary and the balanced structure of the sentence.',
+    skillFocus: 'vocabulary',
+    lessonId: 'c1'
   }
 ];
 
