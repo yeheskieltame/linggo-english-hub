@@ -23,6 +23,7 @@ import PracticalTest from '@/components/PracticalTest';
 import { getLessonStageData } from '@/data/lessonStagesData';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/providers/AuthProvider';
+import { supabase } from '@/integrations/supabase/client';
 
 // Define mock skills for demonstration
 const mockSkills = {
@@ -187,7 +188,7 @@ const LessonDetail = () => {
     setCurrentView('final-test');
   };
   
-  const handleStageComplete = (stageId: string) => {
+  const handleStageComplete = async (stageId: string) => {
     if (!completedStages.includes(stageId)) {
       const newCompletedStages = [...completedStages, stageId];
       setCompletedStages(newCompletedStages);
@@ -197,6 +198,79 @@ const LessonDetail = () => {
         completedStages: newCompletedStages,
         completed: hasCompletedLesson
       }));
+      
+      // Save progress to database if user is logged in
+      if (user && lessonId) {
+        try {
+          // Calculate progress percentage
+          const totalStages = stagesData.stages.length + stagesData.quizzes.length;
+          const progressPercentage = (newCompletedStages.length / totalStages) * 100;
+          
+          // Check if there's already a progress record for this lesson
+          const { data: existingProgress, error: checkError } = await supabase
+            .from('user_progress')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('module', lessonId)
+            .single();
+            
+          if (checkError && checkError.code !== 'PGRST116') { // PGRST116 is "not found" which is expected if no record exists
+            console.error('Error checking lesson progress:', checkError);
+          }
+          
+          if (!existingProgress) {
+            // Create a new progress record
+            const { error: insertError } = await supabase
+              .from('user_progress')
+              .insert({
+                user_id: user.id,
+                module: lessonId,
+                level: lesson?.cefrLevel || 'A1',
+                progress: progressPercentage,
+                completed: false,
+                last_access: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              });
+              
+            if (insertError) {
+              console.error('Error creating lesson progress:', insertError);
+            }
+          } else {
+            // Update the existing progress record
+            const { error: updateError } = await supabase
+              .from('user_progress')
+              .update({
+                progress: progressPercentage,
+                last_access: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              })
+              .eq('id', existingProgress.id);
+              
+            if (updateError) {
+              console.error('Error updating lesson progress:', updateError);
+            }
+          }
+          
+          // Log this activity in user_schedule
+          const { error: scheduleError } = await supabase
+            .from('user_schedule')
+            .insert({
+              user_id: user.id,
+              title: `Completed stage in lesson: ${lesson?.title || 'Unknown'}`,
+              date: new Date().toISOString().split('T')[0],
+              start_time: new Date().toTimeString().split(' ')[0],
+              duration: 5, // Assume 5 minutes per stage
+              is_completed: true,
+              module_id: lessonId
+            });
+            
+          if (scheduleError) {
+            console.error('Error logging lesson activity:', scheduleError);
+          }
+        } catch (error) {
+          console.error('Error saving progress to database:', error);
+        }
+      }
       
       // Find next stage or quiz
       const stageIndex = stagesData.stages.findIndex(s => s.id === stageId);

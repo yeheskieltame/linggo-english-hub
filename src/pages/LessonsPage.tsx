@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -45,6 +45,7 @@ const mockSkills = {
 
 const LessonsPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, profile } = useAuth();
   const [filter, setFilter] = useState({
     search: '',
@@ -58,6 +59,11 @@ const LessonsPage = () => {
     recommended: true,
     inProgress: true
   });
+  
+  // Get the tab from URL query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const tabFromUrl = queryParams.get('tab');
+  const [activeTab, setActiveTab] = useState(tabFromUrl || 'all');
   
   // Fetch user progress and recommended lessons
   useEffect(() => {
@@ -304,7 +310,21 @@ const LessonsPage = () => {
       
       <section className="py-10 bg-white">
         <div className="container mx-auto px-4">
-          <Tabs defaultValue="all" className="w-full max-w-4xl mx-auto">
+          <Tabs 
+            value={activeTab} 
+            onValueChange={(value) => {
+              setActiveTab(value);
+              // Update URL without reloading the page
+              const newUrl = new URL(window.location.href);
+              if (value === 'all') {
+                newUrl.searchParams.delete('tab');
+              } else {
+                newUrl.searchParams.set('tab', value);
+              }
+              window.history.pushState({}, '', newUrl.toString());
+            }}
+            className="w-full max-w-4xl mx-auto"
+          >
             <TabsList className="grid grid-cols-3 mb-8">
               <TabsTrigger value="all">All Lessons</TabsTrigger>
               <TabsTrigger value="recommended">Recommended</TabsTrigger>

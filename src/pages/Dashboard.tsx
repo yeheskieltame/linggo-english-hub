@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -59,6 +59,7 @@ const defaultUserStats = {
 const COLORS = ['#8B5CF6', '#60A5FA', '#F97316', '#10B981'];
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const { user, profile } = useAuth();
   const [userStats, setUserStats] = useState(defaultUserStats);
   const [loading, setLoading] = useState(true);
@@ -343,7 +344,10 @@ const Dashboard = () => {
               </Button>
               <Button 
                 className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700"
-                onClick={() => logUserActivity('lesson', 'Continued learning session', 15)}
+                onClick={() => {
+                  logUserActivity('lesson', 'Continued learning session', 15);
+                  navigate('/lessons?tab=started');
+                }}
                 disabled={loading || !user}
               >
                 <BookOpen className="h-4 w-4" />
