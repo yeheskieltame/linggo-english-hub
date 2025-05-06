@@ -365,34 +365,126 @@ Remember that good research skills are essential for academic success. Taking ti
 export const lessonB1BusinessFinalTest: PracticalTest = {
   id: 'b1-b-final',
   title: 'Business Meeting Skills Test',
-  description: 'Demonstrate your ability to communicate effectively in a business meeting',
-  type: 'speaking',
-  prompt: 'Record a 2-3 minute presentation for a business meeting. Present a new product or service idea to your team. Include a brief introduction, key features or benefits, potential challenges, and conclude with next steps or recommendations.',
+  description: 'Demonstrate your ability to communicate effectively in business meetings through multiple skills',
+  type: 'speaking', // Main type for backward compatibility
+  prompt: 'Complete all sections of this comprehensive test to demonstrate your business meeting skills at the B1 level.',
   criteria: [
     'Clear organization and structure',
     'Appropriate use of business vocabulary',
-    'Effective presentation techniques',
-    'Proper grammar and pronunciation',
+    'Effective communication techniques',
+    'Proper grammar and language use',
     'Professional tone and confidence'
   ],
-  minScore: 70
+  minScore: 70,
+  sections: [
+    {
+      id: 'b1-b-final-s1',
+      title: 'Business Presentation',
+      type: 'speaking',
+      description: 'Deliver a presentation for a business meeting',
+      prompt: 'Record a 2-minute presentation for a business meeting. Present a new product or service idea to your team. Include a brief introduction, key features or benefits, potential challenges, and conclude with next steps or recommendations.',
+      criteria: [
+        'Clear organization and structure',
+        'Appropriate use of business vocabulary',
+        'Effective presentation techniques',
+        'Proper grammar and pronunciation',
+        'Professional tone and confidence'
+      ],
+      weight: 40
+    },
+    {
+      id: 'b1-b-final-s2',
+      title: 'Meeting Minutes',
+      type: 'writing',
+      description: 'Write minutes for a business meeting',
+      prompt: 'Write meeting minutes (150-200 words) for a business meeting about quarterly sales results. Include the date, attendees, main discussion points, decisions made, and action items assigned to team members. Use appropriate format and language for business meeting minutes.',
+      criteria: [
+        'Appropriate meeting minutes format',
+        'Clear and concise summary of key points',
+        'Accurate recording of decisions and action items',
+        'Proper business vocabulary and expressions',
+        'Correct grammar and professional tone'
+      ],
+      weight: 30
+    },
+    {
+      id: 'b1-b-final-s3',
+      title: 'Meeting Participation',
+      type: 'listening',
+      description: 'Demonstrate understanding of business meeting discussions',
+      prompt: 'Listen to the recording of a business meeting discussion about marketing strategy. Then answer questions about the main points discussed, different opinions expressed, and decisions made.',
+      audioUrl: '/audio/b1-business-meeting.mp3',
+      criteria: [
+        'Accurate comprehension of meeting content',
+        'Understanding of business terminology',
+        'Recognition of different opinions and perspectives',
+        'Identification of key decisions and action items'
+      ],
+      weight: 30
+    }
+  ]
 };
 
 // B1 Intermediate Level - Academic Final Test
 export const lessonB1AcademicFinalTest: PracticalTest = {
   id: 'b1-a-final',
-  title: 'Academic Presentation Skills Test',
-  description: 'Demonstrate your ability to deliver an academic presentation',
-  type: 'speaking',
-  prompt: 'Record a 2-3 minute academic presentation on a topic of your choice. Include an introduction, main points with supporting details, and a conclusion. Use appropriate academic language and presentation techniques.',
+  title: 'Academic Research and Essay Writing Test',
+  description: 'Demonstrate your ability to conduct research and write an academic essay',
+  type: 'writing', // Main type for backward compatibility
+  prompt: 'Complete all sections of this comprehensive test to demonstrate your academic research and essay writing skills at the B1 level.',
   criteria: [
-    'Clear organization and structure',
+    'Clear thesis statement and structure',
     'Appropriate use of academic vocabulary',
-    'Effective presentation techniques',
-    'Proper grammar and pronunciation',
+    'Proper citation of sources',
+    'Critical analysis of information',
     'Logical flow of ideas'
   ],
-  minScore: 70
+  minScore: 70,
+  sections: [
+    {
+      id: 'b1-a-final-s1',
+      title: 'Reading Comprehension',
+      type: 'reading',
+      description: 'Read an academic text and answer questions to demonstrate understanding',
+      prompt: 'Read the following academic text about climate change and answer the questions that follow. Focus on identifying the main arguments, supporting evidence, and the author\'s conclusions.',
+      criteria: [
+        'Ability to identify key arguments',
+        'Understanding of academic vocabulary',
+        'Recognition of text structure and organization',
+        'Comprehension of complex ideas'
+      ],
+      weight: 30
+    },
+    {
+      id: 'b1-a-final-s2',
+      title: 'Source Evaluation',
+      type: 'writing',
+      description: 'Evaluate the credibility of academic sources',
+      prompt: 'Examine the three sources provided below. For each source, write a short paragraph (50-75 words) evaluating its credibility using the CRAAP test (Currency, Relevance, Authority, Accuracy, Purpose). Identify which source would be most appropriate for an academic research paper and explain why.',
+      criteria: [
+        'Appropriate application of source evaluation criteria',
+        'Critical thinking skills',
+        'Clear justification for source selection',
+        'Understanding of academic source requirements'
+      ],
+      weight: 30
+    },
+    {
+      id: 'b1-a-final-s3',
+      title: 'Essay Writing',
+      type: 'writing',
+      description: 'Write a short academic essay with proper structure and citations',
+      prompt: 'Write a short academic essay (250-300 words) on the following topic: "The Impact of Technology on Education." Your essay should include an introduction with a clear thesis statement, body paragraphs with supporting evidence, and a conclusion. Use at least two of the sources provided in the previous section and cite them appropriately using APA style.',
+      criteria: [
+        'Clear thesis statement and essay structure',
+        'Appropriate use of academic vocabulary and style',
+        'Proper integration and citation of sources',
+        'Logical development of arguments',
+        'Effective conclusion that restates the thesis'
+      ],
+      weight: 40
+    }
+  ]
 };
 
 // B1 Intermediate Level - Business Pathway Quizzes
@@ -549,6 +641,7 @@ export const lessonB1AcademicQuizzes: LessonQuiz[] = [
       {
         id: 'q1-b1as1',
         question: 'What is a thesis statement in an academic essay?',
+        type: 'multiple-choice',
         options: [
           'A question that the essay will answer',
           'The main argument or point of the essay',
@@ -561,6 +654,7 @@ export const lessonB1AcademicQuizzes: LessonQuiz[] = [
       {
         id: 'q2-b1as1',
         question: 'Which of these is a characteristic of academic writing?',
+        type: 'multiple-choice',
         options: [
           'Using first-person perspective ("I think...")',
           'Including personal anecdotes as primary evidence',
@@ -617,6 +711,7 @@ export const lessonB1AcademicQuizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-b1as2',
+        type: 'multiple-choice',
         question: 'What is a primary source?',
         options: [
           'A textbook that summarizes research',
@@ -674,6 +769,74 @@ export const lessonB1AcademicQuizzes: LessonQuiz[] = [
         ],
         correctAnswer: 'Summarize main points in your own words and record citation information',
         explanation: 'An effective strategy for taking research notes is to summarize main points in your own words while recording complete citation information. This helps you understand the material better and avoid plagiarism when you use the information in your writing.'
+      }
+    ]
+  },
+  {
+    id: 'b1-a-s3-quiz',
+    title: 'Academic Listening Comprehension',
+    description: 'Test your ability to understand academic lectures',
+    skillType: 'listening',
+    requiredScore: 75,
+    questions: [
+      {
+        id: 'q1-b1as3',
+        type: 'listening',
+        question: 'Listen to the excerpt from an academic lecture and answer the question: What is the main topic of the lecture?',
+        audioUrl: '/audio/b1-academic-lecture.mp3',
+        options: [
+          'The economic impact of climate change',
+          'The history of environmental movements',
+          'The scientific consensus on global warming',
+          'The political debate around environmental policy'
+        ],
+        correctAnswer: 'The economic impact of climate change',
+        explanation: 'The lecture primarily discusses how climate change affects various economic sectors and the potential costs of mitigation versus inaction.'
+      },
+      {
+        id: 'q2-b1as3',
+        type: 'listening',
+        question: 'According to the lecturer, which of the following is NOT mentioned as an economic consequence of climate change?',
+        audioUrl: '/audio/b1-academic-lecture.mp3',
+        options: [
+          'Reduced agricultural productivity',
+          'Increased healthcare costs',
+          'Damage to infrastructure from extreme weather',
+          'Increased tourism in polar regions'
+        ],
+        correctAnswer: 'Increased tourism in polar regions',
+        explanation: 'The lecturer discusses reduced agricultural productivity, increased healthcare costs, and infrastructure damage, but does not mention tourism in polar regions.'
+      }
+    ]
+  },
+  {
+    id: 'b1-a-s4-quiz',
+    title: 'Academic Vocabulary and Structure',
+    description: 'Test your knowledge of academic vocabulary and sentence structure',
+    skillType: 'grammar',
+    requiredScore: 75,
+    questions: [
+      {
+        id: 'q1-b1as4',
+        type: 'fill-in-blank',
+        question: 'Complete the sentence with appropriate academic vocabulary',
+        text: 'The research findings [blank1] the hypothesis that economic growth is [blank2] correlated with environmental degradation in developing countries.',
+        answers: {
+          "blank1": "support",
+          "blank2": "positively"
+        },
+        explanation: 'In academic writing, precise verbs like "support" (rather than "back up" or "show") and specific adverbs like "positively" help convey exact relationships between concepts.'
+      },
+      {
+        id: 'q2-b1as4',
+        type: 'fill-in-blank',
+        question: 'Complete the sentence with appropriate transition words',
+        text: 'The study had a small sample size; [blank1], the results should be interpreted with caution. [blank2], future research with larger populations is recommended.',
+        answers: {
+          "blank1": "therefore",
+          "blank2": "Furthermore"
+        },
+        explanation: '"Therefore" indicates a logical conclusion based on the previous statement, while "Furthermore" adds additional information that supports the point being made.'
       }
     ]
   }

@@ -566,18 +566,64 @@ export const lessonC2BusinessFinalTest: PracticalTest = {
   id: 'c2-b-final',
   title: 'Executive-Level Business Communication',
   description: 'Demonstrate mastery of sophisticated business communication at the executive level',
-  type: 'writing',
-  prompt: 'You are the CEO of a global company facing a significant strategic decision: whether to expand into an emerging market with high growth potential but significant political and economic risks. Write a 600-700 word executive communication that could serve as both an internal briefing for your board of directors and a framework for external stakeholder communications. Your response should demonstrate sophisticated business analysis, strategic thinking, and executive-level communication skills.',
+  type: 'writing', // Main type for backward compatibility
+  prompt: 'Complete all sections of this comprehensive test to demonstrate your mastery of executive-level business communication at the C2 level.',
   criteria: [
-    'Comprehensive strategic analysis of business opportunity and risks',
+    'Comprehensive strategic analysis of business opportunities and risks',
     'Sophisticated understanding of global business dynamics',
     'Executive-level clarity, precision, and persuasiveness',
     'Nuanced consideration of diverse stakeholder perspectives',
-    'Masterful organization of complex information',
-    'Elegant and impactful language appropriate for C-suite communication',
-    'Balanced presentation of options with clear recommendations'
+    'Masterful organization of complex information'
   ],
-  minScore: 85
+  minScore: 85,
+  sections: [
+    {
+      id: 'c2-b-final-s1',
+      title: 'Strategic Business Analysis',
+      type: 'reading',
+      description: 'Analyze complex business case information and identify strategic implications',
+      prompt: 'Review the attached business case study about a global technology company facing disruption from new market entrants and changing consumer preferences. Analyze the company\'s current market position, identify key strategic challenges, and evaluate the options presented by the management team. Your analysis should demonstrate sophisticated business acumen and critical thinking.',
+      criteria: [
+        'Sophisticated analysis of complex business information',
+        'Identification of implicit strategic implications',
+        'Evaluation of business options against multiple criteria',
+        'Understanding of global market dynamics',
+        'Recognition of stakeholder considerations'
+      ],
+      weight: 25
+    },
+    {
+      id: 'c2-b-final-s2',
+      title: 'Executive Communication',
+      type: 'writing',
+      description: 'Craft a sophisticated executive communication for multiple stakeholders',
+      prompt: 'You are the CEO of a global company facing a significant strategic decision: whether to expand into an emerging market with high growth potential but significant political and economic risks. Write a 300-350 word executive communication that could serve as both an internal briefing for your board of directors and a framework for external stakeholder communications. Your response should demonstrate sophisticated business analysis, strategic thinking, and executive-level communication skills.',
+      criteria: [
+        'Executive-level clarity, precision, and persuasiveness',
+        'Balanced presentation of options with clear recommendations',
+        'Elegant and impactful language appropriate for C-suite communication',
+        'Nuanced consideration of diverse stakeholder perspectives',
+        'Masterful organization of complex information'
+      ],
+      weight: 35
+    },
+    {
+      id: 'c2-b-final-s3',
+      title: 'Crisis Communication Simulation',
+      type: 'speaking',
+      description: 'Respond to a business crisis scenario with executive-level communication',
+      prompt: 'Listen to the following news report about a crisis affecting your company: a major data breach has exposed customer information and is receiving significant media attention. Record a 3-minute executive response that addresses key stakeholders (customers, employees, investors, and regulators). Your response should demonstrate leadership, strategic thinking, and sophisticated crisis communication skills.',
+      audioUrl: '/audio/c2-business-crisis.mp3',
+      criteria: [
+        'Immediate and appropriate crisis response strategy',
+        'Clear prioritization of stakeholder concerns',
+        'Balanced transparency and protection of company interests',
+        'Confident and authoritative delivery',
+        'Strategic framing of next steps and resolution path'
+      ],
+      weight: 40
+    }
+  ]
 };
 
 // C2 Proficiency Level - Business Pathway Practical Test

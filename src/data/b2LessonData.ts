@@ -612,6 +612,49 @@ export const lessonB2AcademicQuizzes: LessonQuiz[] = [
         explanation: 'Effective argumentation in an academic debate involves making clear claims supported by relevant evidence. This demonstrates the validity of your position through logical reasoning and credible support.'
       }
     ]
+  },
+  {
+    id: 'b2-a-s3-quiz',
+    title: 'Academic Debate Speaking Skills',
+    description: 'Test your ability to articulate academic arguments verbally',
+    skillType: 'speaking',
+    requiredScore: 75,
+    questions: [
+      {
+        id: 'q1-b2as3',
+        type: 'speaking',
+        question: 'Present a counterargument to the following statement: "Social media has had a predominantly negative impact on society."',
+        prompt: 'Record a 1-minute response where you present a well-structured counterargument to the statement. Include a clear position, supporting evidence, and acknowledge potential limitations of your argument.',
+        expectedPhrases: [
+          "While some argue that",
+          "evidence suggests",
+          "research demonstrates",
+          "studies have shown",
+          "it's important to consider",
+          "however",
+          "nevertheless",
+          "therefore"
+        ],
+        explanation: 'An effective counterargument acknowledges the opposing view, presents clear evidence for your position, and uses appropriate academic language and transition phrases.'
+      },
+      {
+        id: 'q2-b2as3',
+        type: 'speaking',
+        question: 'Respond to the following question as if you were in an academic debate: "Should higher education be free for all citizens?"',
+        prompt: 'Record a 1-minute response where you take a position on this question and support it with logical arguments and evidence. Use appropriate academic language and debate techniques.',
+        expectedPhrases: [
+          "I would argue that",
+          "for several reasons",
+          "firstly",
+          "secondly",
+          "furthermore",
+          "evidence indicates",
+          "research shows",
+          "in conclusion"
+        ],
+        explanation: 'A strong academic debate response includes a clear position statement, well-structured arguments with supporting evidence, and appropriate academic language and transitions.'
+      }
+    ]
   }
 ];
 
@@ -619,18 +662,65 @@ export const lessonB2AcademicQuizzes: LessonQuiz[] = [
 export const lessonB2BusinessFinalTest: PracticalTest = {
   id: 'b2-b-final',
   title: 'Advanced Business Communication Test',
-  description: 'Demonstrate your advanced business communication skills',
-  type: 'speaking',
-  prompt: 'Record a 3-4 minute business presentation proposing a solution to a workplace challenge (e.g., improving team collaboration, increasing efficiency, enhancing customer satisfaction). Include an analysis of the problem, your proposed solution with supporting evidence, potential implementation challenges, and expected benefits. Use appropriate business vocabulary and presentation techniques.',
+  description: 'Demonstrate your advanced business communication skills through multiple formats',
+  type: 'speaking', // Main type for backward compatibility
+  prompt: 'Complete all sections of this comprehensive test to demonstrate your advanced business communication skills at the B2 level.',
   criteria: [
     'Clear problem analysis and solution proposal',
     'Strategic thinking and business acumen',
     'Advanced business vocabulary and expressions',
     'Persuasive argumentation with supporting evidence',
-    'Professional delivery and presentation structure',
-    'Consideration of stakeholder perspectives'
+    'Professional communication across multiple formats'
   ],
-  minScore: 75
+  minScore: 75,
+  sections: [
+    {
+      id: 'b2-b-final-s1',
+      title: 'Business Presentation',
+      type: 'speaking',
+      description: 'Deliver a professional business presentation',
+      prompt: 'Record a 2-3 minute business presentation proposing a solution to a workplace challenge (e.g., improving team collaboration, increasing efficiency, enhancing customer satisfaction). Include an analysis of the problem, your proposed solution with supporting evidence, potential implementation challenges, and expected benefits. Use appropriate business vocabulary and presentation techniques.',
+      criteria: [
+        'Clear problem analysis and solution proposal',
+        'Strategic thinking and business acumen',
+        'Advanced business vocabulary and expressions',
+        'Persuasive argumentation with supporting evidence',
+        'Professional delivery and presentation structure'
+      ],
+      weight: 40
+    },
+    {
+      id: 'b2-b-final-s2',
+      title: 'Business Report',
+      type: 'writing',
+      description: 'Write a professional business report',
+      prompt: 'Write a 200-250 word business report analyzing a company\'s performance in a specific area (e.g., sales, marketing, customer service). Include an introduction stating the purpose, findings with supporting data, analysis of the findings, and recommendations for improvement. Use appropriate business report structure and language.',
+      criteria: [
+        'Clear purpose statement and executive summary',
+        'Logical organization following report structure',
+        'Inclusion of relevant data and analysis',
+        'Practical and specific recommendations',
+        'Professional business language and formatting'
+      ],
+      weight: 30
+    },
+    {
+      id: 'b2-b-final-s3',
+      title: 'Business Case Analysis',
+      type: 'reading',
+      description: 'Analyze a business case and identify key issues and solutions',
+      prompt: 'Read the business case study below about a company facing challenges with remote work transition. Identify the key issues, analyze the underlying causes, and recommend solutions based on the information provided.',
+      imageUrl: '/images/b2-business-case.png',
+      criteria: [
+        'Accurate identification of key business issues',
+        'Thoughtful analysis of underlying causes',
+        'Strategic recommendations aligned with business goals',
+        'Understanding of business concepts and terminology',
+        'Consideration of multiple stakeholder perspectives'
+      ],
+      weight: 30
+    }
+  ]
 };
 
 // B2 Upper Intermediate Level - Business Pathway Practical Test
@@ -656,19 +746,65 @@ export const lessonB2BusinessPracticalTest: PracticalTest = {
 // B2 Upper Intermediate Level - Academic Final Test
 export const lessonB2AcademicFinalTest: PracticalTest = {
   id: 'b2-a-final',
-  title: 'Advanced Academic Communication Test',
-  description: 'Demonstrate your advanced academic communication and critical thinking skills',
-  type: 'writing',
-  prompt: 'Write a 300-400 word critical analysis essay on a topic of your choice. Your essay should demonstrate critical thinking by examining multiple perspectives, evaluating evidence, and presenting a nuanced argument. Include an introduction with a clear thesis statement, body paragraphs with supporting evidence, and a conclusion. Use appropriate academic language and citation style.',
+  title: 'Academic Debates and Critical Thinking Test',
+  description: 'Demonstrate your advanced academic communication and critical thinking skills through multiple formats',
+  type: 'speaking', // Main type for backward compatibility
+  prompt: 'Complete all sections of this comprehensive test to demonstrate your academic debate and critical thinking skills at the B2 level.',
   criteria: [
-    'Clear thesis statement and argument development',
     'Critical analysis of multiple perspectives',
     'Evaluation of evidence quality and relevance',
-    'Logical organization and paragraph structure',
+    'Logical organization of arguments',
     'Advanced academic vocabulary and expressions',
-    'Proper citation of sources and references'
+    'Ability to respond to counterarguments'
   ],
-  minScore: 75
+  minScore: 75,
+  sections: [
+    {
+      id: 'b2-a-final-s1',
+      title: 'Critical Reading Analysis',
+      type: 'reading',
+      description: 'Analyze an academic text with conflicting viewpoints',
+      prompt: 'Read the following academic text that presents two opposing viewpoints on artificial intelligence regulation. Identify the main arguments from each perspective, evaluate the strength of the evidence presented, and identify any logical fallacies or biases in the arguments.',
+      criteria: [
+        'Ability to identify key arguments from multiple perspectives',
+        'Critical evaluation of evidence quality',
+        'Recognition of logical fallacies and biases',
+        'Understanding of complex academic discourse'
+      ],
+      weight: 25
+    },
+    {
+      id: 'b2-a-final-s2',
+      title: 'Argumentative Essay',
+      type: 'writing',
+      description: 'Write a balanced argumentative essay considering multiple perspectives',
+      prompt: 'Write a 250-300 word argumentative essay on the following topic: "Should universities prioritize practical skills or theoretical knowledge?" Your essay should examine multiple perspectives, evaluate evidence, and present a nuanced argument. Include an introduction with a clear thesis statement, body paragraphs with supporting evidence, and a conclusion. Use appropriate academic language and citation style.',
+      criteria: [
+        'Clear thesis statement and argument development',
+        'Balanced presentation of multiple perspectives',
+        'Evaluation of evidence quality and relevance',
+        'Logical organization and paragraph structure',
+        'Advanced academic vocabulary and expressions'
+      ],
+      weight: 35
+    },
+    {
+      id: 'b2-a-final-s3',
+      title: 'Debate Response',
+      type: 'speaking',
+      description: 'Respond to counterarguments in an academic debate',
+      prompt: 'Listen to the following argument about climate change policy. Record a 2-minute response that acknowledges the speaker\'s points, identifies strengths and weaknesses in their argument, and presents a counterargument supported by evidence. Use appropriate academic language and debate techniques.',
+      audioUrl: '/audio/b2-climate-debate.mp3',
+      criteria: [
+        'Accurate summary of the original argument',
+        'Identification of strengths and weaknesses',
+        'Well-structured counterargument with evidence',
+        'Appropriate academic language and debate phrases',
+        'Clear articulation and confident delivery'
+      ],
+      weight: 40
+    }
+  ]
 };
 
 // B2 Upper Intermediate Level - Academic Pathway Practical Test

@@ -256,9 +256,9 @@ Remember to be friendly and open when meeting new people in academic settings. B
 export const lessonA1BusinessFinalTest: PracticalTest = {
   id: 'a1-b-final',
   title: 'Business Communication Basics Test',
-  description: 'Demonstrate your ability to communicate in basic business situations',
-  type: 'speaking',
-  prompt: 'Imagine you are meeting a new colleague at work. Record a short introduction of yourself, including your name, job position, and department. Then ask two questions to get to know your colleague better.',
+  description: 'Demonstrate your ability to communicate in basic business situations through multiple skills',
+  type: 'speaking', // Main type for backward compatibility
+  prompt: 'Complete all sections of this comprehensive test to demonstrate your business English skills at the A1 level.',
   criteria: [
     'Clear pronunciation of basic business vocabulary',
     'Appropriate use of introduction phrases',
@@ -266,16 +266,74 @@ export const lessonA1BusinessFinalTest: PracticalTest = {
     'Appropriate questions for a business context',
     'Overall fluency and confidence'
   ],
-  minScore: 70
+  minScore: 70,
+  sections: [
+    {
+      id: 'a1-b-final-s1',
+      title: 'Listening Comprehension',
+      type: 'listening',
+      description: 'Listen to a short business conversation and answer questions',
+      prompt: 'Listen to the audio of a brief office conversation. Then answer the questions that follow.',
+      audioUrl: '/audio/a1-business-conversation.mp3',
+      criteria: [
+        'Ability to identify key information',
+        'Understanding of basic business vocabulary',
+        'Comprehension of simple questions and statements'
+      ],
+      weight: 25
+    },
+    {
+      id: 'a1-b-final-s2',
+      title: 'Speaking Test',
+      type: 'speaking',
+      description: 'Record yourself introducing yourself in a business context',
+      prompt: 'Imagine you are meeting a new colleague at work. Record a short introduction of yourself, including your name, job position, and department. Then ask two questions to get to know your colleague better.',
+      criteria: [
+        'Clear pronunciation of basic business vocabulary',
+        'Appropriate use of introduction phrases',
+        'Correct grammar in simple sentences',
+        'Appropriate questions for a business context'
+      ],
+      weight: 30
+    },
+    {
+      id: 'a1-b-final-s3',
+      title: 'Reading Comprehension',
+      type: 'reading',
+      description: 'Read a short business email and answer questions',
+      prompt: 'Read the following email from a colleague and answer the questions that follow.',
+      imageUrl: '/images/a1-business-email.png',
+      criteria: [
+        'Understanding of basic email format',
+        'Comprehension of simple business messages',
+        'Ability to identify key information'
+      ],
+      weight: 20
+    },
+    {
+      id: 'a1-b-final-s4',
+      title: 'Writing Test',
+      type: 'writing',
+      description: 'Write a short business email',
+      prompt: 'Write a short email (30-50 words) to a colleague asking to reschedule a meeting. Include the original meeting time, reason for rescheduling, and propose a new time.',
+      criteria: [
+        'Appropriate email format and greetings',
+        'Clear communication of the main message',
+        'Correct use of simple present tense',
+        'Appropriate closing phrases'
+      ],
+      weight: 25
+    }
+  ]
 };
 
 // A1 Beginner Level - Academic Final Test
 export const lessonA1AcademicFinalTest: PracticalTest = {
   id: 'a1-a-final',
   title: 'Academic Communication Basics Test',
-  description: 'Demonstrate your ability to communicate in basic academic situations',
-  type: 'speaking',
-  prompt: 'Imagine it is your first day at a language school. Record a short introduction of yourself to your classmates, including your name, where you are from, and what you are studying. Then ask two questions to get to know your classmates better.',
+  description: 'Demonstrate your ability to communicate in basic academic situations through multiple skills',
+  type: 'speaking', // Main type for backward compatibility
+  prompt: 'Complete all sections of this comprehensive test to demonstrate your academic English skills at the A1 level.',
   criteria: [
     'Clear pronunciation of basic academic vocabulary',
     'Appropriate use of introduction phrases',
@@ -283,7 +341,65 @@ export const lessonA1AcademicFinalTest: PracticalTest = {
     'Appropriate questions for an academic context',
     'Overall fluency and confidence'
   ],
-  minScore: 70
+  minScore: 70,
+  sections: [
+    {
+      id: 'a1-a-final-s1',
+      title: 'Listening Comprehension',
+      type: 'listening',
+      description: 'Listen to a short classroom conversation and answer questions',
+      prompt: 'Listen to the audio of a brief classroom interaction. Then answer the questions that follow.',
+      audioUrl: '/audio/a1-classroom-conversation.mp3',
+      criteria: [
+        'Ability to identify key information',
+        'Understanding of basic classroom vocabulary',
+        'Comprehension of simple instructions and questions'
+      ],
+      weight: 25
+    },
+    {
+      id: 'a1-a-final-s2',
+      title: 'Speaking Test',
+      type: 'speaking',
+      description: 'Record yourself introducing yourself in an academic context',
+      prompt: 'Imagine it is your first day at a language school. Record a short introduction of yourself to your classmates, including your name, where you are from, and what you are studying. Then ask two questions to get to know your classmates better.',
+      criteria: [
+        'Clear pronunciation of basic academic vocabulary',
+        'Appropriate use of introduction phrases',
+        'Correct grammar in simple sentences',
+        'Appropriate questions for an academic context'
+      ],
+      weight: 30
+    },
+    {
+      id: 'a1-a-final-s3',
+      title: 'Reading Comprehension',
+      type: 'reading',
+      description: 'Read a short class schedule and answer questions',
+      prompt: 'Look at the following class schedule and answer the questions that follow.',
+      imageUrl: '/images/a1-class-schedule.png',
+      criteria: [
+        'Understanding of basic schedule format',
+        'Comprehension of time expressions',
+        'Ability to identify key information'
+      ],
+      weight: 20
+    },
+    {
+      id: 'a1-a-final-s4',
+      title: 'Writing Test',
+      type: 'writing',
+      description: 'Write a short email to your teacher',
+      prompt: 'Write a short email (30-50 words) to your teacher explaining why you missed yesterday\'s class. Include an apology and ask about the homework assignment.',
+      criteria: [
+        'Appropriate email format and greetings',
+        'Clear explanation of absence',
+        'Correct use of simple past tense',
+        'Appropriate closing phrases'
+      ],
+      weight: 25
+    }
+  ]
 };
 
 // A1 Beginner Level - Business Pathway Quizzes
@@ -297,6 +413,7 @@ export const lessonA1BusinessQuizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-a1bs1',
+        type: 'multiple-choice',
         question: 'What is a place where people work at desks?',
         options: [
           'House',
@@ -309,6 +426,7 @@ export const lessonA1BusinessQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q2-a1bs1',
+        type: 'multiple-choice',
         question: 'Which of these is used to make paper copies?',
         options: [
           'Computer',
@@ -321,39 +439,67 @@ export const lessonA1BusinessQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q3-a1bs1',
-        question: 'What do you call a person you work with?',
-        options: [
-          'Friend',
-          'Boss',
-          'Colleague',
-          'Customer'
+        type: 'matching',
+        question: 'Match the office items with their correct descriptions:',
+        pairs: [
+          {
+            left: 'Desk',
+            right: 'A table where you work'
+          },
+          {
+            left: 'Chair',
+            right: 'What you sit on'
+          },
+          {
+            left: 'Monitor',
+            right: 'The display part of a computer'
+          },
+          {
+            left: 'Keyboard',
+            right: 'Used to type on a computer'
+          }
         ],
-        correctAnswer: 'Colleague',
-        explanation: 'A colleague is a person you work with, especially in a professional environment.'
+        explanation: 'Matching office items with their correct descriptions helps reinforce vocabulary understanding.'
       },
       {
         id: 'q4-a1bs1',
-        question: 'Which phrase would you use to ask for help?',
-        options: [
-          'Have a nice day.',
-          'My name is John.',
-          'Could you help me, please?',
-          'The meeting is at 2 PM.'
-        ],
-        correctAnswer: 'Could you help me, please?',
-        explanation: 'The phrase "Could you help me, please?" is a polite way to ask someone for assistance.'
+        type: 'fill-in-blank',
+        question: 'Complete the sentences with the correct office vocabulary:',
+        text: 'I work in an [blank1]. I sit at my [blank2] and use a [blank3] to type emails. When I need to talk with my team, we go to the [blank4].',
+        answers: {
+          'blank1': 'office',
+          'blank2': 'desk',
+          'blank3': 'keyboard',
+          'blank4': 'meeting room'
+        },
+        explanation: 'Using office vocabulary in context helps you remember how to use these words in real situations.'
       },
       {
         id: 'q5-a1bs1',
-        question: 'What is a room where people gather to discuss work?',
+        type: 'listening',
+        question: 'Listen to the audio and select what the person is asking for:',
+        audioUrl: '/audio/a1-office-request.mp3',
         options: [
-          'Break room',
-          'Meeting room',
-          'Office',
-          'Kitchen'
+          'A pen',
+          'A printer',
+          'A computer',
+          'A meeting room'
         ],
-        correctAnswer: 'Meeting room',
-        explanation: 'A meeting room is a space specifically designated for people to gather and discuss work-related matters.'
+        correctAnswer: 'A pen',
+        explanation: 'The person is saying: "Excuse me, could I borrow your pen, please? I need to sign this document."'
+      },
+      {
+        id: 'q6-a1bs1',
+        type: 'speaking',
+        question: 'Practice saying these common office phrases:',
+        prompt: 'Record yourself saying: "Excuse me, where is the meeting room? I have a meeting at 10 o\'clock."',
+        expectedPhrases: [
+          'Excuse me',
+          'where is the meeting room',
+          'I have a meeting',
+          '10 o\'clock'
+        ],
+        explanation: 'Practicing these phrases will help you communicate effectively in an office environment.'
       }
     ]
   },
@@ -366,63 +512,56 @@ export const lessonA1BusinessQuizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-a1bs2',
-        question: 'Which phrase is used to introduce yourself?',
+        type: 'multiple-choice',
+        question: 'Which is the most appropriate way to introduce yourself in a business setting?',
         options: [
-          'Have a nice day.',
-          'Hello, my name is [your name].',
-          'What\'s your name?',
-          'This is my colleague.'
+          'Hey there! I\'m John.',
+          'Hello, my name is John Smith. I\'m the new marketing assistant.',
+          'John here. Marketing.',
+          'What\'s up? John from marketing.'
         ],
-        correctAnswer: 'Hello, my name is [your name].',
-        explanation: 'The phrase "Hello, my name is [your name]." is a standard way to introduce yourself in a business context.'
+        correctAnswer: 'Hello, my name is John Smith. I\'m the new marketing assistant.',
+        explanation: 'In a business setting, it\'s best to use a formal introduction that includes your full name and position.'
       },
       {
         id: 'q2-a1bs2',
-        question: 'How do you ask someone\'s name politely?',
-        options: [
-          'I am [name].',
-          'Nice to meet you.',
-          'May I know your name, please?',
-          'I work for [company].'
-        ],
-        correctAnswer: 'May I know your name, please?',
-        explanation: 'The phrase "May I know your name, please?" is a polite way to ask someone for their name.'
+        type: 'fill-in-blank',
+        question: 'Complete this business introduction dialogue:',
+        text: 'A: Hello, [blank1] Sarah Johnson. I\'m the new HR manager.\nB: [blank2] to meet you, Sarah. I\'m David Chen from the IT department.\nA: [blank3] do you do?\nB: I\'m fine, thank you. [blank4] you?',
+        answers: {
+          'blank1': 'my name is',
+          'blank2': 'Nice',
+          'blank3': 'How',
+          'blank4': 'And'
+        },
+        explanation: 'This dialogue shows a typical first meeting between colleagues in a business environment.'
       },
       {
         id: 'q3-a1bs2',
-        question: 'Which phrase is used to introduce someone else?',
+        type: 'listening',
+        question: 'Listen to the business introduction and answer: What department does the speaker work in?',
+        audioUrl: '/audio/a1-business-intro.mp3',
         options: [
-          'I work in the marketing department.',
-          'This is my colleague, [name].',
-          'Nice to meet you.',
-          'My name is [name].'
+          'Marketing',
+          'Sales',
+          'Human Resources',
+          'Finance'
         ],
-        correctAnswer: 'This is my colleague, [name].',
-        explanation: 'The phrase "This is my colleague, [name]." is used to introduce another person in a business context.'
+        correctAnswer: 'Sales',
+        explanation: 'The speaker says: "Hello, my name is Robert. I work in the Sales department."'
       },
       {
         id: 'q4-a1bs2',
-        question: 'What is an appropriate response to an introduction?',
-        options: [
-          'What\'s your name?',
-          'I work for [company].',
-          'Nice to meet you.',
-          'This is my colleague.'
+        type: 'speaking',
+        question: 'Practice introducing yourself in a business context:',
+        prompt: 'Record yourself saying your name, your job position, and which department you work in. Use this pattern: "Hello, my name is [name]. I\'m a [job position] in the [department] department."',
+        expectedPhrases: [
+          'Hello',
+          'my name is',
+          'I\'m a',
+          'department'
         ],
-        correctAnswer: 'Nice to meet you.',
-        explanation: 'The phrase "Nice to meet you." is an appropriate and polite response when someone introduces themselves to you.'
-      },
-      {
-        id: 'q5-a1bs2',
-        question: 'Which phrase would you use to end a conversation after an introduction?',
-        options: [
-          'What\'s your name?',
-          'I look forward to working with you.',
-          'This is my colleague.',
-          'I am [name].'
-        ],
-        correctAnswer: 'I look forward to working with you.',
-        explanation: 'The phrase "I look forward to working with you." is a polite way to end a conversation after introductions in a business context.'
+        explanation: 'Being able to introduce yourself clearly is an essential skill in business communication.'
       }
     ]
   }
@@ -574,16 +713,18 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
 export const lessonA1BusinessPracticalTest: PracticalTest = {
   id: 'a1-b-practical',
   title: 'Business Introduction Practice',
-  description: 'Demonstrate your ability to introduce yourself in a business context',
+  description: 'Demonstrate your ability to introduce yourself in a business context using appropriate vocabulary and expressions',
   type: 'speaking',
-  prompt: 'Imagine it is your first day at a new job. Record yourself introducing yourself to a new colleague. Include your name, your position, and one or two other pieces of information about yourself. Use the vocabulary and phrases you learned in this lesson.',
+  prompt: 'Imagine it is your first day at a new job at a marketing company. Record yourself introducing yourself to a new colleague. Your introduction should include:\n\n1. An appropriate greeting\n2. Your full name\n3. Your position/role (e.g., marketing assistant, sales representative, etc.)\n4. One or two additional pieces of information about yourself (e.g., previous experience, education, interests related to the job)\n5. A polite closing phrase\n\nUse the vocabulary and phrases you learned in this lesson. Speak clearly and at an appropriate pace.',
   criteria: [
-    'Use appropriate greeting',
-    'State your name clearly',
-    'Mention your position/role',
-    'Include additional relevant information',
-    'Use correct pronunciation',
-    'Speak with appropriate pace and clarity'
+    'Use appropriate greeting (e.g., "Hello," "Good morning," etc.)',
+    'State your name clearly using proper introduction format',
+    'Mention your position/role in the company',
+    'Include relevant additional information about yourself',
+    'Use appropriate business vocabulary',
+    'Demonstrate correct pronunciation of key terms',
+    'Speak with appropriate pace and clarity',
+    'End with an appropriate closing phrase'
   ],
   minScore: 70
 };
@@ -592,16 +733,38 @@ export const lessonA1BusinessPracticalTest: PracticalTest = {
 export const lessonA1AcademicPracticalTest: PracticalTest = {
   id: 'a1-a-practical',
   title: 'Classroom Communication Practice',
-  description: 'Demonstrate your ability to communicate in a classroom setting',
+  description: 'Demonstrate your ability to communicate effectively in a classroom setting using appropriate academic language',
   type: 'speaking',
-  prompt: 'Imagine you are in a classroom and need to ask your teacher for help. Record yourself asking the teacher to explain something you don\'t understand. Use the vocabulary and phrases you learned in this lesson.',
+  prompt: 'Imagine you are in an English language class and need to ask your teacher for help with an assignment. Your request should include:\n\n1. An appropriate greeting to the teacher\n2. A clear explanation of what you don\'t understand about the assignment\n3. A polite request for clarification or help\n4. At least one specific question about the assignment\n5. A polite thank you\n\nUse the classroom vocabulary and phrases you learned in this lesson. You can choose any type of assignment (essay, presentation, group project, etc.) for your scenario.',
   criteria: [
-    'Use appropriate greeting',
-    'Express your problem clearly',
-    'Ask for help politely',
-    'Use classroom vocabulary correctly',
-    'Use correct pronunciation',
-    'Speak with appropriate pace and clarity'
+    'Use appropriate greeting for addressing a teacher',
+    'Express your problem clearly and specifically',
+    'Ask for help using polite language and correct question forms',
+    'Use classroom vocabulary correctly (e.g., assignment, homework, due date)',
+    'Form grammatically correct sentences',
+    'Use correct pronunciation of academic terms',
+    'Speak with appropriate pace and clarity',
+    'End with an appropriate expression of gratitude'
   ],
-  minScore: 70
+  minScore: 70,
+  sections: [
+    {
+      id: 'speaking-section',
+      title: 'Speaking Practice',
+      type: 'speaking',
+      description: 'Record your response to the prompt',
+      prompt: 'Record yourself asking your teacher for help with an assignment',
+      criteria: ['Clear speech', 'Appropriate vocabulary', 'Polite tone'],
+      weight: 70
+    },
+    {
+      id: 'writing-section',
+      title: 'Written Follow-up',
+      type: 'writing',
+      description: 'Write a short email to your teacher as a follow-up',
+      prompt: 'After class, you realize you have one more question. Write a short email to your teacher asking this additional question. Keep it brief but polite and clear.',
+      criteria: ['Proper email format', 'Clear question', 'Polite language'],
+      weight: 30
+    }
+  ]
 };

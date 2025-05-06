@@ -171,15 +171,13 @@ const LessonDetail = () => {
   const handleFinalTestSelect = () => {
     // Check if all stages are completed
     const allStagesCompleted = stagesData.stages.every(stage => 
-      completedStages.includes(stage.id) && stagesData.quizzes.every(quiz => 
-        completedStages.includes(quiz.id)
-      )
+      completedStages.includes(stage.id)
     );
     
     if (!allStagesCompleted) {
       toast({
         title: "Stages not completed",
-        description: "You need to complete all stages and quizzes before taking the final test",
+        description: "You need to complete all stages before taking the final test",
         variant: "destructive"
       });
       return;
@@ -190,6 +188,8 @@ const LessonDetail = () => {
   
   const handleStageComplete = async (stageId: string) => {
     if (!completedStages.includes(stageId)) {
+      // Mark the stage as viewed but not completed yet
+      // The stage will be fully completed only after passing the quiz
       const newCompletedStages = [...completedStages, stageId];
       setCompletedStages(newCompletedStages);
       
@@ -212,7 +212,7 @@ const LessonDetail = () => {
             .select('*')
             .eq('user_id', user.id)
             .eq('module', lessonId)
-            .single();
+            .maybeSingle();
             
           if (checkError && checkError.code !== 'PGRST116') { // PGRST116 is "not found" which is expected if no record exists
             console.error('Error checking lesson progress:', checkError);
@@ -220,52 +220,65 @@ const LessonDetail = () => {
           
           if (!existingProgress) {
             // Create a new progress record
-            const { error: insertError } = await supabase
-              .from('user_progress')
-              .insert({
-                user_id: user.id,
-                module: lessonId,
-                level: lesson?.cefrLevel || 'A1',
-                progress: progressPercentage,
-                completed: false,
-                last_access: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-              });
-              
-            if (insertError) {
-              console.error('Error creating lesson progress:', insertError);
+            try {
+              const { error: insertError } = await supabase
+                .from('user_progress')
+                .insert({
+                  user_id: user.id,
+                  module: lessonId,
+                  level: lesson?.cefrLevel || 'A1',
+                  progress: progressPercentage,
+                  completed: false,
+                  last_access: new Date().toISOString(),
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString()
+                });
+                
+              if (insertError) {
+                console.error('Error creating lesson progress:', insertError);
+              }
+            } catch (err) {
+              console.error('Exception creating lesson progress:', err);
             }
           } else {
             // Update the existing progress record
-            const { error: updateError } = await supabase
-              .from('user_progress')
-              .update({
-                progress: progressPercentage,
-                last_access: new Date().toISOString(),
-                updated_at: new Date().toISOString()
+            try {
+              const { error: updateError } = await supabase
+                .from('user_progress')
+                .update({
+                  progress: progressPercentage,
+                  last_access: new Date().toISOString(),
+                  updated_at: new Date().toISOString()
               })
               .eq('id', existingProgress.id);
               
-            if (updateError) {
-              console.error('Error updating lesson progress:', updateError);
+              if (updateError) {
+                console.error('Error updating lesson progress:', updateError);
+              }
+            } catch (err) {
+              console.error('Exception updating lesson progress:', err);
             }
           }
           
           // Log this activity in user_schedule
-          const { error: scheduleError } = await supabase
-            .from('user_schedule')
-            .insert({
-              user_id: user.id,
-              title: `Completed stage in lesson: ${lesson?.title || 'Unknown'}`,
-              date: new Date().toISOString().split('T')[0],
-              start_time: new Date().toTimeString().split(' ')[0],
-              duration: 5, // Assume 5 minutes per stage
-              is_completed: true,
-              module_id: lessonId
-            });
-            
-          if (scheduleError) {
-            console.error('Error logging lesson activity:', scheduleError);
+          try {
+            const { error: scheduleError } = await supabase
+              .from('user_schedule')
+              .insert({
+                user_id: user.id,
+                title: `Completed stage in lesson: ${lesson?.title || 'Unknown'}`,
+                date: new Date().toISOString().split('T')[0],
+                start_time: new Date().toTimeString().split(' ')[0],
+                duration: 5, // Assume 5 minutes per stage
+                is_completed: true,
+                module_id: lessonId
+              });
+              
+            if (scheduleError) {
+              console.error('Error logging lesson activity:', scheduleError);
+            }
+          } catch (err) {
+            console.error('Exception logging lesson activity:', err);
           }
         } catch (error) {
           console.error('Error saving progress to database:', error);
@@ -307,42 +320,51 @@ const LessonDetail = () => {
   };
   
   const handleQuizComplete = (score: number, passed: boolean) => {
-    if (passed && currentQuizId) {
-      // Add quiz to completed stages
-      const newCompletedStages = [...completedStages, currentQuizId];
-      setCompletedStages(newCompletedStages);
-      
-      // Save progress to local storage
-      localStorage.setItem(`lesson_progress_${lessonId}`, JSON.stringify({
-        completedStages: newCompletedStages,
-        completed: hasCompletedLesson
-      }));
-      
-      // Find stage ID from quiz ID (assumes format 'stageId-quiz')
-      const stageId = currentQuizId.split('-quiz')[0];
-      const stageIndex = stagesData.stages.findIndex(s => s.id === stageId);
-      const nextStage = stagesData.stages[stageIndex + 1];
-      
-      setTimeout(() => {
-        if (nextStage) {
-          // If there's a next stage, show it
-          setCurrentStageId(nextStage.id);
-          setCurrentView('stage');
-          
-          toast({
-            title: "Quiz passed!",
-            description: "Moving to the next stage",
-          });
-        } else {
-          // If this was the last quiz, return to list view
-          setCurrentView('list');
-          
-          toast({
-            title: "Quiz passed!",
-            description: "You've completed all quizzes. Ready for the final test?",
-          });
-        }
-      }, 3000);
+    if (currentQuizId) {
+      if (passed) {
+        // Add quiz to completed stages
+        const newCompletedStages = [...completedStages, currentQuizId];
+        setCompletedStages(newCompletedStages);
+        
+        // Save progress to local storage
+        localStorage.setItem(`lesson_progress_${lessonId}`, JSON.stringify({
+          completedStages: newCompletedStages,
+          completed: hasCompletedLesson
+        }));
+        
+        // Find stage ID from quiz ID (assumes format 'stageId-quiz')
+        const stageId = currentQuizId.split('-quiz')[0];
+        const stageIndex = stagesData.stages.findIndex(s => s.id === stageId);
+        const nextStage = stagesData.stages[stageIndex + 1];
+        
+        setTimeout(() => {
+          if (nextStage) {
+            // If there's a next stage, show it
+            setCurrentStageId(nextStage.id);
+            setCurrentView('stage');
+            
+            toast({
+              title: "Quiz passed!",
+              description: "Moving to the next stage",
+            });
+          } else {
+            // If this was the last quiz, show final test option
+            setCurrentView('list');
+            
+            toast({
+              title: "Quiz passed!",
+              description: "You've completed all quizzes. Ready for the final test?",
+            });
+          }
+        }, 3000);
+      } else {
+        // If quiz failed, stay on the quiz but show a message
+        toast({
+          title: "Quiz not passed",
+          description: "Please review the material and try again. You need to pass the quiz to continue.",
+          variant: "destructive"
+        });
+      }
     }
   };
   
@@ -356,6 +378,28 @@ const LessonDetail = () => {
         completed: true
       }));
       
+      // Update progress in database to mark lesson as completed
+      if (user && lessonId) {
+        try {
+          supabase
+            .from('user_progress')
+            .update({
+              progress: 100,
+              completed: true,
+              updated_at: new Date().toISOString()
+            })
+            .eq('user_id', user.id)
+            .eq('module', lessonId)
+            .then(({ error }) => {
+              if (error) {
+                console.error('Error updating lesson completion status:', error);
+              }
+            });
+        } catch (err) {
+          console.error('Exception updating lesson completion status:', err);
+        }
+      }
+      
       toast({
         title: "Congratulations!",
         description: "You've successfully completed this lesson!",
@@ -365,6 +409,13 @@ const LessonDetail = () => {
       setTimeout(() => {
         setCurrentView('list');
       }, 3000);
+    } else {
+      // If final test failed, stay on the test but show a message
+      toast({
+        title: "Final test not passed",
+        description: "Please review the material and try again. You need to pass the final test to complete this lesson.",
+        variant: "destructive"
+      });
     }
   };
   

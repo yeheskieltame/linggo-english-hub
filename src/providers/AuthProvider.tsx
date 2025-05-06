@@ -154,47 +154,65 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error };
       }
 
-      // Create user profile in the profiles table
+      // The profile will be created automatically by the database trigger
+      // We'll just check if it exists after a short delay
       if (data.user) {
-        const { error: profileError } = await supabase
+        // Wait a moment for the trigger to execute
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Check if profile exists
+        const { data: profileData, error: profileCheckError } = await supabase
           .from('profiles')
-          .insert({
-            id: data.user.id,
-            email: email,
-            full_name: fullName,
-            preferred_level: 'Beginner',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          });
+          .select('*')
+          .eq('id', data.user.id)
+          .single();
+          
+        if (profileCheckError || !profileData) {
+          console.log("Profile not created by trigger, creating manually...");
+          // If profile doesn't exist, create it manually
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert({
+              id: data.user.id,
+              email: email,
+              full_name: fullName,
+              preferred_level: 'Beginner',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            });
 
-        if (profileError) {
-          console.error("Error creating user profile:", profileError);
-          // We don't return this error to avoid blocking the signup process
-          // The profile can be created later
+          if (profileError) {
+            console.error("Error creating user profile:", profileError);
+            // We don't return this error to avoid blocking the signup process
+            // The profile can be created later
+          }
         }
         
         // Create initial user progress entries
         const initialModules = [
-          { level: 'A1', module: 'Introduction', progress: 0, completed: false },
-          { level: 'A1', module: 'Greetings', progress: 0, completed: false },
-          { level: 'A1', module: 'Basic Phrases', progress: 0, completed: false }
+          { level: 'A1', module: 'a1-business', progress: 0, completed: false },
+          { level: 'A1', module: 'a1-academic', progress: 0, completed: false }
         ];
         
         for (const module of initialModules) {
-          const { error: progressError } = await supabase
-            .from('user_progress')
-            .insert({
-              user_id: data.user.id,
-              level: module.level,
-              module: module.module,
-              progress: module.progress,
-              completed: module.completed,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            });
-            
-          if (progressError) {
-            console.error("Error creating initial user progress:", progressError);
+          try {
+            const { error: progressError } = await supabase
+              .from('user_progress')
+              .insert({
+                user_id: data.user.id,
+                level: module.level,
+                module: module.module,
+                progress: module.progress,
+                completed: module.completed,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              });
+              
+            if (progressError) {
+              console.error("Error creating initial user progress:", progressError);
+            }
+          } catch (err) {
+            console.error("Exception creating user progress:", err);
           }
         }
         

@@ -81,7 +81,8 @@ const LessonsPage = () => {
         const { data: progressData, error: progressError } = await supabase
           .from('user_progress')
           .select('*')
-          .eq('user_id', user.id);
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
           
         if (progressError) {
           console.error('Error fetching user progress:', progressError);

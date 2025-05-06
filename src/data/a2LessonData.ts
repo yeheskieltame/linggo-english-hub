@@ -321,34 +321,128 @@ Remember that good note-taking is a skill that improves with practice. Find the 
 export const lessonA2BusinessFinalTest: PracticalTest = {
   id: 'a2-b-final',
   title: 'Business Communication Test',
-  description: 'Demonstrate your ability to communicate in business situations',
-  type: 'writing',
-  prompt: 'Write a short business email (5-8 sentences) to a colleague about scheduling a meeting. Include the purpose of the meeting, proposed date and time, location, and ask for confirmation.',
+  description: 'Demonstrate your ability to communicate in business situations through multiple skills',
+  type: 'writing', // Main type for backward compatibility
+  prompt: 'Complete all sections of this comprehensive test to demonstrate your business communication skills at the A2 level.',
   criteria: [
-    'Appropriate email format and structure',
-    'Clear communication of meeting details',
+    'Appropriate business communication format',
+    'Clear communication of information',
     'Correct use of business vocabulary',
     'Proper grammar and punctuation',
     'Professional tone and politeness'
   ],
-  minScore: 70
+  minScore: 70,
+  sections: [
+    {
+      id: 'a2-b-final-s1',
+      title: 'Business Email Writing',
+      type: 'writing',
+      description: 'Write a professional business email',
+      prompt: 'Write a short business email (5-8 sentences) to a colleague about scheduling a meeting. Include the purpose of the meeting, proposed date and time, location, and ask for confirmation.',
+      criteria: [
+        'Appropriate email format and structure',
+        'Clear communication of meeting details',
+        'Correct use of business vocabulary',
+        'Proper grammar and punctuation',
+        'Professional tone and politeness'
+      ],
+      weight: 40
+    },
+    {
+      id: 'a2-b-final-s2',
+      title: 'Business Phone Call',
+      type: 'speaking',
+      description: 'Demonstrate your ability to handle a business phone call',
+      prompt: 'Record a 1-2 minute business phone call where you call a colleague to discuss a project update. Introduce yourself properly, explain the purpose of your call, ask at least two questions about the project status, and end the call professionally.',
+      criteria: [
+        'Appropriate phone call opening and closing',
+        'Clear explanation of call purpose',
+        'Proper use of business phone vocabulary',
+        'Appropriate questions and responses',
+        'Professional tone and politeness'
+      ],
+      weight: 30
+    },
+    {
+      id: 'a2-b-final-s3',
+      title: 'Business Vocabulary Comprehension',
+      type: 'reading',
+      description: 'Demonstrate understanding of business vocabulary and concepts',
+      prompt: 'Read the short business memo below and answer the questions that follow. Focus on understanding the key information and business terminology used.',
+      imageUrl: '/images/a2-business-memo.png',
+      criteria: [
+        'Accurate comprehension of business text',
+        'Understanding of business vocabulary',
+        'Ability to identify key information',
+        'Recognition of memo format and purpose'
+      ],
+      weight: 30
+    }
+  ]
 };
 
 // A2 Elementary Level - Academic Final Test
 export const lessonA2AcademicFinalTest: PracticalTest = {
   id: 'a2-a-final',
   title: 'Academic Communication Test',
-  description: 'Demonstrate your ability to communicate in academic situations',
-  type: 'writing',
-  prompt: 'Write a short email (5-8 sentences) to your teacher explaining why you missed a class and asking about the homework assignment. Include an apology, the reason for your absence, and specific questions about what you missed.',
+  description: 'Demonstrate your ability to communicate in academic situations through multiple skills',
+  type: 'writing', // Main type for backward compatibility
+  prompt: 'Complete all sections of this comprehensive test to demonstrate your academic communication skills at the A2 level.',
   criteria: [
-    'Appropriate email format and structure',
-    'Clear explanation of absence',
+    'Appropriate academic communication format',
+    'Clear communication of information',
     'Correct use of academic vocabulary',
     'Proper grammar and punctuation',
     'Respectful tone and politeness'
   ],
-  minScore: 70
+  minScore: 70,
+  sections: [
+    {
+      id: 'a2-a-final-s1',
+      title: 'Academic Email Writing',
+      type: 'writing',
+      description: 'Write an email to a teacher or professor',
+      prompt: 'Write a short email (5-8 sentences) to your teacher explaining why you missed a class and asking about the homework assignment. Include an apology, the reason for your absence, and specific questions about what you missed.',
+      criteria: [
+        'Appropriate email format and structure',
+        'Clear explanation of absence',
+        'Correct use of academic vocabulary',
+        'Proper grammar and punctuation',
+        'Respectful tone and politeness'
+      ],
+      weight: 35
+    },
+    {
+      id: 'a2-a-final-s2',
+      title: 'Classroom Discussion',
+      type: 'speaking',
+      description: 'Demonstrate your ability to participate in a classroom discussion',
+      prompt: 'Record a 1-2 minute response to the following discussion question from your teacher: "What was the most interesting thing you learned in this course and why?" Include an introduction, at least two main points with examples, and a conclusion.',
+      criteria: [
+        'Clear organization of ideas',
+        'Appropriate academic vocabulary',
+        'Proper pronunciation and intonation',
+        'Relevant examples to support points',
+        'Appropriate classroom language'
+      ],
+      weight: 35
+    },
+    {
+      id: 'a2-a-final-s3',
+      title: 'Academic Reading Comprehension',
+      type: 'reading',
+      description: 'Demonstrate understanding of academic text',
+      prompt: 'Read the short academic passage below about study skills and answer the questions that follow. Focus on understanding the main ideas and supporting details.',
+      imageUrl: '/images/a2-academic-text.png',
+      criteria: [
+        'Accurate comprehension of academic text',
+        'Understanding of academic vocabulary',
+        'Ability to identify main ideas and supporting details',
+        'Recognition of text structure and purpose'
+      ],
+      weight: 30
+    }
+  ]
 };
 
 // A2 Elementary Level - Business Pathway Quizzes

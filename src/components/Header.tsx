@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { 
   Menu, X, BookOpen, MessageCircle, BarChart, 
-  BookText, Info, User, LogOut 
+  BookText, Info, User, LogOut, Mic
 } from "lucide-react";
 import { useAuth } from '@/providers/AuthProvider';
 import {
@@ -106,6 +106,15 @@ const Header = () => {
           >
             <Info className="h-4 w-4" />
             <span>Tentang</span>
+          </Link>
+          <Link 
+            to="/speech-demo" 
+            className={`font-medium transition-colors flex items-center gap-1 ${
+              isActive('/speech-demo') ? 'text-purple-600' : 'text-gray-800 hover:text-purple-600'
+            }`}
+          >
+            <Mic className="h-4 w-4" />
+            <span>Speech Demo</span>
           </Link>
         </nav>
 
@@ -222,6 +231,16 @@ const Header = () => {
             >
               <Info className="h-4 w-4" />
               <span>Tentang</span>
+            </Link>
+            <Link 
+              to="/speech-demo" 
+              className={`font-medium flex items-center gap-2 ${
+                isActive('/speech-demo') ? 'text-purple-600' : 'text-gray-800 hover:text-purple-600'
+              }`}
+              onClick={() => setIsOpen(false)}
+            >
+              <Mic className="h-4 w-4" />
+              <span>Speech Demo</span>
             </Link>
 
             {user ? (

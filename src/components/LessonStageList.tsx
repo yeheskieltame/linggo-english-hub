@@ -104,14 +104,14 @@ const LessonStageList: React.FC<LessonStageListProps> = ({
           className={cn(
             "flex items-center w-full text-left p-3 rounded-md transition-colors mt-4 border-t border-gray-200 pt-4",
             isStageActive('final-test') ? "bg-amber-50 border-l-4 border-amber-500" : "hover:bg-gray-50",
-            completedStages.length === stages.length ? "text-gray-800" : "text-gray-400"
+            stages.every(stage => completedStages.includes(stage.id)) ? "text-gray-800" : "text-gray-400"
           )}
-          disabled={completedStages.length !== stages.length}
+          disabled={!stages.every(stage => completedStages.includes(stage.id))}
         >
           <div className="mr-3">
             <Award className={cn(
               "h-5 w-5",
-              completedStages.length === stages.length ? "text-amber-500" : "text-gray-300"
+              stages.every(stage => completedStages.includes(stage.id)) ? "text-amber-500" : "text-gray-300"
             )} />
           </div>
           <div className="flex-1">

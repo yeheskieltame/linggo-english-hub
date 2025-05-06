@@ -76,13 +76,52 @@ export interface LessonQuiz {
   skillType: LessonSkill['type']; // Which skill this quiz tests
 }
 
-export interface QuizQuestion {
+export interface BaseQuizQuestion {
   id: string;
   question: string;
-  options: string[];
-  correctAnswer: string;
+  type: 'multiple-choice' | 'fill-in-blank' | 'matching' | 'listening' | 'speaking';
   explanation?: string;
 }
+
+export interface MultipleChoiceQuestion extends BaseQuizQuestion {
+  type: 'multiple-choice';
+  options: string[];
+  correctAnswer: string;
+}
+
+export interface FillInBlankQuestion extends BaseQuizQuestion {
+  type: 'fill-in-blank';
+  text: string; // Text with blanks marked as [blank1], [blank2], etc.
+  answers: Record<string, string>; // e.g., { "blank1": "correct answer" }
+}
+
+export interface MatchingQuestion extends BaseQuizQuestion {
+  type: 'matching';
+  pairs: Array<{
+    left: string;
+    right: string;
+  }>;
+}
+
+export interface ListeningQuestion extends BaseQuizQuestion {
+  type: 'listening';
+  audioUrl: string;
+  options: string[];
+  correctAnswer: string;
+}
+
+export interface SpeakingQuestion extends BaseQuizQuestion {
+  type: 'speaking';
+  prompt: string;
+  expectedPhrases: string[]; // Key phrases that should be included
+}
+
+export type QuizQuestion = 
+  | MultipleChoiceQuestion 
+  | FillInBlankQuestion 
+  | MatchingQuestion 
+  | ListeningQuestion 
+  | SpeakingQuestion;
 
 export interface PracticalTest {
   id: string;
@@ -92,11 +131,26 @@ export interface PracticalTest {
   prompt: string;
   criteria?: string[];
   minScore: number; // Minimum score to pass (0-100)
+  sections?: PracticalTestSection[]; // For comprehensive tests with multiple sections
+}
+
+export interface PracticalTestSection {
+  id: string;
+  title: string;
+  type: 'listening' | 'speaking' | 'writing' | 'reading' | 'grammar' | 'vocabulary';
+  description?: string;
+  prompt: string;
+  audioUrl?: string; // For listening sections
+  imageUrl?: string; // For visual prompts
+  text?: string; // For reading sections - text that user needs to read
+  hiddenText?: string; // For listening sections - text that will be read by TTS
+  criteria?: string[];
+  weight: number; // Weight of this section in the overall score (0-100)
 }
 
 export interface LessonStructure {
   stages: LessonStage[];
-  stageQuizzes: LessonQuiz[];
+  quizzes: LessonQuiz[];
   finalTest: PracticalTest;
 }
 

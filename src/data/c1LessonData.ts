@@ -643,19 +643,66 @@ export const lessonC1Quizzes: LessonQuiz[] = [
 // C1 Advanced Level Final Test
 export const lessonC1FinalTest: PracticalTest = {
   id: 'c1-final',
-  title: 'Academic Discourse Analysis and Response',
-  description: 'Demonstrate your advanced English skills through critical analysis and academic writing',
-  type: 'writing',
-  prompt: 'Read the following excerpt from an academic article and write a critical response (250-300 words):\n\n"The increasing digitalization of education presents both opportunities and challenges. While digital tools can enhance accessibility and personalization of learning, there are concerns about screen time, data privacy, and the potential widening of socioeconomic disparities in educational outcomes. Some research suggests that traditional face-to-face instruction remains superior for developing certain critical thinking skills and social competencies."\n\nIn your response:\n1. Analyze the main arguments and assumptions in the excerpt\n2. Evaluate the strength of the claims based on your knowledge and experience\n3. Present your own position on the digitalization of education, using sophisticated language and structure\n4. Address potential counterarguments to your position',
+  title: 'Advanced Academic Discourse and Critical Analysis',
+  description: 'Demonstrate your advanced English skills through multiple academic tasks',
+  type: 'writing', // Main type for backward compatibility
+  prompt: 'Complete all sections of this comprehensive test to demonstrate your advanced academic discourse and critical analysis skills at the C1 level.',
   criteria: [
-    'Sophisticated use of advanced grammatical structures (passive voice, mixed conditionals, etc.)',
+    'Sophisticated use of advanced grammatical structures',
     'Effective use of academic vocabulary and nominalisation',
-    'Appropriate use of discourse markers to create cohesion',
     'Critical analysis that demonstrates nuanced understanding',
     'Well-structured argumentation with clear thesis and supporting points',
-    'Acknowledgment and response to counterarguments'
+    'Ability to synthesize complex information from multiple sources'
   ],
-  minScore: 80
+  minScore: 80,
+  sections: [
+    {
+      id: 'c1-final-s1',
+      title: 'Academic Text Analysis',
+      type: 'reading',
+      description: 'Analyze complex academic texts and identify rhetorical strategies',
+      prompt: 'Read the following two excerpts from academic articles on artificial intelligence ethics. Analyze the rhetorical strategies, argumentative techniques, and underlying assumptions in each text. Compare and contrast how the authors frame their arguments and identify any potential biases or limitations in their approaches.',
+      criteria: [
+        'Identification of sophisticated rhetorical strategies',
+        'Recognition of implicit assumptions and biases',
+        'Comparative analysis of argumentative techniques',
+        'Critical evaluation of evidence quality and relevance',
+        'Understanding of complex academic discourse'
+      ],
+      weight: 30
+    },
+    {
+      id: 'c1-final-s2',
+      title: 'Research Synthesis',
+      type: 'writing',
+      description: 'Synthesize information from multiple academic sources',
+      prompt: 'Review the three research abstracts provided on the topic of climate change mitigation strategies. Write a 200-250 word synthesis that identifies the key findings, methodological approaches, and limitations across the studies. Conclude with a critical assessment of the current state of research in this area and identify gaps that future research should address.',
+      criteria: [
+        'Effective synthesis of complex information',
+        'Identification of methodological strengths and limitations',
+        'Critical comparison of research findings',
+        'Advanced academic vocabulary and nominalisation',
+        'Logical organization with appropriate discourse markers'
+      ],
+      weight: 35
+    },
+    {
+      id: 'c1-final-s3',
+      title: 'Academic Debate Response',
+      type: 'speaking',
+      description: 'Respond to a complex academic argument with sophisticated counterarguments',
+      prompt: 'Listen to the following excerpt from an academic lecture on economic inequality. Record a 3-minute response that analyzes the speaker\'s main arguments, evaluates the evidence presented, and develops a sophisticated counterargument supported by relevant examples and theoretical frameworks. Use advanced academic language and appropriate discourse markers.',
+      audioUrl: '/audio/c1-economics-lecture.mp3',
+      criteria: [
+        'Sophisticated analysis of complex arguments',
+        'Development of nuanced counterarguments',
+        'Integration of relevant theoretical frameworks',
+        'Advanced academic vocabulary and expressions',
+        'Fluid delivery with appropriate intonation and stress'
+      ],
+      weight: 35
+    }
+  ]
 };
 
 // Export C1 lesson data

@@ -1,11 +1,5 @@
-
 import { LessonStage, LessonQuiz, PracticalTest } from '@/types/lesson';
-import { lessonC1Stages, lessonC1Quizzes, lessonC1FinalTest } from './c1LessonData';
-import { lessonC2BusinessStages, lessonC2AcademicStages, lessonC2BusinessQuizzes, lessonC2AcademicQuizzes, lessonC2BusinessFinalTest, lessonC2AcademicFinalTest } from './c2LessonData';
-import { lessonA1BusinessStages, lessonA1AcademicStages, lessonA1BusinessQuizzes, lessonA1AcademicQuizzes, lessonA1BusinessFinalTest, lessonA1AcademicFinalTest } from './a1LessonData';
-import { lessonA2BusinessStages, lessonA2AcademicStages, lessonA2BusinessQuizzes, lessonA2AcademicQuizzes, lessonA2BusinessFinalTest, lessonA2AcademicFinalTest } from './a2LessonData';
-import { lessonB1BusinessStages, lessonB1AcademicStages, lessonB1BusinessQuizzes, lessonB1AcademicQuizzes, lessonB1BusinessFinalTest, lessonB1AcademicFinalTest } from './b1LessonData';
-import { lessonB2BusinessStages, lessonB2AcademicStages, lessonB2BusinessQuizzes, lessonB2AcademicQuizzes, lessonB2BusinessFinalTest, lessonB2AcademicFinalTest } from './b2LessonData';
+import { getLessonData } from './lessons';
 
 // Mock lesson stages for lesson 1
 export const lessonL1Stages: LessonStage[] = [
@@ -307,6 +301,21 @@ export const lessonL1FinalTest: PracticalTest = {
   minScore: 70
 };
 
+// Function to get lesson stage data
+export function getLessonStageData(lessonId: string) {
+  // For the mock lesson, return the mock data
+  if (lessonId === 'l1') {
+    return {
+      stages: lessonL1Stages,
+      quizzes: lessonL1Quizzes,
+      finalTest: lessonL1FinalTest
+    };
+  }
+  
+  // For other lessons, use the new modular structure
+  return getLessonData(lessonId);
+}
+
 // Export mock data for other lessons
 export const lessonStagesMockData: Record<string, {
   stages: LessonStage[],
@@ -318,70 +327,14 @@ export const lessonStagesMockData: Record<string, {
     quizzes: lessonL1Quizzes,
     finalTest: lessonL1FinalTest
   },
-  'c1': {
-    stages: lessonC1Stages,
-    quizzes: lessonC1Quizzes,
-    finalTest: lessonC1FinalTest
-  },
-  'c2-business': {
-    stages: lessonC2BusinessStages,
-    quizzes: lessonC2BusinessQuizzes,
-    finalTest: lessonC2BusinessFinalTest
-  },
-  'c2-academic': {
-    stages: lessonC2AcademicStages,
-    quizzes: lessonC2AcademicQuizzes,
-    finalTest: lessonC2AcademicFinalTest
-  },
-  'a1-business': {
-    stages: lessonA1BusinessStages,
-    quizzes: lessonA1BusinessQuizzes,
-    finalTest: lessonA1BusinessFinalTest
-  },
-  'a1-academic': {
-    stages: lessonA1AcademicStages,
-    quizzes: lessonA1AcademicQuizzes,
-    finalTest: lessonA1AcademicFinalTest
-  },
-  'a2-business': {
-    stages: lessonA2BusinessStages,
-    quizzes: lessonA2BusinessQuizzes,
-    finalTest: lessonA2BusinessFinalTest
-  },
-  'a2-academic': {
-    stages: lessonA2AcademicStages,
-    quizzes: lessonA2AcademicQuizzes,
-    finalTest: lessonA2AcademicFinalTest
-  },
-  'b1-business': {
-    stages: lessonB1BusinessStages,
-    quizzes: lessonB1BusinessQuizzes,
-    finalTest: lessonB1BusinessFinalTest
-  },
-  'b1-academic': {
-    stages: lessonB1AcademicStages,
-    quizzes: lessonB1AcademicQuizzes,
-    finalTest: lessonB1AcademicFinalTest
-  },
-  'b2-business': {
-    stages: lessonB2BusinessStages,
-    quizzes: lessonB2BusinessQuizzes,
-    finalTest: lessonB2BusinessFinalTest
-  },
-  'b2-academic': {
-    stages: lessonB2AcademicStages,
-    quizzes: lessonB2AcademicQuizzes,
-    finalTest: lessonB2AcademicFinalTest
-  },
   'l2': {
     stages: [
       // Mock stages for lesson 2
       {
         id: 'l2-s1',
         title: 'Past Simple: Regular Verbs',
-        description: 'Learn how to use regular verbs in the past simple tense',
-        content: 'The past simple is used to talk about completed actions in the past. For regular verbs, we add -ed to the base form...',
-        videoId: 'u9CPQ5RQN9g',
+        description: 'Learn how to form and use regular verbs in the past simple',
+        content: 'Content for past simple regular verbs...',
         examples: [
           {
             english: "I worked yesterday.",
@@ -396,176 +349,59 @@ export const lessonStagesMockData: Record<string, {
       {
         id: 'l2-s2',
         title: 'Past Simple: Irregular Verbs',
-        description: 'Learn about common irregular verbs in the past tense',
-        content: 'Many common verbs in English have irregular past forms that must be memorized...',
+        description: 'Learn common irregular verbs in the past simple',
+        content: 'Content for past simple irregular verbs...',
         examples: [
           {
             english: "I went to the store.",
             indonesian: "Saya pergi ke toko."
           },
           {
-            english: "She saw a movie yesterday.",
-            indonesian: "Dia menonton film kemarin."
+            english: "She saw a movie.",
+            indonesian: "Dia menonton film."
           }
         ]
       }
     ],
     quizzes: [
-      // Mock quiz for lesson 2
+      // Mock quizzes for lesson 2
       {
         id: 'l2-s1-quiz',
-        title: 'Regular Past Tense Quiz',
-        description: 'Test your knowledge of regular past tense verbs',
+        title: 'Regular Past Simple Quiz',
+        description: 'Test your knowledge of regular verbs in past simple',
         skillType: 'grammar',
         requiredScore: 70,
         questions: [
           {
             id: 'q1-l2s1',
-            question: 'What is the past tense of "work"?',
-            options: ['work', 'worked', 'working', 'works'],
-            correctAnswer: 'worked',
-            explanation: 'Regular verbs form the past tense by adding -ed.'
-          },
-          {
-            id: 'q2-l2s1',
-            question: 'Which sentence uses the past simple correctly?',
-            options: [
-              'I play tennis yesterday.',
-              'I playing tennis yesterday.',
-              'I played tennis yesterday.',
-              'I am played tennis yesterday.'
-            ],
-            correctAnswer: 'I played tennis yesterday.',
-            explanation: 'The past simple of "play" is "played".'
+            question: 'Sample question for regular past simple',
+            options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
+            correctAnswer: 'Option 2',
+            explanation: 'Explanation for the correct answer'
           }
         ]
       }
     ],
     finalTest: {
       id: 'l2-final',
-      title: 'Past Tense Mastery Test',
-      description: 'Show your understanding of past tense in English',
+      title: 'Past Simple Mastery Test',
+      description: 'Demonstrate your mastery of past simple tense',
       type: 'writing',
-      prompt: 'Write about what you did last weekend using past tense verbs. Include at least 3 regular and 3 irregular verbs.',
-      criteria: [
-        'Correct use of past tense',
-        'Mix of regular and irregular verbs',
-        'Proper time expressions',
-        'Overall clarity'
-      ],
-      minScore: 70
-    }
-  },
-  'l3': {
-    stages: [
-      {
-        id: 'l3-s1',
-        title: 'Future Forms: Will vs Going To',
-        description: 'Understanding different ways to express the future',
-        content: 'English has several ways to talk about the future. The two most common are "will" and "going to"...',
-        videoId: 'bPlO19Z4RWk',
-        examples: [
-          {
-            english: "I will help you tomorrow.",
-            indonesian: "Saya akan membantu Anda besok."
-          },
-          {
-            english: "I'm going to visit my parents this weekend.",
-            indonesian: "Saya akan mengunjungi orangtua saya akhir pekan ini."
-          }
-        ]
-      }
-    ],
-    quizzes: [
-      {
-        id: 'l3-s1-quiz',
-        title: 'Future Forms Quiz',
-        description: 'Test your understanding of future tenses',
-        skillType: 'grammar',
-        requiredScore: 70,
-        questions: [
-          {
-            id: 'q1-l3s1',
-            question: 'Which expresses a spontaneous decision?',
-            options: [
-              'I will answer the phone.',
-              'I am going to answer the phone.',
-              'I answer the phone.',
-              'I answered the phone.'
-            ],
-            correctAnswer: 'I will answer the phone.',
-            explanation: '"Will" is often used for spontaneous decisions made at the time of speaking.'
-          }
-        ]
-      }
-    ],
-    finalTest: {
-      id: 'l3-final',
-      title: 'Future Tense Mastery',
-      description: 'Demonstrate your ability to express future events',
-      type: 'writing',
-      prompt: 'Write about your plans for the next year. Use different future forms (will, going to, present continuous for future) appropriately.',
-      criteria: [
-        'Correct use of future forms',
-        'Variety of expressions',
-        'Logical time references',
-        'Overall clarity'
-      ],
-      minScore: 70
-    }
-  },
-  // Default structure for any other lesson ID
-  'default': {
-    stages: [
-      {
-        id: 'default-s1',
-        title: 'Introduction to the Topic',
-        description: 'Basic overview of the lesson content',
-        content: 'This lesson covers the fundamental concepts of the topic...',
-        examples: [
-          {
-            english: "Example sentence in English",
-            indonesian: "Contoh kalimat dalam bahasa Indonesia"
-          }
-        ]
-      }
-    ],
-    quizzes: [
-      {
-        id: 'default-s1-quiz',
-        title: 'Basic Comprehension Quiz',
-        description: 'Test your understanding of the basics',
-        skillType: 'grammar',
-        requiredScore: 70,
-        questions: [
-          {
-            id: 'q1-default',
-            question: 'Sample question about the topic?',
-            options: ['Option A', 'Option B', 'Option C', 'Option D'],
-            correctAnswer: 'Option A',
-            explanation: 'Explanation of why Option A is correct.'
-          }
-        ]
-      }
-    ],
-    finalTest: {
-      id: 'default-final',
-      title: 'Topic Mastery Test',
-      description: 'Demonstrate your understanding of the topic',
-      type: 'writing',
-      prompt: 'Write a paragraph showing your understanding of the key concepts from this lesson.',
-      criteria: [
-        'Correct use of concepts',
-        'Clear explanation',
-        'Proper examples',
-        'Overall coherence'
-      ],
+      prompt: 'Write about what you did last weekend using past simple tense',
+      criteria: ['Criteria 1', 'Criteria 2', 'Criteria 3'],
       minScore: 70
     }
   }
 };
 
-// Helper function to get lesson stage data
-export const getLessonStageData = (lessonId: string) => {
-  return lessonStagesMockData[lessonId] || lessonStagesMockData.default;
-};
+// Add other lessons from the modular structure
+Object.keys(getLessonData('a1-business')).forEach(lessonId => {
+  if (lessonId !== 'l1' && lessonId !== 'l2') {
+    const lessonData = getLessonData(lessonId);
+    lessonStagesMockData[lessonId] = {
+      stages: lessonData.stages,
+      quizzes: lessonData.quizzes,
+      finalTest: lessonData.finalTest
+    };
+  }
+});

@@ -2,11 +2,12 @@
 import React, { useState } from 'react';
 import { LessonStage } from '@/types/lesson';
 import { Button } from '@/components/ui/button';
-import { Volume2, BookOpen, ExternalLink } from 'lucide-react';
+import { Volume2, BookOpen, ExternalLink, Mic } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { speakText } from '@/services/textToSpeech';
+import { speakText } from '@/services/speechRecognition';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
 import { useIsMobile } from '@/hooks/use-mobile';
+import PronunciationPractice from '@/components/PronunciationPractice';
 
 interface LessonStageContentProps {
   stage: LessonStage;
@@ -16,6 +17,7 @@ interface LessonStageContentProps {
 const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComplete }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [activeExampleIndex, setActiveExampleIndex] = useState<number | null>(null);
+  const [activePracticeIndex, setActivePracticeIndex] = useState<number | null>(null);
   const isMobile = useIsMobile();
 
   const handleSpeak = async (text: string, index?: number) => {
@@ -96,36 +98,55 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
       {stage.examples && stage.examples.length > 0 && (
         <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-3 sm:p-6 shadow-sm">
           <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-6 text-purple-700">Examples</h3>
-          <div className="space-y-3">
+          <div className="space-y-6">
             {stage.examples.map((example, index) => (
-              <Card 
-                key={index} 
-                className={`border-none shadow-sm transition-all hover:shadow-md ${
-                  activeExampleIndex === index ? 'bg-purple-50 border-l-4 border-purple-400' : 'bg-white'
-                }`}
-              >
-                <CardContent className="p-3 sm:p-5">
-                  <div className="flex justify-between items-start mb-2 gap-2">
-                    <p className="font-medium text-gray-800 text-sm sm:text-base break-words hyphens-auto flex-1">
-                      {example.english}
+              <div key={index} className="space-y-3">
+                <Card 
+                  className={`border-none shadow-sm transition-all hover:shadow-md ${
+                    activeExampleIndex === index ? 'bg-purple-50 border-l-4 border-purple-400' : 'bg-white'
+                  }`}
+                >
+                  <CardContent className="p-3 sm:p-5">
+                    <div className="flex justify-between items-start mb-2 gap-2">
+                      <p className="font-medium text-gray-800 text-sm sm:text-base break-words hyphens-auto flex-1">
+                        {example.english}
+                      </p>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-purple-600 hover:bg-purple-50 flex-shrink-0"
+                          onClick={() => handleSpeak(example.english, index)}
+                          disabled={isSpeaking}
+                          title="Listen to example"
+                        >
+                          <Volume2 className="h-4 w-4" />
+                          <span className="sr-only">Listen</span>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-purple-600 hover:bg-purple-50 flex-shrink-0"
+                          onClick={() => setActivePracticeIndex(activePracticeIndex === index ? null : index)}
+                          title="Practice pronunciation"
+                        >
+                          <Mic className="h-4 w-4" />
+                          <span className="sr-only">Practice</span>
+                        </Button>
+                      </div>
+                    </div>
+                    <p className="text-gray-600 text-sm sm:text-base break-words hyphens-auto">
+                      {example.indonesian}
                     </p>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="ml-1 text-purple-600 hover:bg-purple-50 flex-shrink-0"
-                      onClick={() => handleSpeak(example.english, index)}
-                      disabled={isSpeaking}
-                      title="Listen to example"
-                    >
-                      <Volume2 className="h-4 w-4" />
-                      <span className="sr-only">Listen</span>
-                    </Button>
+                  </CardContent>
+                </Card>
+                
+                {activePracticeIndex === index && (
+                  <div className="pl-4 border-l-2 border-purple-200">
+                    <PronunciationPractice phrase={example.english} />
                   </div>
-                  <p className="text-gray-600 text-sm sm:text-base break-words hyphens-auto">
-                    {example.indonesian}
-                  </p>
-                </CardContent>
-              </Card>
+                )}
+              </div>
             ))}
           </div>
         </div>
