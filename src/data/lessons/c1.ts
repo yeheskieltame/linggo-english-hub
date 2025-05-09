@@ -1,4 +1,5 @@
-import { LessonStage, LessonQuiz, PracticalTest } from '@/types/lesson';
+
+import { LessonStage, LessonQuiz, PracticalTest, LessonStructure } from '@/types/lesson';
 
 // C1 Advanced Business English - Lesson Stages
 export const c1BusinessStages: LessonStage[] = [
@@ -421,6 +422,13 @@ export const c1BusinessFinalTest: PracticalTest = {
 
 // Export the lesson structure
 export const c1Business = {
+  stages: c1BusinessStages,
+  quizzes: c1BusinessQuizzes,
+  finalTest: c1BusinessFinalTest
+};
+
+// Add this export to match what's being imported in lessons.ts
+export const c1Lesson: LessonStructure = {
   stages: c1BusinessStages,
   quizzes: c1BusinessQuizzes,
   finalTest: c1BusinessFinalTest
