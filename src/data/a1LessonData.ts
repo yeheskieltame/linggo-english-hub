@@ -578,6 +578,7 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-a1as1',
+        type: 'multiple-choice',
         question: 'What is a room where students learn?',
         options: [
           'Office',
@@ -590,6 +591,7 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q2-a1as1',
+        type: 'multiple-choice',
         question: 'What do you call the person who teaches?',
         options: [
           'Student',
@@ -602,6 +604,7 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q3-a1as1',
+        type: 'multiple-choice',
         question: 'Which phrase would you use if you don\'t understand something?',
         options: [
           'May I come in?',
@@ -614,6 +617,7 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q4-a1as1',
+        type: 'multiple-choice',
         question: 'What is work that students do outside of class?',
         options: [
           'Notebook',
@@ -626,6 +630,7 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q5-a1as1',
+        type: 'multiple-choice',
         question: 'Which phrase would you use to ask the teacher to speak more slowly?',
         options: [
           'Could you speak more slowly, please?',
@@ -647,6 +652,7 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-a1as2',
+        type: 'multiple-choice',
         question: 'Which phrase is used to introduce yourself as a student?',
         options: [
           'I\'m a teacher.',
@@ -659,6 +665,7 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q2-a1as2',
+        type: 'multiple-choice',
         question: 'How do you introduce a classmate?',
         options: [
           'I\'m studying [subject].',
@@ -671,6 +678,7 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q3-a1as2',
+        type: 'multiple-choice',
         question: 'Which phrase is used to share what you are studying?',
         options: [
           'I\'m studying [subject/major].',
@@ -683,6 +691,7 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q4-a1as2',
+        type: 'multiple-choice',
         question: 'What is an appropriate response to an introduction?',
         options: [
           'I\'m in my first year.',
@@ -695,6 +704,7 @@ export const lessonA1AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q5-a1as2',
+        type: 'multiple-choice',
         question: 'Which phrase would you use to end a conversation with a classmate?',
         options: [
           'What\'s your name?',

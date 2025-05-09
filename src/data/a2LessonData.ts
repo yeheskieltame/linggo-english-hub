@@ -303,7 +303,7 @@ Remember that good note-taking is a skill that improves with practice. Find the 
       },
       {
         english: "Cornell Method Example:\n[Left column]\nWhat is photosynthesis?\nWhat do plants need?\nWhat is produced?\n\n[Right column]\nPhotosynthesis is the process by which plants make their own food.\nPlants need sunlight, water, and carbon dioxide.\nThe process produces glucose (sugar) and oxygen.\n\n[Summary]\nPhotosynthesis is a vital process where plants use sunlight, water, and CO2 to produce food (glucose) and release oxygen.",
-        indonesian: "Contoh Metode Cornell:\n[Kolom kiri]\nApa itu fotosintesis?\nApa yang dibutuhkan tanaman?\nApa yang dihasilkan?\n\n[Kolom kanan]\nFotosintesis adalah proses di mana tanaman membuat makanan mereka sendiri.\nTanaman membutuhkan sinar matahari, air, dan karbon dioksida.\nProses ini menghasilkan glukosa (gula) dan oksigen.\n\n[Ringkasan]\nFotosintesis adalah proses vital di mana tanaman menggunakan sinar matahari, air, dan CO2 untuk menghasilkan makanan (glukosa) dan melepaskan oksigen."
+        indonesian: "Contoh Metode Cornell:\n[Kolom kiri]\nApa itu fotosintesis?\nApa yang dibutuhkan tanaman?\nApa yang dihasilkan?\n\n[Kolom kanan]\nFotosintesis adalah proses di mana tanaman membuat makanan mereka sendiri.\nTanaman membutuhkan sinar matahari, air, dan karbon dioksida.\nProses ini menghasilkan glukosa (gula) dan oksigen.\n\n[Ringkasan]\nFotosintesis adalah proses vital di mana tanaman menggunakan sinar matahari, air, dan CO2 untuk menghasilkan makanan (glucose) dan melepaskan oksigen."
       },
       {
         english: "Abbreviations Example:\nGlobal warming → ↑ in Earth's avg temp\nCauses: fossil fuels, deforestation, etc.\nEffects: ↑ sea levels, extreme weather, & habitat loss\n∴ need to reduce carbon emissions\n∵ current levels unsustainable",
@@ -456,6 +456,7 @@ export const lessonA2BusinessQuizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-a2bs1',
+        type: 'multiple-choice',
         question: 'How should you identify yourself when making a business phone call?',
         options: [
           'Hello, how are you?',
@@ -468,6 +469,7 @@ export const lessonA2BusinessQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q2-a2bs1',
+        type: 'multiple-choice',
         question: 'What does "to put someone on hold" mean?',
         options: [
           'To end a call',
@@ -480,6 +482,7 @@ export const lessonA2BusinessQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q3-a2bs1',
+        type: 'multiple-choice',
         question: 'Which phrase would you use to answer a business phone call professionally?',
         options: [
           'Hello?',
@@ -492,6 +495,7 @@ export const lessonA2BusinessQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q4-a2bs1',
+        type: 'multiple-choice',
         question: 'What should you say if you need to transfer a call?',
         options: [
           'Wait a minute.',
@@ -504,6 +508,7 @@ export const lessonA2BusinessQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q5-a2bs1',
+        type: 'multiple-choice',
         question: 'What should you say if you can\'t hear the caller clearly?',
         options: [
           'What? Speak up!',
@@ -525,6 +530,7 @@ export const lessonA2BusinessQuizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-a2bs2',
+        type: 'multiple-choice',
         question: 'What should a good email subject line be?',
         options: [
           'Long and detailed',
@@ -537,6 +543,7 @@ export const lessonA2BusinessQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q2-a2bs2',
+        type: 'multiple-choice',
         question: 'Which is an appropriate formal greeting when you know the recipient\'s name?',
         options: [
           'Hey there,',
@@ -549,6 +556,7 @@ export const lessonA2BusinessQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q3-a2bs2',
+        type: 'multiple-choice',
         question: 'Which phrase would you use to make a polite request in a business email?',
         options: [
           'I want you to...',
@@ -561,6 +569,7 @@ export const lessonA2BusinessQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q4-a2bs2',
+        type: 'multiple-choice',
         question: 'What is an appropriate closing for a formal business email?',
         options: [
           'See ya!',
@@ -573,6 +582,7 @@ export const lessonA2BusinessQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q5-a2bs2',
+        type: 'multiple-choice',
         question: 'What should be included in an email signature?',
         options: [
           'Only your name',
@@ -598,6 +608,7 @@ export const lessonA2AcademicQuizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-a2as1',
+        type: 'multiple-choice',
         question: 'What should you include in the introduction of an academic presentation?',
         options: [
           'Only your name',
@@ -610,6 +621,7 @@ export const lessonA2AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q2-a2as1',
+        type: 'multiple-choice',
         question: 'Which phrase would you use to move to the next point in your presentation?',
         options: [
           'Anyway...',
@@ -622,6 +634,7 @@ export const lessonA2AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q3-a2as1',
+        type: 'multiple-choice',
         question: 'How would you refer to a visual aid in your presentation?',
         options: [
           'Look at this thing here.',
@@ -634,6 +647,7 @@ export const lessonA2AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q4-a2as1',
+        type: 'multiple-choice',
         question: 'Which phrase would you use to begin your conclusion?',
         options: [
           'Finally, I\'m almost done.',
@@ -646,6 +660,7 @@ export const lessonA2AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q5-a2as1',
+        type: 'multiple-choice',
         question: 'What is an important tip for effective presentations?',
         options: [
           'Speak as quickly as possible to include more information',
@@ -667,6 +682,7 @@ export const lessonA2AcademicQuizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-a2as2',
+        type: 'multiple-choice',
         question: 'What is the Cornell Method of note-taking?',
         options: [
           'Writing everything the teacher says word for word',
@@ -679,6 +695,7 @@ export const lessonA2AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q2-a2as2',
+        type: 'multiple-choice',
         question: 'What is the main advantage of using abbreviations in note-taking?',
         options: [
           'It makes your notes look more professional',
@@ -691,6 +708,7 @@ export const lessonA2AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q3-a2as2',
+        type: 'multiple-choice',
         question: 'In the Outline Method, how is information organized?',
         options: [
           'In a circular pattern',
@@ -703,6 +721,7 @@ export const lessonA2AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q4-a2as2',
+        type: 'multiple-choice',
         question: 'What does the symbol "→" commonly represent in notes?',
         options: [
           'And',
@@ -715,6 +734,7 @@ export const lessonA2AcademicQuizzes: LessonQuiz[] = [
       },
       {
         id: 'q5-a2as2',
+        type: 'multiple-choice',
         question: 'What should you do with your notes soon after class?',
         options: [
           'Throw them away',
