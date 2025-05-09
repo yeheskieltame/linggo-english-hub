@@ -555,7 +555,7 @@ The market isn't waiting. Our customers aren't waiting. And neither should we."`
         'Recognition of sources of misunderstanding',
         'Practical suggestions for improved communication',
         'Understanding of cultural dimensions (directness, time orientation, etc.)',
-        'Balanced perspective considering all parties' viewpoints'
+        'Balanced perspective considering all parties\' viewpoints'
       ],
       weight: 25
     },
