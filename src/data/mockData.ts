@@ -25,6 +25,28 @@ export const mockLessons = [
     duration: '30 min',
     imageUrl: 'https://images.unsplash.com/photo-1600880292089-90a649409b7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
     tags: ['Business', 'Communication', 'Meetings']
+  },
+  {
+    id: 'a2-conversation',
+    title: 'Elementary Everyday Conversation',
+    description: 'Learn basic conversation skills for everyday situations',
+    path: 'conversation',
+    cefrLevel: 'A2',
+    level: 'Elementary',
+    duration: '25 min',
+    imageUrl: 'https://images.unsplash.com/photo-1573165231977-3f0e27806045?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+    tags: ['Conversation', 'Everyday', 'Social']
+  },
+  {
+    id: 'b2-academic',
+    title: 'Upper Intermediate Academic English',
+    description: 'Enhance your academic writing and presentation skills',
+    path: 'academic',
+    cefrLevel: 'B2',
+    level: 'Upper Intermediate',
+    duration: '40 min',
+    imageUrl: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+    tags: ['Academic', 'Writing', 'Presentation']
   }
 ];
 
@@ -44,6 +66,16 @@ export const features = [
     title: "Interactive Practice",
     description: "Reinforce your learning with interactive exercises and quizzes.",
     icon: "BookOpen"
+  },
+  {
+    title: "Speaking Practice",
+    description: "Improve your pronunciation and fluency with AI-powered speaking exercises.",
+    icon: "Mic"
+  },
+  {
+    title: "Comprehensive Assessment",
+    description: "Track your progress with detailed assessments and feedback.",
+    icon: "BarChart"
   }
 ];
 
@@ -66,10 +98,16 @@ export const topicCategories = [
     description: "Improve your skills for daily social interactions",
     icon: "MessageCircle",
     path: "/lessons?topic=conversation"
+  },
+  {
+    name: "Travel English",
+    description: "Learn essential phrases and vocabulary for travel",
+    icon: "Plane",
+    path: "/lessons?topic=travel"
   }
 ];
 
-// Practice sentences for the practice page
+// Practice sentences for the practice page with enhanced features
 export const practiceSentences = [
   {
     id: "ps1",
@@ -79,7 +117,10 @@ export const practiceSentences = [
     difficulty: "medium",
     cefrLevel: "B1",
     skillFocus: "pronunciation",
-    tips: "Pay attention to the pronunciation of 'schedule' with the /ʃ/ sound."
+    tips: "Pay attention to the pronunciation of 'schedule' with the /ʃ/ sound.",
+    context: "Business meeting",
+    audioUrl: "/audio/sentence-schedule-meeting.mp3",
+    imageUrl: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0"
   },
   {
     id: "ps2",
@@ -89,7 +130,10 @@ export const practiceSentences = [
     difficulty: "easy",
     cefrLevel: "A2",
     skillFocus: "pronunciation",
-    tips: "Focus on the rising intonation at the end of the question."
+    tips: "Focus on the rising intonation at the end of the question.",
+    context: "Classroom",
+    audioUrl: "/audio/sentence-explain-concept.mp3",
+    imageUrl: "https://images.unsplash.com/photo-1577896851231-70ef18881754"
   },
   {
     id: "ps3",
@@ -99,6 +143,74 @@ export const practiceSentences = [
     difficulty: "hard",
     cefrLevel: "C1",
     skillFocus: "vocabulary",
-    tips: "Pay attention to the stress on 'quarterly' and the clear pronunciation of 'report'."
+    tips: "Pay attention to the stress on 'quarterly' and the clear pronunciation of 'report'.",
+    context: "Business reports",
+    audioUrl: "/audio/sentence-quarterly-report.mp3",
+    imageUrl: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85"
+  },
+  {
+    id: "ps4",
+    english: "I've been living in Jakarta for three years.",
+    indonesian: "Saya telah tinggal di Jakarta selama tiga tahun.",
+    lessonId: "b1-business",
+    difficulty: "medium",
+    cefrLevel: "B1",
+    skillFocus: "grammar",
+    tips: "Notice the use of present perfect continuous tense to describe an action that started in the past and continues to the present.",
+    context: "Personal background",
+    audioUrl: "/audio/sentence-living-jakarta.mp3",
+    imageUrl: "https://images.unsplash.com/photo-1555899434-94d1368aa7af"
+  },
+  {
+    id: "ps5",
+    english: "The research paper must be submitted before the deadline.",
+    indonesian: "Makalah penelitian harus diserahkan sebelum batas waktu.",
+    lessonId: "b2-academic",
+    difficulty: "hard",
+    cefrLevel: "B2",
+    skillFocus: "vocabulary",
+    tips: "Focus on academic vocabulary like 'research paper' and 'deadline'.",
+    context: "Academic studies",
+    audioUrl: "/audio/sentence-research-paper.mp3",
+    imageUrl: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173"
+  },
+  {
+    id: "ps6",
+    english: "Excuse me, could you tell me the way to the nearest subway station?",
+    indonesian: "Permisi, bisakah Anda memberitahu saya jalan ke stasiun kereta bawah tanah terdekat?",
+    lessonId: "a2-conversation",
+    difficulty: "medium",
+    cefrLevel: "A2",
+    skillFocus: "speaking",
+    tips: "Practice polite expressions for asking directions.",
+    context: "Travel directions",
+    audioUrl: "/audio/sentence-directions-subway.mp3",
+    imageUrl: "https://images.unsplash.com/photo-1588412079929-790b9f593d8e"
+  },
+  {
+    id: "ps7",
+    english: "Despite the challenges, the team managed to complete the project ahead of schedule.",
+    indonesian: "Meskipun ada tantangan, tim berhasil menyelesaikan proyek lebih cepat dari jadwal.",
+    lessonId: "c1-business",
+    difficulty: "hard",
+    cefrLevel: "C1",
+    skillFocus: "grammar",
+    tips: "Notice the use of 'despite' followed by a noun phrase, and the complex sentence structure.",
+    context: "Project management",
+    audioUrl: "/audio/sentence-project-ahead-schedule.mp3",
+    imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978"
+  },
+  {
+    id: "ps8",
+    english: "I'd like to order a cappuccino and a blueberry muffin, please.",
+    indonesian: "Saya ingin memesan cappuccino dan muffin blueberry, tolong.",
+    lessonId: "a2-conversation",
+    difficulty: "easy",
+    cefrLevel: "A2",
+    skillFocus: "speaking",
+    tips: "Practice clear ordering phrases and food vocabulary pronunciation.",
+    context: "Café ordering",
+    audioUrl: "/audio/sentence-order-coffee.mp3",
+    imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24"
   }
 ];

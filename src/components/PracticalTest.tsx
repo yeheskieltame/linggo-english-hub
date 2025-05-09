@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { PracticalTest as PracticalTestType } from '@/types/lesson';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle2, Book, Mic, Pencil, Headphones, Award } from 'lucide-react';
+import { CheckCircle, Book, Mic, MicOff, Pencil, Headphones, Award, Play, Image } from 'lucide-react';
 import { QuizProgress } from '@/components/ui/quiz-progress';
 
 interface PracticalTestProps {
@@ -22,6 +22,12 @@ const PracticalTest: React.FC<PracticalTestProps> = ({ test, onComplete }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [score, setScore] = useState(0);
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioBlob, setAudioBlob] = useState<Record<string, Blob>>({});
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [playbackCount, setPlaybackCount] = useState<Record<string, number>>({});
+  
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const hasSections = test.sections && test.sections.length > 0;
   const sections = test.sections || [];
@@ -46,6 +52,64 @@ const PracticalTest: React.FC<PracticalTestProps> = ({ test, onComplete }) => {
       const prevSection = currentSection - 1;
       setCurrentSection(prevSection);
       setCurrentTab(sections[prevSection].id);
+    }
+  };
+  
+  // Handle recording for speaking sections
+  const handleToggleRecording = async (sectionId: string) => {
+    if (isRecording) {
+      // Stop recording
+      if (mediaRecorder) {
+        mediaRecorder.stop();
+      }
+      setIsRecording(false);
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const recorder = new MediaRecorder(stream);
+        const audioChunks: BlobPart[] = [];
+        
+        recorder.ondataavailable = (e) => {
+          audioChunks.push(e.data);
+        };
+        
+        recorder.onstop = () => {
+          const blob = new Blob(audioChunks, { type: 'audio/webm' });
+          setAudioBlob(prev => ({...prev, [sectionId]: blob}));
+          setResponses(prev => ({
+            ...prev,
+            [sectionId]: "Audio response recorded"
+          }));
+          
+          // Stop all tracks of the stream to release the microphone
+          stream.getTracks().forEach(track => track.stop());
+        };
+        
+        setMediaRecorder(recorder);
+        recorder.start();
+        setIsRecording(true);
+      } catch (error) {
+        console.error('Error accessing microphone:', error);
+      }
+    }
+  };
+  
+  // Handle audio playback for listening sections
+  const handlePlayAudio = (sectionId: string, audioUrl: string) => {
+    const currentCount = playbackCount[sectionId] || 0;
+    
+    if (currentCount < 3) {
+      if (!audioRef.current) {
+        audioRef.current = new Audio(audioUrl);
+      } else {
+        audioRef.current.src = audioUrl;
+      }
+      
+      audioRef.current.play();
+      setPlaybackCount(prev => ({
+        ...prev,
+        [sectionId]: (prev[sectionId] || 0) + 1
+      }));
     }
   };
   
@@ -150,20 +214,48 @@ const PracticalTest: React.FC<PracticalTestProps> = ({ test, onComplete }) => {
             
             <div className="text-center my-6">
               <Button 
-                variant="outline" 
+                variant={isRecording ? "destructive" : "outline"}
                 size="lg"
-                className="flex items-center space-x-2"
-                onClick={() => {
-                  // Simulate recording functionality
-                  handleTextChange(section.id, "Speaking response recorded");
-                }}
+                className="flex items-center space-x-2 mb-4"
+                onClick={() => handleToggleRecording(section.id)}
               >
-                <Mic className="h-5 w-5" />
-                <span>Record Your Answer</span>
+                {isRecording ? (
+                  <>
+                    <MicOff className="h-5 w-5 mr-2" />
+                    <span>Stop Recording</span>
+                  </>
+                ) : (
+                  <>
+                    <Mic className="h-5 w-5 mr-2" />
+                    <span>Record Your Answer</span>
+                  </>
+                )}
               </Button>
               
-              <p className="text-sm text-gray-500 mt-2">
-                Click to start recording your answer. You can record up to 2 minutes.
+              {isRecording && (
+                <div className="mt-2 mb-4">
+                  <div className="animate-pulse flex space-x-2 justify-center">
+                    <div className="h-3 w-3 bg-red-500 rounded-full"></div>
+                    <div className="h-3 w-3 bg-red-500 rounded-full"></div>
+                    <div className="h-3 w-3 bg-red-500 rounded-full"></div>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">Recording in progress...</p>
+                </div>
+              )}
+              
+              {audioBlob[section.id] && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-700 mb-2">Preview your recording:</p>
+                  <audio 
+                    src={URL.createObjectURL(audioBlob[section.id])} 
+                    controls 
+                    className="w-full" 
+                  />
+                </div>
+              )}
+              
+              <p className="text-sm text-gray-500 mt-4">
+                Record your answer based on the prompt. You can record up to 2 minutes.
               </p>
             </div>
           </div>
@@ -181,18 +273,24 @@ const PracticalTest: React.FC<PracticalTestProps> = ({ test, onComplete }) => {
                 variant="outline" 
                 size="lg"
                 className="flex items-center space-x-2 mb-6"
-                onClick={() => {
-                  // Play audio logic
-                  const audio = new Audio(section.audioUrl);
-                  audio.play();
-                }}
+                onClick={() => handlePlayAudio(section.id, section.audioUrl || '')}
+                disabled={(playbackCount[section.id] || 0) >= 3}
               >
-                <Headphones className="h-5 w-5" />
-                <span>Play Audio</span>
+                <Play className="h-5 w-5 mr-2" />
+                <span>
+                  {playbackCount[section.id] === undefined ? 'Play Audio' : 
+                   `Play Audio (${3 - (playbackCount[section.id] || 0)} plays left)`}
+                </span>
               </Button>
               
-              <p className="text-sm text-gray-500 mt-2 mb-6">
-                Listen to the audio carefully. You can replay it up to 3 times.
+              {(playbackCount[section.id] || 0) >= 3 && (
+                <p className="text-sm text-amber-600 mb-4">
+                  You've reached the maximum number of plays.
+                </p>
+              )}
+              
+              <p className="text-sm text-gray-500 mb-6">
+                Listen carefully and answer the question based on what you hear.
               </p>
               
               <Textarea
@@ -271,7 +369,7 @@ const PracticalTest: React.FC<PracticalTestProps> = ({ test, onComplete }) => {
               {passed ? (
                 <Award className="h-12 w-12 text-amber-500" />
               ) : (
-                <CheckCircle2 className="h-12 w-12 text-blue-500" />
+                <CheckCircle className="h-12 w-12 text-blue-500" />
               )}
             </div>
           </div>
