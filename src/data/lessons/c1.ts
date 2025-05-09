@@ -317,7 +317,7 @@ const quizzes: LessonQuiz[] = [
         id: 'q6-c1s1',
         type: 'speaking',
         question: 'Practice responding to a difficult negotiation situation:',
-        prompt: 'The other party has just said: "Your price is significantly higher than your competitors, and we see no justification for this difference. Either match their price, or we'll have to go with them." How would you respond?',
+        prompt: 'The other party has just said: "Your price is significantly higher than your competitors, and we see no justification for this difference. Either match their price, or we\'ll have to go with them." How would you respond?',
         expectedPhrases: [
           'understand your concern',
           'value proposition',
@@ -388,12 +388,6 @@ const quizzes: LessonQuiz[] = [
           'Technical documentation',
           'Sales negotiation',
           'Team motivation session'
-        ],
-        targets: [
-          'Metaphors and vivid imagery',
-          'Precise language and logical structure',
-          'Hypothetical scenarios and questions',
-          'Inspirational anaphora and tricolon'
         ],
         correctPairings: {
           'Annual shareholder meeting': 'Metaphors and vivid imagery',
