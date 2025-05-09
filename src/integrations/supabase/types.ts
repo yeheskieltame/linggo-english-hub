@@ -41,59 +41,116 @@ export type Database = {
       }
       user_assessments: {
         Row: {
+          areas_to_improve: string[] | null
+          cefr_level: string
+          correct_answers: number
           created_at: string | null
           id: string
           level: string
           score: number
+          strengths: string[] | null
+          total_questions: number
           user_id: string
         }
         Insert: {
+          areas_to_improve?: string[] | null
+          cefr_level: string
+          correct_answers: number
           created_at?: string | null
           id?: string
           level: string
           score: number
+          strengths?: string[] | null
+          total_questions: number
           user_id: string
         }
         Update: {
+          areas_to_improve?: string[] | null
+          cefr_level?: string
+          correct_answers?: number
           created_at?: string | null
           id?: string
           level?: string
           score?: number
+          strengths?: string[] | null
+          total_questions?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_goals: {
+        Row: {
+          created_at: string | null
+          current_value: number | null
+          end_date: string | null
+          goal_type: string
+          id: string
+          is_completed: boolean | null
+          start_date: string
+          target_value: number
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_value?: number | null
+          end_date?: string | null
+          goal_type: string
+          id?: string
+          is_completed?: boolean | null
+          start_date: string
+          target_value: number
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_value?: number | null
+          end_date?: string | null
+          goal_type?: string
+          id?: string
+          is_completed?: boolean | null
+          start_date?: string
+          target_value?: number
+          title?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
       }
       user_progress: {
         Row: {
-          completed: boolean
+          completed: boolean | null
           created_at: string | null
           id: string
           last_access: string | null
           level: string
           module: string
-          progress: number
+          progress: number | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
-          completed?: boolean
+          completed?: boolean | null
           created_at?: string | null
           id?: string
           last_access?: string | null
           level: string
           module: string
-          progress?: number
+          progress?: number | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
-          completed?: boolean
+          completed?: boolean | null
           created_at?: string | null
           id?: string
           last_access?: string | null
           level?: string
           module?: string
-          progress?: number
+          progress?: number | null
           updated_at?: string | null
           user_id?: string
         }
@@ -105,7 +162,7 @@ export type Database = {
           date: string
           duration: number
           id: string
-          is_completed: boolean
+          is_completed: boolean | null
           module_id: string | null
           start_time: string
           title: string
@@ -116,7 +173,7 @@ export type Database = {
           date: string
           duration: number
           id?: string
-          is_completed?: boolean
+          is_completed?: boolean | null
           module_id?: string | null
           start_time: string
           title: string
@@ -127,7 +184,7 @@ export type Database = {
           date?: string
           duration?: number
           id?: string
-          is_completed?: boolean
+          is_completed?: boolean | null
           module_id?: string | null
           start_time?: string
           title?: string
@@ -140,7 +197,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_user_goal: {
+        Args: {
+          title_param: string
+          description_param: string
+          target_date_param: string
+          user_id_param?: string
+        }
+        Returns: Json
+      }
+      get_user_goals: {
+        Args: { user_id_param: string }
+        Returns: Json
+      }
+      toggle_goal_completion: {
+        Args: { goal_id_param: string; completed_param: boolean }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

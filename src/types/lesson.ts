@@ -1,4 +1,3 @@
-
 export interface LessonTag {
   name: string;
   color: string;
@@ -79,14 +78,17 @@ export interface LessonQuiz {
 export interface BaseQuizQuestion {
   id: string;
   question: string;
-  type: 'multiple-choice' | 'fill-in-blank' | 'matching' | 'listening' | 'speaking';
+  type: 'multiple-choice' | 'fill-in-blank' | 'matching' | 'listening' | 'speaking' | 'drag-drop' | 'ordering' | 'image-selection';
   explanation?: string;
+  difficulty?: 'easy' | 'medium' | 'hard';
+  points?: number;
 }
 
 export interface MultipleChoiceQuestion extends BaseQuizQuestion {
   type: 'multiple-choice';
   options: string[];
   correctAnswer: string;
+  imageUrl?: string;
 }
 
 export interface FillInBlankQuestion extends BaseQuizQuestion {
@@ -108,12 +110,37 @@ export interface ListeningQuestion extends BaseQuizQuestion {
   audioUrl: string;
   options: string[];
   correctAnswer: string;
+  transcription?: string; // Optional transcription for review
 }
 
 export interface SpeakingQuestion extends BaseQuizQuestion {
   type: 'speaking';
   prompt: string;
   expectedPhrases: string[]; // Key phrases that should be included
+  sampleAnswer?: string; // Example of a good answer
+}
+
+export interface DragDropQuestion extends BaseQuizQuestion {
+  type: 'drag-drop';
+  items: string[]; // Items to be dragged
+  targets: string[]; // Targets where items should be dropped
+  correctPairings: Record<string, string>; // Maps items to correct targets
+  imageUrl?: string; // Optional background image
+}
+
+export interface OrderingQuestion extends BaseQuizQuestion {
+  type: 'ordering';
+  items: string[]; // Items to be ordered
+  correctOrder: number[]; // Correct order of items (indices)
+  context?: string; // Context for ordering (e.g. "Order these events chronologically")
+}
+
+export interface ImageSelectionQuestion extends BaseQuizQuestion {
+  type: 'image-selection';
+  imageUrl: string;
+  options: string[];
+  correctAnswer: string;
+  description?: string; // Additional context for the image
 }
 
 export type QuizQuestion = 
@@ -121,7 +148,10 @@ export type QuizQuestion =
   | FillInBlankQuestion 
   | MatchingQuestion 
   | ListeningQuestion 
-  | SpeakingQuestion;
+  | SpeakingQuestion
+  | DragDropQuestion
+  | OrderingQuestion
+  | ImageSelectionQuestion;
 
 export interface PracticalTest {
   id: string;

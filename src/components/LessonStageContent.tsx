@@ -2,12 +2,10 @@
 import React, { useState } from 'react';
 import { LessonStage } from '@/types/lesson';
 import { Button } from '@/components/ui/button';
-import { Volume2, BookOpen, ExternalLink, Mic } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { speakText } from '@/services/speechRecognition';
-import YouTubeEmbed from '@/components/YouTubeEmbed';
-import { useIsMobile } from '@/hooks/use-mobile';
-import PronunciationPractice from '@/components/PronunciationPractice';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import YouTube from 'react-youtube';
+import { CheckCircle, ArrowRight } from 'lucide-react';
 
 interface LessonStageContentProps {
   stage: LessonStage;
@@ -15,149 +13,191 @@ interface LessonStageContentProps {
 }
 
 const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComplete }) => {
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [activeExampleIndex, setActiveExampleIndex] = useState<number | null>(null);
-  const [activePracticeIndex, setActivePracticeIndex] = useState<number | null>(null);
-  const isMobile = useIsMobile();
-
-  const handleSpeak = async (text: string, index?: number) => {
-    if (isSpeaking) return;
-    
-    try {
-      setIsSpeaking(true);
-      if (index !== undefined) {
-        setActiveExampleIndex(index);
-      }
-      
-      await speakText(text);
-    } catch (error) {
-      console.error('Error speaking text:', error);
-    } finally {
-      setIsSpeaking(false);
-      setActiveExampleIndex(null);
-    }
+  const [isVideoPlayed, setIsVideoPlayed] = useState(false);
+  const [isReadingComplete, setIsReadingComplete] = useState(false);
+  const [showExamples, setShowExamples] = useState(false);
+  
+  const handleVideoPlay = () => {
+    setIsVideoPlayed(true);
   };
-
+  
+  const handleVideoEnd = () => {
+    setIsVideoPlayed(true);
+  };
+  
+  const handleReadingComplete = () => {
+    setIsReadingComplete(true);
+  };
+  
+  const canCompleteStage = () => {
+    // If there's a video, it should be played before completion
+    if (stage.videoId && !isVideoPlayed) {
+      return false;
+    }
+    
+    // Always require reading to be marked as complete
+    if (!isReadingComplete) {
+      return false;
+    }
+    
+    return true;
+  };
+  
+  const handleMarkComplete = () => {
+    onComplete(stage.id);
+  };
+  
+  // Parse the content to render markdown-like formatting
+  const renderContent = (content: string) => {
+    // Process headings
+    let processedContent = content;
+    
+    // Handle h1 headings
+    processedContent = processedContent.replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold mt-6 mb-3">$1</h1>');
+    
+    // Handle h2 headings
+    processedContent = processedContent.replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold mt-5 mb-2">$1</h2>');
+    
+    // Handle h3 headings
+    processedContent = processedContent.replace(/^### (.+)$/gm, '<h3 class="text-lg font-semibold mt-4 mb-2">$1</h3>');
+    
+    // Handle bold text
+    processedContent = processedContent.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    
+    // Handle italic text
+    processedContent = processedContent.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    
+    // Handle lists
+    processedContent = processedContent.replace(/^- (.+)$/gm, '<li class="ml-4">$1</li>');
+    
+    // Add paragraph tags for normal text (lines that don't start with markup)
+    processedContent = processedContent.replace(/^([^<\n].+)$/gm, '<p class="my-2">$1</p>');
+    
+    // Fix for consecutive list items
+    processedContent = processedContent.replace(/(<\/li>\n<li)/g, '</li><li');
+    
+    // Wrap lists properly
+    processedContent = processedContent.replace(/(<li.+?<\/li>)/gs, '<ul class="list-disc ml-5 my-3">$1</ul>');
+    
+    // Handle double line breaks as paragraph breaks
+    processedContent = processedContent.replace(/\n\n/g, '</p><p class="my-2">');
+    
+    return processedContent;
+  };
+  
   return (
-    <div className="space-y-6 sm:space-y-8 max-w-full">
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        <h2 className="text-xl sm:text-2xl font-bold text-purple-700 break-words hyphens-auto">
-          {stage.title}
-        </h2>
-        <Button 
-          variant="ghost" 
-          size={isMobile ? "icon" : "sm"}
-          onClick={() => handleSpeak(stage.content)}
-          disabled={isSpeaking}
-          className="text-purple-600 hover:bg-purple-50 flex-shrink-0"
-          title="Listen to this section"
-        >
-          <Volume2 className="h-4 w-4" />
-          {!isMobile && <span className="ml-2">Listen</span>}
-        </Button>
-      </div>
-
-      {stage.videoId && (
-        <div className="mb-4 sm:mb-6">
-          <div className="relative rounded-lg overflow-hidden shadow-lg">
-            <YouTubeEmbed 
-              videoId={stage.videoId} 
-              title={stage.title}
-              className="w-full"
+    <Card className="w-full">
+      <CardHeader>
+        <div className="flex justify-between items-center">
+          <CardTitle>{stage.title}</CardTitle>
+          {stage.videoId && (
+            <Badge variant={isVideoPlayed ? "outline" : "secondary"} className="ml-2">
+              {isVideoPlayed ? "Video Watched" : "Includes Video"}
+            </Badge>
+          )}
+        </div>
+        {stage.description && <p className="text-gray-600">{stage.description}</p>}
+      </CardHeader>
+      
+      <CardContent className="space-y-6">
+        {/* Video Section */}
+        {stage.videoId && (
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3">Video Lesson</h3>
+            <div className="aspect-video w-full">
+              <YouTube 
+                videoId={stage.videoId} 
+                className="w-full"
+                opts={{
+                  width: '100%',
+                  height: '100%',
+                  playerVars: {
+                    autoplay: 0,
+                  },
+                }}
+                onPlay={handleVideoPlay}
+                onEnd={handleVideoEnd}
+              />
+            </div>
+          </div>
+        )}
+        
+        {/* Image Section */}
+        {stage.imageUrl && (
+          <div className="my-4">
+            <img 
+              src={stage.imageUrl}
+              alt={stage.title}
+              className="rounded-md w-full max-h-80 object-cover"
             />
           </div>
-          <div className="mt-2 flex justify-end">
-            <a 
-              href={`https://www.youtube.com/watch?v=${stage.videoId}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-sm flex items-center text-purple-600 hover:text-purple-800"
-            >
-              <BookOpen className="h-3 w-3 mr-1" /> Watch on YouTube <ExternalLink className="h-3 w-3 ml-1" />
-            </a>
-          </div>
-        </div>
-      )}
-
-      {stage.imageUrl && (
-        <div className="mb-4 sm:mb-6 overflow-hidden rounded-lg shadow-md">
-          <img 
-            src={stage.imageUrl} 
-            alt={stage.title} 
-            className="w-full h-auto object-cover rounded-lg hover:scale-105 transition-transform duration-500"
+        )}
+        
+        {/* Content Section */}
+        <div className="mt-4 lesson-content">
+          <h3 className="text-lg font-medium mb-3">Lesson Content</h3>
+          <div 
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ __html: renderContent(stage.content) }}
           />
+          
+          {!isReadingComplete && (
+            <div className="mt-6 flex justify-center">
+              <Button variant="outline" onClick={handleReadingComplete}>
+                I've Finished Reading
+              </Button>
+            </div>
+          )}
         </div>
-      )}
-
-      <div className="prose prose-sm sm:prose max-w-none">
-        <p className="text-gray-700 text-sm sm:text-base leading-relaxed whitespace-pre-wrap break-words hyphens-auto overflow-wrap-anywhere">
-          {stage.content}
-        </p>
-      </div>
-      
-      {stage.examples && stage.examples.length > 0 && (
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-3 sm:p-6 shadow-sm">
-          <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-6 text-purple-700">Examples</h3>
-          <div className="space-y-6">
-            {stage.examples.map((example, index) => (
-              <div key={index} className="space-y-3">
-                <Card 
-                  className={`border-none shadow-sm transition-all hover:shadow-md ${
-                    activeExampleIndex === index ? 'bg-purple-50 border-l-4 border-purple-400' : 'bg-white'
-                  }`}
-                >
-                  <CardContent className="p-3 sm:p-5">
-                    <div className="flex justify-between items-start mb-2 gap-2">
-                      <p className="font-medium text-gray-800 text-sm sm:text-base break-words hyphens-auto flex-1">
-                        {example.english}
-                      </p>
-                      <div className="flex gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-purple-600 hover:bg-purple-50 flex-shrink-0"
-                          onClick={() => handleSpeak(example.english, index)}
-                          disabled={isSpeaking}
-                          title="Listen to example"
-                        >
-                          <Volume2 className="h-4 w-4" />
-                          <span className="sr-only">Listen</span>
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-purple-600 hover:bg-purple-50 flex-shrink-0"
-                          onClick={() => setActivePracticeIndex(activePracticeIndex === index ? null : index)}
-                          title="Practice pronunciation"
-                        >
-                          <Mic className="h-4 w-4" />
-                          <span className="sr-only">Practice</span>
-                        </Button>
-                      </div>
-                    </div>
-                    <p className="text-gray-600 text-sm sm:text-base break-words hyphens-auto">
-                      {example.indonesian}
-                    </p>
-                  </CardContent>
-                </Card>
-                
-                {activePracticeIndex === index && (
-                  <div className="pl-4 border-l-2 border-purple-200">
-                    <PronunciationPractice phrase={example.english} />
+        
+        {/* Examples Section */}
+        {stage.examples && stage.examples.length > 0 && (
+          <div className="mt-6">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-lg font-medium">Examples</h3>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setShowExamples(!showExamples)}
+              >
+                {showExamples ? "Hide Examples" : "Show Examples"}
+              </Button>
+            </div>
+            
+            {showExamples && (
+              <div className="space-y-3">
+                {stage.examples.map((example, index) => (
+                  <div key={index} className="border rounded-md p-3 bg-gray-50">
+                    <p className="font-medium">{example.english}</p>
+                    <p className="text-gray-600 mt-1">{example.indonesian}</p>
                   </div>
-                )}
+                ))}
               </div>
-            ))}
+            )}
           </div>
+        )}
+      </CardContent>
+      
+      <CardFooter className="flex justify-between">
+        <div>
+          {isReadingComplete && (
+            <div className="flex items-center text-green-600">
+              <CheckCircle className="h-5 w-5 mr-2" />
+              <span>Reading completed</span>
+            </div>
+          )}
         </div>
-      )}
-
-      <div className="flex justify-end mt-6 sm:mt-8 pb-4">
-        <Button onClick={() => onComplete(stage.id)} className="bg-purple-600 hover:bg-purple-700">
-          Mark as Complete & Continue
+        
+        <Button 
+          onClick={handleMarkComplete}
+          disabled={!canCompleteStage()}
+          className="flex items-center"
+        >
+          <span>Complete & Continue</span>
+          <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 };
 
