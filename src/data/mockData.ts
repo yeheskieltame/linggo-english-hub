@@ -74,16 +74,31 @@ export const practiceSentences = [
   {
     id: "ps1",
     english: "I would like to schedule a meeting for next week.",
-    indonesian: "Saya ingin menjadwalkan rapat untuk minggu depan."
+    indonesian: "Saya ingin menjadwalkan rapat untuk minggu depan.",
+    lessonId: "l1",
+    difficulty: "medium",
+    cefrLevel: "B1",
+    skillFocus: "pronunciation",
+    tips: "Pay attention to the pronunciation of 'schedule' with the /ʃ/ sound."
   },
   {
     id: "ps2",
     english: "Could you please explain this concept again?",
-    indonesian: "Bisakah Anda menjelaskan konsep ini lagi?"
+    indonesian: "Bisakah Anda menjelaskan konsep ini lagi?",
+    lessonId: "l2",
+    difficulty: "easy",
+    cefrLevel: "A2",
+    skillFocus: "pronunciation",
+    tips: "Focus on the rising intonation at the end of the question."
   },
   {
     id: "ps3",
     english: "The quarterly report will be ready by Friday.",
-    indonesian: "Laporan kuartal akan siap pada hari Jumat."
+    indonesian: "Laporan kuartal akan siap pada hari Jumat.",
+    lessonId: "c1-business",
+    difficulty: "hard",
+    cefrLevel: "C1",
+    skillFocus: "vocabulary",
+    tips: "Pay attention to the stress on 'quarterly' and the clear pronunciation of 'report'."
   }
 ];

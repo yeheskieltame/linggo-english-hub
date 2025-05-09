@@ -6,6 +6,20 @@ import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { features, topicCategories } from '@/data/mockData';
+import { Briefcase, GraduationCap, MessageCircle } from 'lucide-react';
+
+const getIconComponent = (iconName: string) => {
+  switch (iconName) {
+    case 'Briefcase':
+      return <Briefcase className="h-6 w-6" />;
+    case 'GraduationCap':
+      return <GraduationCap className="h-6 w-6" />;
+    case 'MessageCircle':
+      return <MessageCircle className="h-6 w-6" />;
+    default:
+      return <Briefcase className="h-6 w-6" />;
+  }
+};
 
 const Index = () => {
   return (
@@ -176,7 +190,7 @@ const Index = () => {
           
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
             {topicCategories.map((topic, index) => (
-              <Link to="/lessons" key={index}>
+              <Link to={topic.path} key={index}>
                 <div className="bg-white rounded-xl p-5 text-center border border-gray-100 card-hover group">
                   <div className={`w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center ${
                     index % 4 === 0 ? 'bg-purple-100 text-purple-600' : 
@@ -184,13 +198,9 @@ const Index = () => {
                     index % 4 === 2 ? 'bg-orange-100 text-orange-600' :
                     'bg-green-100 text-green-600'
                   } group-hover:bg-purple-600 group-hover:text-white transition-colors`}>
-                    {/* Simple icon based on index */}
-                    {index % 4 === 0 ? '🎓' : 
-                     index % 4 === 1 ? '💼' : 
-                     index % 4 === 2 ? '✈️' :
-                     '🏠'}
+                    {getIconComponent(topic.icon)}
                   </div>
-                  <h3 className="font-medium group-hover:text-purple-600 transition-colors">{topic}</h3>
+                  <h3 className="font-medium group-hover:text-purple-600 transition-colors">{topic.name}</h3>
                 </div>
               </Link>
             ))}
