@@ -1,3 +1,4 @@
+
 import { LessonStage, LessonQuiz, PracticalTest } from '@/types/lesson';
 import { getLessonData } from './lessons';
 
@@ -120,6 +121,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-l1s1',
+        type: 'multiple-choice',
         question: 'When do we use the present simple tense?',
         options: [
           'Only for actions happening right now',
@@ -132,6 +134,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
       },
       {
         id: 'q2-l1s1',
+        type: 'multiple-choice',
         question: 'Which sentence uses the present simple correctly?',
         options: [
           'She work in a bank.',
@@ -144,6 +147,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
       },
       {
         id: 'q3-l1s1',
+        type: 'multiple-choice',
         question: 'The Earth _____ around the Sun.',
         options: [
           'revolve',
@@ -156,6 +160,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
       },
       {
         id: 'q4-l1s1',
+        type: 'multiple-choice',
         question: 'Which sentence is NOT in the present simple tense?',
         options: [
           'I eat breakfast every day.',
@@ -177,6 +182,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-l1s2',
+        type: 'multiple-choice',
         question: 'Which question is correctly formed in the present simple?',
         options: [
           'Do she like ice cream?',
@@ -189,6 +195,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
       },
       {
         id: 'q2-l1s2',
+        type: 'multiple-choice',
         question: 'Which negative statement is correct?',
         options: [
           'I not work on Sundays.',
@@ -201,6 +208,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
       },
       {
         id: 'q3-l1s2',
+        type: 'multiple-choice',
         question: '_____ they live in Bali?',
         options: [
           'Do',
@@ -213,6 +221,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
       },
       {
         id: 'q4-l1s2',
+        type: 'multiple-choice',
         question: 'He _____ understand the lesson.',
         options: [
           'don\'t',
@@ -234,6 +243,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
     questions: [
       {
         id: 'q1-l1s3',
+        type: 'multiple-choice',
         question: 'Where is the correct position for the frequency adverb in this sentence? "She _____ arrives _____ on time _____ ."',
         options: [
           'always / -- / --',
@@ -246,6 +256,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
       },
       {
         id: 'q2-l1s3',
+        type: 'multiple-choice',
         question: 'Which sentence uses a frequency adverb correctly?',
         options: [
           'He watches never TV.',
@@ -258,6 +269,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
       },
       {
         id: 'q3-l1s3',
+        type: 'multiple-choice',
         question: 'Which adverb indicates the highest frequency?',
         options: [
           'Sometimes',
@@ -270,6 +282,7 @@ export const lessonL1Quizzes: LessonQuiz[] = [
       },
       {
         id: 'q4-l1s3',
+        type: 'multiple-choice',
         question: 'Where should the frequency adverb go in this sentence? "They are _____ late _____ for class _____."',
         options: [
           'never / -- / --',
@@ -374,6 +387,7 @@ export const lessonStagesMockData: Record<string, {
         questions: [
           {
             id: 'q1-l2s1',
+            type: 'multiple-choice',
             question: 'Sample question for regular past simple',
             options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
             correctAnswer: 'Option 2',

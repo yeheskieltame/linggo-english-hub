@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { LessonStage } from '@/types/lesson';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import YouTube from 'react-youtube';
-import { CheckCircle, ArrowRight, BookOpen, VolumeUp, Lightbulb } from 'lucide-react';
+import { CheckCircle, ArrowRight, BookOpen, Volume2, Lightbulb } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 
@@ -138,7 +137,7 @@ const LessonStageContent: React.FC<LessonStageContentProps> = ({ stage, onComple
           </TabsTrigger>
           {stage.videoId && (
             <TabsTrigger value="video" className="flex items-center gap-2 py-3 rounded-none data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-purple-500">
-              <VolumeUp className="h-4 w-4" />
+              <Volume2 className="h-4 w-4" />
               <span>Video Lesson</span>
             </TabsTrigger>
           )}

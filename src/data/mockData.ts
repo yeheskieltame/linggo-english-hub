@@ -1,680 +1,420 @@
+import { LessonStage, LessonQuiz, PracticalTest } from '@/types/lesson';
+import { getLessonData } from './lessons';
 
-export interface Lesson {
-  id: string;
-  title: string;
-  level: 'beginner' | 'intermediate' | 'advanced';
-  cefrLevel: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
-  path: 'general' | 'business' | 'academic';
-  duration: string;
-  description: string;
-  imageUrl: string;
-  tags: string[];
-  content: {
-    sections: {
-      title: string;
-      text: string;
-      imageUrl?: string; // Optional image URL for each section
-      examples?: {
-        english: string;
-        indonesian: string;
-      }[];
-    }[];
-  };
+// Mock lesson stages for lesson 1
+export const lessonL1Stages: LessonStage[] = [
+  {
+    id: 'l1-s1',
+    title: 'Introduction to Present Simple',
+    description: 'Learn when and how to use the present simple tense',
+    content: `The present simple tense is used to express habits, facts, and regular actions. It's an important grammatical structure in English.
+    
+    We use the present simple for:
+    
+    1. Regular habits and daily routines: "I wake up at 7 AM every day."
+    2. General facts and truths: "The Earth revolves around the Sun."
+    3. Scheduled events in the near future: "The train leaves at 3 PM tomorrow."
+    
+    For most verbs, we form the present simple by using the base form of the verb. However, for third-person singular subjects (he, she, it), we add -s or -es to the verb.`,
+    videoId: 'GrPkuk1ezyo',
+    examples: [
+      {
+        english: "I work in an office.",
+        indonesian: "Saya bekerja di kantor."
+      },
+      {
+        english: "She lives in Jakarta.",
+        indonesian: "Dia tinggal di Jakarta."
+      },
+      {
+        english: "They don't speak English.",
+        indonesian: "Mereka tidak berbicara bahasa Inggris."
+      },
+      {
+        english: "Does he like coffee?",
+        indonesian: "Apakah dia suka kopi?"
+      }
+    ]
+  },
+  {
+    id: 'l1-s2',
+    title: 'Forming Questions & Negatives',
+    description: 'Learn how to form questions and negative statements',
+    content: `To form questions in the present simple tense, we use the auxiliary verbs "do" and "does" followed by the subject and the base form of the main verb.
+    
+    For negatives, we use "do not" (don't) or "does not" (doesn't) followed by the base form of the verb.
+    
+    Remember:
+    - Use "do" with I, you, we, they
+    - Use "does" with he, she, it
+    
+    The main verb is always in the base form after do/does (without -s ending).`,
+    examples: [
+      {
+        english: "Do you work on weekends?",
+        indonesian: "Apakah kamu bekerja pada akhir pekan?"
+      },
+      {
+        english: "Does she speak Indonesian?",
+        indonesian: "Apakah dia berbicara bahasa Indonesia?"
+      },
+      {
+        english: "I don't like spicy food.",
+        indonesian: "Saya tidak suka makanan pedas."
+      },
+      {
+        english: "He doesn't play football.",
+        indonesian: "Dia tidak bermain sepak bola."
+      }
+    ]
+  },
+  {
+    id: 'l1-s3',
+    title: 'Present Simple with Frequency Adverbs',
+    description: 'Using adverbs of frequency with present simple',
+    content: `Frequency adverbs tell us how often something happens. In English, they are often used with the present simple tense.
+    
+    Common frequency adverbs (from most to least frequent):
+    - Always (100%)
+    - Usually / Normally (80-90%)
+    - Often / Frequently (70-80%)
+    - Sometimes (30-60%)
+    - Occasionally (20-30%)
+    - Rarely / Seldom (10-20%)
+    - Never (0%)
+    
+    Position of frequency adverbs:
+    - Before the main verb: "She always arrives on time."
+    - After the verb "to be": "He is never late."
+    - At the beginning or end of a sentence for emphasis: "Sometimes, I go to the cinema." or "I go to the cinema sometimes."`,
+    videoId: 'BPEqG9cZP8o',
+    examples: [
+      {
+        english: "I always drink coffee in the morning.",
+        indonesian: "Saya selalu minum kopi di pagi hari."
+      },
+      {
+        english: "She usually takes the bus to work.",
+        indonesian: "Dia biasanya naik bus ke tempat kerja."
+      },
+      {
+        english: "They sometimes visit their grandparents on Sundays.",
+        indonesian: "Mereka terkadang mengunjungi kakek-nenek mereka pada hari Minggu."
+      },
+      {
+        english: "He is never late for meetings.",
+        indonesian: "Dia tidak pernah terlambat untuk rapat."
+      }
+    ]
+  }
+];
+
+// Mock quiz for lesson 1 stages
+export const lessonL1Quizzes: LessonQuiz[] = [
+  {
+    id: 'l1-s1-quiz',
+    title: 'Present Simple Quiz',
+    description: 'Test your understanding of the present simple tense',
+    skillType: 'grammar',
+    requiredScore: 70,
+    questions: [
+      {
+        id: 'q1-l1s1',
+        type: 'multiple-choice',
+        question: 'When do we use the present simple tense?',
+        options: [
+          'Only for actions happening right now',
+          'For habits, facts, and regular actions',
+          'Only for past events',
+          'Only for future plans'
+        ],
+        correctAnswer: 'For habits, facts, and regular actions',
+        explanation: 'The present simple is used for habits, facts, general truths, and regular actions.'
+      },
+      {
+        id: 'q2-l1s1',
+        type: 'multiple-choice',
+        question: 'Which sentence uses the present simple correctly?',
+        options: [
+          'She work in a bank.',
+          'She working in a bank.',
+          'She works in a bank.',
+          'She is works in a bank.'
+        ],
+        correctAnswer: 'She works in a bank.',
+        explanation: 'For third-person singular subjects (he, she, it), we add -s to the verb in present simple.'
+      },
+      {
+        id: 'q3-l1s1',
+        type: 'multiple-choice',
+        question: 'The Earth _____ around the Sun.',
+        options: [
+          'revolve',
+          'revolves',
+          'revolving',
+          'is revolve'
+        ],
+        correctAnswer: 'revolves',
+        explanation: 'For general facts and with third-person singular subjects (the Earth), we add -s to the verb.'
+      },
+      {
+        id: 'q4-l1s1',
+        type: 'multiple-choice',
+        question: 'Which sentence is NOT in the present simple tense?',
+        options: [
+          'I eat breakfast every day.',
+          'She is studying right now.',
+          'They play football on Saturdays.',
+          'Water boils at 100 degrees Celsius.'
+        ],
+        correctAnswer: 'She is studying right now.',
+        explanation: 'This sentence uses the present continuous tense (is + verb-ing), not the present simple.'
+      }
+    ]
+  },
+  {
+    id: 'l1-s2-quiz',
+    title: 'Questions & Negatives Quiz',
+    description: 'Test your understanding of forming questions and negatives',
+    skillType: 'grammar',
+    requiredScore: 70,
+    questions: [
+      {
+        id: 'q1-l1s2',
+        type: 'multiple-choice',
+        question: 'Which question is correctly formed in the present simple?',
+        options: [
+          'Do she like ice cream?',
+          'Does she likes ice cream?',
+          'Does she like ice cream?',
+          'Is she like ice cream?'
+        ],
+        correctAnswer: 'Does she like ice cream?',
+        explanation: 'For questions with third-person singular subjects, we use "does" followed by the base form of the verb (without -s).'
+      },
+      {
+        id: 'q2-l1s2',
+        type: 'multiple-choice',
+        question: 'Which negative statement is correct?',
+        options: [
+          'I not work on Sundays.',
+          'I don\'t works on Sundays.',
+          'I doesn\'t work on Sundays.',
+          'I don\'t work on Sundays.'
+        ],
+        correctAnswer: 'I don\'t work on Sundays.',
+        explanation: 'For first-person negatives, we use "don\'t" (do not) followed by the base form of the verb.'
+      },
+      {
+        id: 'q3-l1s2',
+        type: 'multiple-choice',
+        question: '_____ they live in Bali?',
+        options: [
+          'Do',
+          'Does',
+          'Are',
+          'Is'
+        ],
+        correctAnswer: 'Do',
+        explanation: 'For plural subjects (they), we use "do" to form questions in the present simple.'
+      },
+      {
+        id: 'q4-l1s2',
+        type: 'multiple-choice',
+        question: 'He _____ understand the lesson.',
+        options: [
+          'don\'t',
+          'doesn\'t',
+          'isn\'t',
+          'not'
+        ],
+        correctAnswer: 'doesn\'t',
+        explanation: 'For third-person singular subjects (he), we use "doesn\'t" (does not) in negative statements.'
+      }
+    ]
+  },
+  {
+    id: 'l1-s3-quiz',
+    title: 'Frequency Adverbs Quiz',
+    description: 'Test your understanding of frequency adverbs',
+    skillType: 'grammar',
+    requiredScore: 70,
+    questions: [
+      {
+        id: 'q1-l1s3',
+        type: 'multiple-choice',
+        question: 'Where is the correct position for the frequency adverb in this sentence? "She _____ arrives _____ on time _____ ."',
+        options: [
+          'always / -- / --',
+          '-- / always / --',
+          '-- / -- / always',
+          'Any of these positions is correct'
+        ],
+        correctAnswer: 'always / -- / --',
+        explanation: 'Frequency adverbs usually come before the main verb (arrives).'
+      },
+      {
+        id: 'q2-l1s3',
+        type: 'multiple-choice',
+        question: 'Which sentence uses a frequency adverb correctly?',
+        options: [
+          'He watches never TV.',
+          'He never watches TV.',
+          'He watches TV never.',
+          'Never he watches TV.'
+        ],
+        correctAnswer: 'He never watches TV.',
+        explanation: 'The frequency adverb "never" should come before the main verb (watches).'
+      },
+      {
+        id: 'q3-l1s3',
+        type: 'multiple-choice',
+        question: 'Which adverb indicates the highest frequency?',
+        options: [
+          'Sometimes',
+          'Usually',
+          'Often',
+          'Always'
+        ],
+        correctAnswer: 'Always',
+        explanation: '"Always" indicates 100% of the time, which is the highest frequency.'
+      },
+      {
+        id: 'q4-l1s3',
+        type: 'multiple-choice',
+        question: 'Where should the frequency adverb go in this sentence? "They are _____ late _____ for class _____."',
+        options: [
+          'never / -- / --',
+          '-- / never / --',
+          '-- / -- / never',
+          'Both A and C are correct'
+        ],
+        correctAnswer: '-- / never / --',
+        explanation: 'With the verb "to be", the frequency adverb comes after the verb. So "They are never late for class" is correct.'
+      }
+    ]
+  }
+];
+
+// Mock final test for lesson 1
+export const lessonL1FinalTest: PracticalTest = {
+  id: 'l1-final',
+  title: 'Present Simple Mastery Test',
+  description: 'Demonstrate your mastery of present simple tense in a practical writing exercise',
+  type: 'writing',
+  prompt: 'Write a short paragraph (5-8 sentences) about your daily routine using the present simple tense. Include at least two frequency adverbs and form both positive and negative sentences.',
+  criteria: [
+    'Correct use of present simple verb forms',
+    'Appropriate use of frequency adverbs',
+    'Correctly formed negative sentences',
+    'Proper subject-verb agreement',
+    'Overall clarity and coherence'
+  ],
+  minScore: 70
+};
+
+// Function to get lesson stage data
+export function getLessonStageData(lessonId: string) {
+  // For the mock lesson, return the mock data
+  if (lessonId === 'l1') {
+    return {
+      stages: lessonL1Stages,
+      quizzes: lessonL1Quizzes,
+      finalTest: lessonL1FinalTest
+    };
+  }
+  
+  // For other lessons, use the new modular structure
+  return getLessonData(lessonId);
 }
 
-export interface PracticeSentence {
-  id: string;
-  english: string;
-  indonesian: string;
-  audioUrl?: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  cefrLevel: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
-  tips: string;
-  skillFocus: 'pronunciation' | 'fluency' | 'vocabulary' | 'grammar';
-  lessonId: string;  // Link practice sentence to a specific lesson
-}
-
-export const topicCategories = [
-  'Daily Conversation', 
-  'Business English', 
-  'Travel', 
-  'Academic', 
-  'Pronunciation', 
-  'Grammar', 
-  'Idioms', 
-  'Vocabulary'
-];
-
-export const mockLessons: Lesson[] = [
-  {
-    id: 'a1-business',
-    title: 'Office Basics and Business Introductions',
-    level: 'beginner',
-    cefrLevel: 'A1',
-    path: 'business',
-    duration: '30 min',
-    description: 'Learn essential vocabulary and phrases for the workplace environment and business introductions.',
-    imageUrl: 'https://images.unsplash.com/photo-1497215842964-222b430dc094?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    tags: ['Business English', 'Beginner', 'Vocabulary', 'Introductions'],
-    content: {
-      sections: [
-        {
-          title: 'Office Basics',
-          text: 'Learn essential vocabulary and phrases for the workplace environment.',
-          examples: [
-            {
-              english: "Good morning! My name is John. I'm the new employee in the marketing department.",
-              indonesian: "Selamat pagi! Nama saya John. Saya karyawan baru di departemen pemasaran."
-            }
-          ]
-        }
-      ]
-    }
+// Export mock data for other lessons
+export const lessonStagesMockData: Record<string, {
+  stages: LessonStage[],
+  quizzes: LessonQuiz[],
+  finalTest: PracticalTest
+}> = {
+  'l1': {
+    stages: lessonL1Stages,
+    quizzes: lessonL1Quizzes,
+    finalTest: lessonL1FinalTest
   },
-  {
-    id: 'a1-academic',
-    title: 'Classroom Language and Academic Introductions',
-    level: 'beginner',
-    cefrLevel: 'A1',
-    path: 'academic',
-    duration: '30 min',
-    description: 'Learn essential vocabulary and phrases for the classroom environment and academic introductions.',
-    imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1122&q=80',
-    tags: ['Academic English', 'Beginner', 'Vocabulary', 'Classroom Language'],
-    content: {
-      sections: [
-        {
-          title: 'Classroom Language',
-          text: 'Learn essential vocabulary and phrases for the classroom environment.',
-          examples: [
-            {
-              english: "Excuse me, professor. Could you repeat that, please? I didn't understand.",
-              indonesian: "Permisi, profesor. Bisakah Anda mengulanginya? Saya tidak mengerti."
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'a2-business',
-    title: 'Business Phone Calls and Emails',
-    level: 'elementary',
-    cefrLevel: 'A2',
-    path: 'business',
-    duration: '35 min',
-    description: 'Learn essential vocabulary and phrases for making business phone calls and writing professional emails.',
-    imageUrl: 'https://images.unsplash.com/photo-1534536281715-e28d76689b4d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    tags: ['Business English', 'Elementary', 'Phone Calls', 'Emails'],
-    content: {
-      sections: [
-        {
-          title: 'Business Phone Calls',
-          text: 'Learn essential vocabulary and phrases for making and receiving business phone calls.',
-          examples: [
-            {
-              english: "Hello, this is John Smith from ABC Company. Could I speak to Ms. Johnson, please?",
-              indonesian: "Halo, ini John Smith dari Perusahaan ABC. Bisakah saya berbicara dengan Ibu Johnson?"
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'a2-academic',
-    title: 'Academic Discussions and Presentations',
-    level: 'elementary',
-    cefrLevel: 'A2',
-    path: 'academic',
-    duration: '35 min',
-    description: 'Learn essential vocabulary and phrases for participating in academic discussions and giving simple presentations.',
-    imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    tags: ['Academic English', 'Elementary', 'Discussions', 'Presentations'],
-    content: {
-      sections: [
-        {
-          title: 'Academic Discussions',
-          text: 'Learn essential vocabulary and phrases for participating in academic discussions.',
-          examples: [
-            {
-              english: "I think that's an interesting point. Could you explain more about it?",
-              indonesian: "Saya pikir itu adalah poin yang menarik. Bisakah Anda menjelaskan lebih lanjut tentang hal itu?"
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'b1-business',
-    title: 'Business Meetings and Negotiations',
-    level: 'intermediate',
-    cefrLevel: 'B1',
-    path: 'business',
-    duration: '40 min',
-    description: 'Learn vocabulary and phrases for participating effectively in business meetings and basic negotiations.',
-    imageUrl: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    tags: ['Business English', 'Intermediate', 'Meetings', 'Negotiations'],
-    content: {
-      sections: [
-        {
-          title: 'Business Meetings',
-          text: 'Learn vocabulary and phrases for participating effectively in business meetings.',
-          examples: [
-            {
-              english: "I'd like to add something to that point if I may.",
-              indonesian: "Saya ingin menambahkan sesuatu pada poin itu jika boleh."
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'b1-academic',
-    title: 'Academic Research and Essays',
-    level: 'intermediate',
-    cefrLevel: 'B1',
-    path: 'academic',
-    duration: '40 min',
-    description: 'Learn vocabulary and structures for conducting academic research and writing essays.',
-    imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    tags: ['Academic English', 'Intermediate', 'Research', 'Essays'],
-    content: {
-      sections: [
-        {
-          title: 'Academic Research',
-          text: 'Learn vocabulary and structures for conducting academic research.',
-          examples: [
-            {
-              english: "According to Smith (2020), there is a strong correlation between these variables.",
-              indonesian: "Menurut Smith (2020), ada korelasi yang kuat antara variabel-variabel ini."
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'b2-business',
-    title: 'Negotiation Skills and Business Strategy',
-    level: 'upper intermediate',
-    cefrLevel: 'B2',
-    path: 'business',
-    duration: '45 min',
-    description: 'Learn effective strategies and language for business negotiations and discussing business strategy.',
-    imageUrl: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    tags: ['Business English', 'Upper Intermediate', 'Negotiations', 'Strategy'],
-    content: {
-      sections: [
-        {
-          title: 'Negotiation Skills',
-          text: 'Learn effective strategies and language for business negotiations.',
-          examples: [
-            {
-              english: "I understand your position, but I think we can find a solution that works for both parties.",
-              indonesian: "Saya memahami posisi Anda, tetapi saya pikir kita dapat menemukan solusi yang berfungsi untuk kedua belah pihak."
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'b2-academic',
-    title: 'Academic Debates and Critical Thinking',
-    level: 'upper intermediate',
-    cefrLevel: 'B2',
-    path: 'academic',
-    duration: '45 min',
-    description: 'Learn vocabulary and structures for participating in academic debates and developing critical thinking skills.',
-    imageUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    tags: ['Academic English', 'Upper Intermediate', 'Debates', 'Critical Thinking'],
-    content: {
-      sections: [
-        {
-          title: 'Academic Debates',
-          text: 'Learn vocabulary and structures for participating in academic debates.',
-          examples: [
-            {
-              english: "While I see the merit in your argument, I would like to offer an alternative perspective.",
-              indonesian: "Meskipun saya melihat manfaat dalam argumen Anda, saya ingin menawarkan perspektif alternatif."
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'c1-business',
-    title: 'Advanced Business Communication',
-    level: 'advanced',
-    cefrLevel: 'C1',
-    path: 'business',
-    duration: '45 min',
-    description: 'Master sophisticated business language, negotiation strategies, and persuasive communication for high-level business contexts.',
-    imageUrl: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80',
-    tags: ['Business English', 'Advanced', 'Negotiation', 'Persuasive Communication'],
-    content: {
-      sections: [
-        {
-          title: 'Advanced Business Communication',
-          text: 'Master sophisticated business language and communication strategies.',
-          examples: [
-            {
-              english: "I appreciate your perspective on this matter, and I'd like to propose an alternative approach that might address your concerns while still meeting our objectives.",
-              indonesian: "Saya menghargai perspektif Anda tentang masalah ini, dan saya ingin mengusulkan pendekatan alternatif yang mungkin mengatasi kekhawatiran Anda sambil tetap memenuhi tujuan kami."
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'c1-academic',
-    title: 'Academic Discourse and Critical Analysis',
-    level: 'advanced',
-    cefrLevel: 'C1',
-    path: 'academic',
-    duration: '45 min',
-    description: 'Master sophisticated academic language, critical analysis, and persuasive argumentation for advanced academic contexts.',
-    imageUrl: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1373&q=80',
-    tags: ['Academic English', 'Critical Thinking', 'Advanced Grammar', 'Formal Writing'],
-    content: {
-      sections: [
-        {
-          title: 'Advanced Passive Structures',
-          text: 'Master complex passive constructions for academic and professional contexts, including passive infinitives, passive gerunds, and passive reporting structures.',
-          imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-          examples: [
-            {
-              english: "The findings are believed to have been manipulated to support the hypothesis.",
-              indonesian: "Temuan tersebut diyakini telah dimanipulasi untuk mendukung hipotesis."
-            },
-            {
-              english: "It has been suggested that the policy should be reconsidered in light of recent developments.",
-              indonesian: "Telah disarankan bahwa kebijakan tersebut harus dipertimbangkan kembali mengingat perkembangan terbaru."
-            }
-          ]
-        },
-        {
-          title: 'Academic Vocabulary and Nominalisation',
-          text: "Enhance your formal writing with sophisticated vocabulary and nominalisation techniques to create concise, objective academic discourse.",
-          imageUrl: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1373&q=80',
-          examples: [
-            {
-              english: "The implementation of the new policy resulted in a significant reduction in carbon emissions.",
-              indonesian: "Implementasi kebijakan baru menghasilkan pengurangan signifikan dalam emisi karbon."
-            },
-            {
-              english: "Their failure to address the underlying issues led to the deterioration of diplomatic relations.",
-              indonesian: "Kegagalan mereka untuk mengatasi masalah mendasar menyebabkan memburuknya hubungan diplomatik."
-            }
-          ]
-        },
-        {
-          title: 'Critical Analysis and Argumentation',
-          text: "Develop sophisticated critical thinking and persuasive argumentation skills for academic discourse and professional contexts.",
-          imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-          examples: [
-            {
-              english: "While the author presents compelling statistical evidence to support their main claim, they fail to address several significant counterarguments that undermine their conclusion.",
-              indonesian: "Meskipun penulis menyajikan bukti statistik yang meyakinkan untuk mendukung klaim utama mereka, mereka gagal mengatasi beberapa argumen tandingan signifikan yang melemahkan kesimpulan mereka."
-            },
-            {
-              english: "The research methodology appears robust; however, the small sample size and lack of demographic diversity raise questions about the generalizability of the findings.",
-              indonesian: "Metodologi penelitian tampak kuat; namun, ukuran sampel yang kecil dan kurangnya keragaman demografis menimbulkan pertanyaan tentang kemampuan generalisasi temuan."
-            }
-          ]
-        }
-      ]
+  'l2': {
+    stages: [
+      // Mock stages for lesson 2
+      {
+        id: 'l2-s1',
+        title: 'Past Simple: Regular Verbs',
+        description: 'Learn how to form and use regular verbs in the past simple',
+        content: 'Content for past simple regular verbs...',
+        examples: [
+          {
+            english: "I worked yesterday.",
+            indonesian: "Saya bekerja kemarin."
+          },
+          {
+            english: "She played tennis last weekend.",
+            indonesian: "Dia bermain tenis akhir pekan lalu."
+          }
+        ]
+      },
+      {
+        id: 'l2-s2',
+        title: 'Past Simple: Irregular Verbs',
+        description: 'Learn common irregular verbs in the past simple',
+        content: 'Content for past simple irregular verbs...',
+        examples: [
+          {
+            english: "I went to the store.",
+            indonesian: "Saya pergi ke toko."
+          },
+          {
+            english: "She saw a movie.",
+            indonesian: "Dia menonton film."
+          }
+        ]
+      }
+    ],
+    quizzes: [
+      // Mock quizzes for lesson 2
+      {
+        id: 'l2-s1-quiz',
+        title: 'Regular Past Simple Quiz',
+        description: 'Test your knowledge of regular verbs in past simple',
+        skillType: 'grammar',
+        requiredScore: 70,
+        questions: [
+          {
+            id: 'q1-l2s1',
+            type: 'multiple-choice',
+            question: 'Sample question for regular past simple',
+            options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
+            correctAnswer: 'Option 2',
+            explanation: 'Explanation for the correct answer'
+          }
+        ]
+      }
+    ],
+    finalTest: {
+      id: 'l2-final',
+      title: 'Past Simple Mastery Test',
+      description: 'Demonstrate your mastery of past simple tense',
+      type: 'writing',
+      prompt: 'Write about what you did last weekend using past simple tense',
+      criteria: ['Criteria 1', 'Criteria 2', 'Criteria 3'],
+      minScore: 70
     }
   }
-];
+};
 
-export const practiceSentences: PracticeSentence[] = [
-  // Lesson 1: Introducing Yourself (beginner, B1, general)
-  {
-    id: 'p1-l1-1',
-    english: 'Hello, my name is Sarah. Nice to meet you.',
-    indonesian: 'Halo, nama saya Sarah. Senang bertemu dengan Anda.',
-    difficulty: 'easy',
-    cefrLevel: 'B1',
-    tips: 'Focus on the "th" sound in "Sarah" and in "the".',
-    skillFocus: 'pronunciation',
-    lessonId: 'l1'
-  },
-  {
-    id: 'p1-l1-2',
-    english: "I'm from Jakarta, Indonesia. I've been living here for five years.",
-    indonesian: 'Saya dari Jakarta, Indonesia. Saya telah tinggal di sini selama lima tahun.',
-    difficulty: 'medium',
-    cefrLevel: 'B1',
-    tips: 'Pay attention to the contraction "I\'ve" and practice the "v" sound.',
-    skillFocus: 'fluency',
-    lessonId: 'l1'
-  },
-  {
-    id: 'p1-l1-3',
-    english: "I work as a software developer at a tech company.",
-    indonesian: 'Saya bekerja sebagai pengembang perangkat lunak di perusahaan teknologi.',
-    difficulty: 'medium',
-    cefrLevel: 'B1',
-    tips: 'Focus on clearly pronouncing "software developer" and the rhythm of the sentence.',
-    skillFocus: 'pronunciation',
-    lessonId: 'l1'
-  },
-  {
-    id: 'p1-l1-4',
-    english: "What about you? What do you do for work?",
-    indonesian: 'Bagaimana dengan Anda? Apa pekerjaan Anda?',
-    difficulty: 'easy',
-    cefrLevel: 'B1',
-    tips: 'Practice the rising intonation for questions.',
-    skillFocus: 'pronunciation',
-    lessonId: 'l1'
-  },
-  {
-    id: 'p1-l1-5',
-    english: "It's a pleasure to meet someone from your field of expertise.",
-    indonesian: 'Senang bertemu dengan seseorang dari bidang keahlian Anda.',
-    difficulty: 'hard',
-    cefrLevel: 'B1',
-    tips: 'Pay attention to the word stress in "expertise" and practice the "pleasure" pronunciation.',
-    skillFocus: 'pronunciation',
-    lessonId: 'l1'
-  },
-  
-  // Lesson 2: Business Meetings (intermediate, B2, business)
-  {
-    id: 'p2-l2-1',
-    english: 'In our quarterly meeting, we need to discuss the financial projections for next year.',
-    indonesian: 'Dalam rapat triwulanan kita, kita perlu membahas proyeksi keuangan untuk tahun depan.',
-    difficulty: 'medium',
-    cefrLevel: 'B2',
-    tips: 'Focus on the clarity of "quarterly" and the intonation when presenting business topics.',
-    skillFocus: 'fluency',
-    lessonId: 'l2'
-  },
-  {
-    id: 'p2-l2-2',
-    english: "I believe we should prioritize expanding our marketing efforts in the Asian market.",
-    indonesian: 'Saya percaya kita harus memprioritaskan perluasan upaya pemasaran kita di pasar Asia.',
-    difficulty: 'hard',
-    cefrLevel: 'B2',
-    tips: 'Practice the word "prioritize" and maintain a professional tone throughout.',
-    skillFocus: 'vocabulary',
-    lessonId: 'l2'
-  },
-  {
-    id: 'p2-l2-3',
-    english: "Let's start by reviewing the action items from our previous meeting.",
-    indonesian: 'Mari kita mulai dengan meninjau item tindakan dari rapat sebelumnya.',
-    difficulty: 'medium',
-    cefrLevel: 'B2',
-    tips: 'Focus on the "let\'s" contraction and the rhythm of the business phrase "action items".',
-    skillFocus: 'fluency',
-    lessonId: 'l2'
-  },
-  {
-    id: 'p2-l2-4',
-    english: "I'd like to propose an alternative approach to solving this issue.",
-    indonesian: 'Saya ingin mengusulkan pendekatan alternatif untuk menyelesaikan masalah ini.',
-    difficulty: 'hard',
-    cefrLevel: 'B2',
-    tips: 'Pay attention to the pronunciation of "alternative" and "approach".',
-    skillFocus: 'vocabulary',
-    lessonId: 'l2'
-  },
-  {
-    id: 'p2-l2-5',
-    english: "Are there any questions before we move on to the next agenda item?",
-    indonesian: 'Apakah ada pertanyaan sebelum kita melanjutkan ke item agenda berikutnya?',
-    difficulty: 'medium',
-    cefrLevel: 'B2',
-    tips: 'Practice the rising intonation for questions in a business context.',
-    skillFocus: 'fluency',
-    lessonId: 'l2'
-  },
-  
-  // Lesson 3: Academic Research Writing (advanced, C1, academic)
-  {
-    id: 'p3-l3-1',
-    english: 'The research paper demonstrates a significant correlation between the variables examined in the study.',
-    indonesian: 'Makalah penelitian menunjukkan korelasi yang signifikan antara variabel-variabel yang diteliti dalam studi tersebut.',
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Pay attention to the academic vocabulary and formal structure of this complex sentence.',
-    skillFocus: 'vocabulary',
-    lessonId: 'l3'
-  },
-  {
-    id: 'p3-l3-2',
-    english: "The literature review reveals several gaps in the current understanding of the phenomenon.",
-    indonesian: 'Tinjauan literatur mengungkapkan beberapa kesenjangan dalam pemahaman saat ini tentang fenomena tersebut.',
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Focus on the academic terms "literature review" and "phenomenon" with clear pronunciation.',
-    skillFocus: 'vocabulary',
-    lessonId: 'l3'
-  },
-  {
-    id: 'p3-l3-3',
-    english: "The methodology employed in this study has both strengths and limitations that must be acknowledged.",
-    indonesian: 'Metodologi yang digunakan dalam penelitian ini memiliki kekuatan dan keterbatasan yang harus diakui.',
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Practice the academic vocabulary and the rhythm of this formal sentence.',
-    skillFocus: 'grammar',
-    lessonId: 'l3'
-  },
-  {
-    id: 'p3-l3-4',
-    english: "Further research is necessary to validate these preliminary findings.",
-    indonesian: 'Penelitian lebih lanjut diperlukan untuk memvalidasi temuan awal ini.',
-    difficulty: 'medium',
-    cefrLevel: 'C1',
-    tips: 'Focus on the formal academic tone and the pronunciation of "validate" and "preliminary".',
-    skillFocus: 'vocabulary',
-    lessonId: 'l3'
-  },
-  {
-    id: 'p3-l3-5',
-    english: "The hypothesis was partially supported by the empirical evidence collected.",
-    indonesian: 'Hipotesis tersebut sebagian didukung oleh bukti empiris yang dikumpulkan.',
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Pay attention to the academic terms "hypothesis" and "empirical evidence".',
-    skillFocus: 'vocabulary',
-    lessonId: 'l3'
-  },
-  
-  // Lesson 4: Daily Conversations (beginner, A2, general)
-  {
-    id: 'p4-l4-1',
-    english: 'I would like to order a coffee with milk and sugar, please.',
-    indonesian: 'Saya ingin memesan kopi dengan susu dan gula, tolong.',
-    difficulty: 'easy',
-    cefrLevel: 'A2',
-    tips: 'Pay attention to the "w" sound in "would" and the "th" sound in "with".',
-    skillFocus: 'pronunciation',
-    lessonId: 'l4'
-  },
-  {
-    id: 'p4-l4-2',
-    english: "Could you tell me how to get to the nearest subway station?",
-    indonesian: 'Bisakah Anda memberi tahu saya bagaimana cara ke stasiun kereta bawah tanah terdekat?',
-    difficulty: 'medium',
-    cefrLevel: 'A2',
-    tips: 'Practice the "could you" contraction and the "st" sound in "nearest".',
-    skillFocus: 'pronunciation',
-    lessonId: 'l4'
-  },
-  {
-    id: 'p4-l4-3',
-    english: "I'd like to try on these shoes in size 42, please.",
-    indonesian: 'Saya ingin mencoba sepatu ini dalam ukuran 42, tolong.',
-    difficulty: 'easy',
-    cefrLevel: 'A2',
-    tips: 'Focus on the contraction "I\'d" and the clear pronunciation of numbers.',
-    skillFocus: 'pronunciation',
-    lessonId: 'l4'
-  },
-  {
-    id: 'p4-l4-4',
-    english: "Do you accept credit cards or only cash?",
-    indonesian: 'Apakah Anda menerima kartu kredit atau hanya uang tunai?',
-    difficulty: 'easy',
-    cefrLevel: 'A2',
-    tips: 'Practice the rising intonation for yes/no questions.',
-    skillFocus: 'pronunciation',
-    lessonId: 'l4'
-  },
-  {
-    id: 'p4-l4-5',
-    english: "The food was delicious. Could I have the bill, please?",
-    indonesian: 'Makanannya lezat. Boleh saya minta bonnya?',
-    difficulty: 'medium',
-    cefrLevel: 'A2',
-    tips: 'Pay attention to the pronunciation of "delicious" and the polite request form.',
-    skillFocus: 'fluency',
-    lessonId: 'l4'
-  },
-  
-  // Lesson 5: Business Negotiations (advanced, C1, business)
-  {
-    id: 'p5-l5-1',
-    english: 'We appreciate your offer, but we\'re looking for more favorable payment terms.',
-    indonesian: 'Kami menghargai penawaran Anda, tetapi kami mencari persyaratan pembayaran yang lebih menguntungkan.',
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Focus on the professional tone and the clear pronunciation of "favorable".',
-    skillFocus: 'vocabulary',
-    lessonId: 'l5'
-  },
-  {
-    id: 'p5-l5-2',
-    english: "If we can reach an agreement today, we\'re prepared to sign the contract immediately.",
-    indonesian: 'Jika kita dapat mencapai kesepakatan hari ini, kami siap untuk menandatangani kontrak segera.',
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Practice the conditional structure and maintain a confident tone.',
-    skillFocus: 'grammar',
-    lessonId: 'l5'
-  },
-  {
-    id: 'p5-l5-3',
-    english: "Let\'s find a solution that benefits both our companies in the long term.",
-    indonesian: 'Mari kita temukan solusi yang menguntungkan kedua perusahaan kita dalam jangka panjang.',
-    difficulty: 'medium',
-    cefrLevel: 'C1',
-    tips: 'Focus on the positive, collaborative tone and the proper stress in "benefits".',
-    skillFocus: 'fluency',
-    lessonId: 'l5'
-  },
-  {
-    id: 'p5-l5-4',
-    english: "We need to address several key concerns before finalizing this deal.",
-    indonesian: 'Kami perlu mengatasi beberapa kekhawatiran utama sebelum menyelesaikan kesepakatan ini.',
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Pay attention to the business vocabulary and the rhythm of the sentence.',
-    skillFocus: 'vocabulary',
-    lessonId: 'l5'
-  },
-  {
-    id: 'p5-l5-5',
-    english: "Our proposal includes a substantial discount if you commit to a three-year partnership.",
-    indonesian: 'Proposal kami mencakup diskon substansial jika Anda berkomitmen untuk kemitraan tiga tahun.',
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Practice the business terms "substantial" and "partnership" with clear pronunciation.',
-    skillFocus: 'vocabulary',
-    lessonId: 'l5'
-  },
-  // C1 Lesson: Academic Discourse and Critical Analysis
-  {
-    id: 'p6-c1-1',
-    english: "The findings are believed to have been manipulated to support the hypothesis.",
-    indonesian: "Temuan tersebut diyakini telah dimanipulasi untuk mendukung hipotesis.",
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Focus on the complex passive structure "are believed to have been manipulated" and maintain a formal academic tone.',
-    skillFocus: 'grammar',
-    lessonId: 'c1'
-  },
-  {
-    id: 'p6-c1-2',
-    english: "Had the government implemented stricter regulations, we wouldn't be facing this environmental crisis now.",
-    indonesian: "Seandainya pemerintah menerapkan peraturan yang lebih ketat, kita tidak akan menghadapi krisis lingkungan ini sekarang.",
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Pay attention to the inverted conditional structure and the stress patterns in the longer sentence.',
-    skillFocus: 'grammar',
-    lessonId: 'c1'
-  },
-  {
-    id: 'p6-c1-3',
-    english: "The implementation of the new policy resulted in a significant reduction in carbon emissions.",
-    indonesian: "Implementasi kebijakan baru menghasilkan pengurangan signifikan dalam emisi karbon.",
-    difficulty: 'medium',
-    cefrLevel: 'C1',
-    tips: 'Focus on the nominalised forms "implementation" and "reduction" and the academic vocabulary.',
-    skillFocus: 'vocabulary',
-    lessonId: 'c1'
-  },
-  {
-    id: 'p6-c1-4',
-    english: "Notwithstanding the challenges faced, the research team managed to complete the project ahead of schedule.",
-    indonesian: "Terlepas dari tantangan yang dihadapi, tim penelitian berhasil menyelesaikan proyek lebih cepat dari jadwal.",
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Practice the advanced discourse marker "notwithstanding" and maintain a smooth rhythm throughout the sentence.',
-    skillFocus: 'fluency',
-    lessonId: 'c1'
-  },
-  {
-    id: 'p6-c1-5',
-    english: "While the author presents compelling evidence, they fail to address several significant counterarguments.",
-    indonesian: "Meskipun penulis menyajikan bukti yang meyakinkan, mereka gagal mengatasi beberapa argumen tandingan yang signifikan.",
-    difficulty: 'hard',
-    cefrLevel: 'C1',
-    tips: 'Focus on the critical analysis vocabulary and the balanced structure of the sentence.',
-    skillFocus: 'vocabulary',
-    lessonId: 'c1'
+// Add other lessons from the modular structure
+Object.keys(getLessonData('a1-business')).forEach(lessonId => {
+  if (lessonId !== 'l1' && lessonId !== 'l2') {
+    const lessonData = getLessonData(lessonId);
+    lessonStagesMockData[lessonId] = {
+      stages: lessonData.stages,
+      quizzes: lessonData.quizzes,
+      finalTest: lessonData.finalTest
+    };
   }
-];
-
-export const features = [
-  {
-    title: "AI-Powered Pronunciation Feedback",
-    description: "Get instant feedback on your pronunciation with our advanced speech recognition technology.",
-    icon: "🎯"
-  },
-  {
-    title: "Personalized Learning Path",
-    description: "Our system adapts to your level and learning goals to create a customized experience.",
-    icon: "🛤️"
-  },
-  {
-    title: "Interactive Speaking Practice",
-    description: "Practice real conversations with our AI conversation partner that responds naturally.",
-    icon: "💬"
-  },
-  {
-    title: "Contextual Vocabulary Building",
-    description: "Learn new words in context with examples that make them easy to understand and remember.",
-    icon: "📚"
-  },
-  {
-    title: "Progress Tracking",
-    description: "Monitor your improvement over time with detailed analytics and achievement badges.",
-    icon: "📊"
-  },
-  {
-    title: "Native Speaker Audio",
-    description: "Listen to clear pronunciations from native English speakers for perfect learning.",
-    icon: "🔊"
-  }
-];
+});
