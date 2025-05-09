@@ -17,7 +17,6 @@ import LevelAssessmentPage from "./pages/LevelAssessmentPage";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
-import SpeechDemoPage from "./pages/SpeechDemoPage";
 import { AuthProvider } from "./providers/AuthProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuth } from "./providers/AuthProvider";
@@ -44,7 +43,6 @@ const AppRoutes = () => {
       <Route path="/lessons" element={<LessonsPage />} />
       <Route path="/lessons/:lessonId" element={<LessonDetail />} />
       <Route path="/about" element={<AboutPage />} />
-      <Route path="/speech-demo" element={<SpeechDemoPage />} />
 
       {/* Protected Routes */}
       <Route path="/practice" element={<ProtectedRoute><PracticePage /></ProtectedRoute>} />
